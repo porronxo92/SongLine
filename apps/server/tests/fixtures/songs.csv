@@ -1,0 +1,9 @@
+ID,Cancion,Artista,Anio,Genero,Origen,AliasTitulo,AliasArtista,Nota,SpotifyTrackId,ISRC,Estado
+T001,Despacito,"Luis Fonsi, Daddy Yankee",2017,latino,es,,,,tr001,,verified
+T002,Bohemian Rhapsody,Queen,1975,rock,intl,,,,tr002,,
+T003,Billie Jean,Michael Jackson,1983,pop,intl,,,,tr003,,verified
+T004,Hijo de la Luna,Mecano,1986,pop,es,,,,tr004,,verified
+T005,Dato dudoso,Alguien,1990,pop,es,,,,tr005,,ambiguous
+T006,Otro dudoso,Alguien,1991,pop,es,,,,tr006,,disputed
+T007,Un año más,Mecano,1988,pop,es,Un ano mas|Un año mas,,Single de 1988,tr007,,verified
+T008,Año roto,Nadie,abcd,pop,es,,,,tr008,,verified

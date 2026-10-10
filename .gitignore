@@ -1,0 +1,37 @@
+# Dependencias
+node_modules/
+.venv/
+
+# Builds
+dist/
+build/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Entorno y secretos
+.env
+.env.*
+!.env.example
+
+# Tests y reportes
+review/
+test-results/
+playwright-report/
+blob-report/
+coverage/
+
+# Editores y sistema
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.log
+.DS_Store
+Thumbs.db
+
+# Artefactos de empaquetado Python
+*.egg-info/

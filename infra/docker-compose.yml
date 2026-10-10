@@ -1,0 +1,66 @@
+# Producción: Caddy (web estática + proxy /api y /ws), API (uvicorn, 1 worker) y Postgres.
+# Uso: make up   (o: docker compose --env-file .env -f infra/docker-compose.yml up -d --build)
+# POSTGRES_PASSWORD sale de .env; sin ella Postgres no arranca. La red tiene una subred fija porque
+# la API solo confía en X-Forwarded-For si el par es Caddy (--forwarded-allow-ips en api.Dockerfile).
+name: hitster
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: hitster
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-}
+      POSTGRES_DB: hitster
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hitster -d hitster"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: ..
+      dockerfile: infra/api.Dockerfile
+    restart: unless-stopped
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      DATABASE_URL: postgresql+asyncpg://hitster:${POSTGRES_PASSWORD:-}@postgres:5432/hitster
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "8000"
+    networks:
+      - default
+
+  caddy:
+    build:
+      context: ..
+      dockerfile: infra/web.Dockerfile
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

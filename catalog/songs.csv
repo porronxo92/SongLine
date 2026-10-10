@@ -1,0 +1,181 @@
+ID,Cancion,Artista,Anio,Genero,Origen,AliasTitulo,AliasArtista,Nota,SpotifyTrackId,ISRC,Estado
+S001,Gwendolyne,Julio Iglesias,1970,pop,es,,Julio,,,,verified
+S002,Your Song,Elton John,1970,pop,intl,,,,,,verified
+S003,Mediterráneo,Joan Manuel Serrat,1971,pop,es,Mediterraneo,Serrat,,,,verified
+S004,Stairway to Heaven,Led Zeppelin,1971,rock,intl,,,,,,verified
+S005,Imagine,John Lennon,1971,pop,intl,,Lennon,,,,verified
+S006,Brown Sugar,The Rolling Stones,1971,rock,intl,,Rolling Stones|Los Rolling,,,,verified
+S007,Libre,Nino Bravo,1972,pop,es,,Nino Bravo,,,,verified
+S008,Un beso y una flor,Nino Bravo,1972,pop,es,,Nino Bravo,,,,verified
+S009,Smoke on the Water,Deep Purple,1972,rock,intl,,,,,,verified
+S010,Eres tú,Mocedades,1973,pop,es,Eres tu,,,,,verified
+S011,Porque te vas,Jeanette,1974,pop,es,,,,,,verified
+S012,"Soy un truhán, soy un señor",Julio Iglesias,1978,pop,es,Soy un truhan|Soy un truhán,Julio,,,,verified
+S013,Bohemian Rhapsody,Queen,1975,rock,intl,,,,,,verified
+S014,Escándalo,Raphael,1976,pop,es,Escandalo,,año de la grabación de Raphael por confirmar,,,disputed
+S015,Dancing Queen,ABBA,1976,pop,intl,,Abba,,,,verified
+S016,Hotel California,Eagles,1976,rock,intl,,The Eagles,"Álbum dic-1976, single feb-1977. Vale 1976 (lo primero que salió)",,,disputed
+S017,"Yes Sir, I Can Boogie",Baccara,1977,dance,es,Yes Sir I Can Boogie,,,,,verified
+S018,Stayin' Alive,Bee Gees,1977,dance,intl,Stayin Alive,BeeGees,,,,verified
+S019,I Feel Love,Donna Summer,1977,dance,intl,,,,,,verified
+S020,Dreams,Fleetwood Mac,1977,rock,intl,,,,,,verified
+S021,Vivir así es morir de amor,Camilo Sesto,1978,pop,es,Vivir asi es morir de amor,Camilo,Año dudoso: 1978 o 1979 según la fuente; confirmar con el álbum original,,,disputed
+S022,I Will Survive,Gloria Gaynor,1978,dance,intl,,,,,,verified
+S023,Y.M.C.A.,Village People,1978,dance,intl,YMCA,,,,,verified
+S024,Le Freak,Chic,1978,dance,intl,,,,,,verified
+S025,Another Brick in the Wall (Part 2),Pink Floyd,1979,rock,intl,Another Brick in the Wall|Another Brick in the Wall Part 2,,,,,verified
+S026,Enamorado de la moda juvenil,Radio Futura,1980,rock,es,,,,,,verified
+S027,Chica de ayer,Nacha Pop,1980,rock,es,,,,,,verified
+S028,Hey,Julio Iglesias,1980,pop,es,,Julio,,,,verified
+S029,Under Pressure,Queen & David Bowie,1981,rock,intl,,Queen|David Bowie|Bowie,,,,verified
+S030,Don't Stop Believin',Journey,1981,rock,intl,Dont Stop Believin|Don't Stop Believing,,,,,verified
+S031,Tainted Love,Soft Cell,1981,pop,intl,,,,,,verified
+S032,Billie Jean,Michael Jackson,1982,pop,intl,,MJ,"Álbum Thriller nov-1982, single ene-1983. Vale 1982 (lo primero que salió)",,,disputed
+S033,Africa,Toto,1982,rock,intl,,,,,,verified
+S034,Eye of the Tiger,Survivor,1982,rock,intl,,,,,,verified
+S035,Hungry Like the Wolf,Duran Duran,1982,pop,intl,,,,,,verified
+S036,Sweet Dreams (Are Made of This),Eurythmics,1983,pop,intl,Sweet Dreams,,,,,verified
+S037,Every Breath You Take,The Police,1983,rock,intl,,Police,,,,verified
+S038,Girls Just Want to Have Fun,Cyndi Lauper,1983,pop,intl,Girls Just Wanna Have Fun,,,,,verified
+S039,Ni tú ni nadie,Alaska y Dinarama,1984,rock,es,Ni tu ni nadie,Alaska|Dinarama,,,,verified
+S040,Escuela de calor,Radio Futura,1984,rock,es,,,,,,verified
+S041,Amante bandido,Miguel Bosé,1984,pop,es,,Bosé|Bose,,,,verified
+S042,Lobo-hombre en París,La Unión,1984,pop,es,Lobo hombre en Paris|Lobo-hombre en Paris,La Union,,,,verified
+S043,Like a Virgin,Madonna,1984,pop,intl,,,,,,verified
+S044,Purple Rain,Prince,1984,rock,intl,,,,,,verified
+S045,Last Christmas,Wham!,1984,pop,intl,,Wham,,,,verified
+S046,Devuélveme a mi chica,Hombres G,1985,pop,es,Devuelveme a mi chica,,,,,verified
+S047,Sufre mamón,Hombres G,1985,pop,es,Sufre mamon,,,,,verified
+S048,Everybody Wants to Rule the World,Tears for Fears,1985,pop,intl,,,,,,verified
+S049,Running Up That Hill (A Deal with God),Kate Bush,1985,pop,intl,Running Up That Hill,,Reentrada en listas en 2022; el año es 1985,,,verified
+S050,Hijo de la luna,Mecano,1986,pop,es,,,,,,verified
+S051,Livin' on a Prayer,Bon Jovi,1986,rock,intl,Livin on a Prayer|Living on a Prayer,,,,,verified
+S052,The Final Countdown,Europe,1986,rock,intl,Final Countdown,,,,,verified
+S053,Pero a tu lado,Los Secretos,1987,pop,es,,Secretos,Año no confirmado: puede ser 1987 u otro año del álbum original; confirmar,,,disputed
+S054,Smooth Criminal,Michael Jackson,1987,pop,intl,,MJ,,,,verified
+S055,I Wanna Dance with Somebody (Who Loves Me),Whitney Houston,1987,pop,intl,I Wanna Dance with Somebody,Whitney,,,,verified
+S056,Sweet Child o' Mine,Guns N' Roses,1987,rock,intl,Sweet Child of Mine|Sweet Child O Mine,Guns and Roses|Guns N Roses,,,,verified
+S057,With or Without You,U2,1987,rock,intl,,,,,,verified
+S058,Me cuesta tanto olvidarte,Mecano,1988,pop,es,,,,,,verified
+S059,Como la cabeza al sombrero,El Último de la Fila,1988,rock,es,,Ultimo de la Fila|El Ultimo de la Fila,Año del álbum no confirmado (1988); confirmar,,,disputed
+S060,Resistiré,Dúo Dinámico,1988,pop,es,Resistire,Duo Dinamico,,,,verified
+S061,Entre dos tierras,Héroes del Silencio,1990,rock,es,,Heroes del Silencio|Héroes,,,,verified
+S062,Smells Like Teen Spirit,Nirvana,1991,rock,intl,Teen Spirit,,,,,verified
+S063,Under the Bridge,Red Hot Chili Peppers,1991,rock,intl,,RHCP|Chili Peppers,,,,verified
+S064,Nothing Else Matters,Metallica,1991,rock,intl,,,,,,verified
+S065,Losing My Religion,R.E.M.,1991,rock,intl,,REM,,,,verified
+S066,I Will Always Love You,Whitney Houston,1992,pop,intl,,Whitney,Versión de 1992 (la original de Dolly Parton es de 1973),,,verified
+S067,Creep,Radiohead,1992,rock,intl,,,,,,verified
+S068,Rhythm Is a Dancer,Snap!,1992,dance,intl,,Snap,,,,verified
+S069,Sin documentos,Los Rodríguez,1993,rock,es,,Los Rodriguez,,,,verified
+S070,Desesperada,Marta Sánchez,1993,pop,es,,Marta Sanchez,,,,verified
+S071,Macarena,Los del Río,1993,dance,es,La Macarena,Los del Rio,Original de 1993; el remix Bayside Boys es de 1995 y fue el éxito mundial,,,disputed
+S072,What Is Love,Haddaway,1993,dance,intl,,,,,,verified
+S073,Basket Case,Green Day,1994,rock,intl,,,,,,verified
+S074,Zombie,The Cranberries,1994,rock,intl,,Cranberries,,,,verified
+S075,Avalancha,Héroes del Silencio,1995,rock,es,,Heroes del Silencio|Héroes,,,,verified
+S076,Wonderwall,Oasis,1995,rock,intl,,,,,,verified
+S077,So payaso,Extremoduro,1996,rock,es,,,,,,verified
+S078,Wannabe,Spice Girls,1996,pop,intl,,,,,,verified
+S079,Killing Me Softly with His Song,Fugees,1996,hiphop,intl,Killing Me Softly,The Fugees,Versión de Fugees (1996); la original de Roberta Flack es de 1973,,,verified
+S080,Corazón partío,Alejandro Sanz,1997,pop,es,Corazon partio,Sanz,,,,verified
+S081,Sobreviviré,Mónica Naranjo,2000,pop,es,Sobrevivire,Monica Naranjo,álbum Minage 2000,,,verified
+S082,My Heart Will Go On,Céline Dion,1997,pop,intl,,Celine Dion,,,,verified
+S083,Song 2,Blur,1997,rock,intl,,,,,,verified
+S084,Barbie Girl,Aqua,1997,dance,intl,,,,,,verified
+S085,Bitter Sweet Symphony,The Verve,1997,rock,intl,Bittersweet Symphony,Verve,,,,verified
+S086,Cuídate,La Oreja de Van Gogh,1998,pop,es,Cuidate,LODVG|Oreja de Van Gogh,,,,verified
+S087,La flaca,Jarabe de Palo,1996,pop,es,,Jarabe,álbum La Flaca 1996; éxito masivo 1997-98 (anuncio),,,verified
+S088,Sin ti no soy nada,Amaral,2002,pop,es,,,álbum Estrella de mar 2002,,,verified
+S089,Soldadito marinero,Fito & Fitipaldis,2003,rock,es,,Fito|Fito y Fitipaldis|Fitipaldis,álbum Lo más lejos a tu lado 2003,,,verified
+S090,...Baby One More Time,Britney Spears,1998,pop,intl,Baby One More Time,Britney,"Single oct-1998, álbum ene-1999",,,verified
+S091,Believe,Cher,1998,dance,intl,,,,,,verified
+S092,Y nos dieron las diez,Joaquín Sabina,1992,pop,es,Y nos dieron las 10,Sabina|Joaquin Sabina,álbum Física y química 1992,,,verified
+S093,Bailamos,Enrique Iglesias,1999,latin,es,,Enrique,,,,verified
+S094,I Want It That Way,Backstreet Boys,1999,pop,intl,,BSB,,,,verified
+S095,Livin' la Vida Loca,Ricky Martin,1999,latin,intl,Livin la Vida Loca|Living la Vida Loca,,,,,verified
+S096,Yellow,Coldplay,2000,indie,intl,,,,,,verified
+S097,One More Time,Daft Punk,2000,dance,intl,,,,,,verified
+S098,Como Camarón,Estopa,1999,pop,es,Como Camaron,,"álbum debut Estopa, oct-1999",,,verified
+S099,Bonito,Jarabe de Palo,2003,pop,es,,Jarabe,álbum Bonito 2003,,,verified
+S100,Me gustas tú,Manu Chao,2001,indie,es,Me gustas tu,,,,,verified
+S101,Hero,Enrique Iglesias,2001,pop,es,,Enrique,,,,verified
+S102,"Whenever, Wherever",Shakira,2001,latin,intl,Whenever Wherever,,,,,verified
+S103,Aserejé,Las Ketchup,2002,dance,es,Asereje|The Ketchup Song,Ketchup,,,,verified
+S104,Ave María,David Bisbal,2002,latin,es,Ave Maria,Bisbal,,,,verified
+S105,Lose Yourself,Eminem,2002,hiphop,intl,,,,,,verified
+S106,Rosas,La Oreja de Van Gogh,2003,pop,es,,LODVG|Oreja de Van Gogh,,,,verified
+S107,La playa,La Oreja de Van Gogh,2000,pop,es,,LODVG|Oreja de Van Gogh,álbum El viaje de Copperpot 2000,,,verified
+S108,Con la luna llena,Melendi,2003,pop,es,,,,,,verified
+S109,No es lo mismo,Alejandro Sanz,2003,pop,es,,Sanz,,,,verified
+S110,Crazy in Love,Beyoncé,2003,rnb,intl,,Beyonce,,,,verified
+S111,Hey Ya!,Outkast,2003,hiphop,intl,Hey Ya,OutKast,,,,verified
+S112,Toxic,Britney Spears,2003,pop,intl,,Britney,,,,verified
+S113,Mr. Brightside,The Killers,2003,indie,intl,Mr Brightside,Killers,"Single sep-2003, álbum Hot Fuss 2004 y reedición del single en 2004. Vale 2003",,,disputed
+S114,Numb,Linkin Park,2003,rock,intl,,,,,,verified
+S115,Seven Nation Army,The White Stripes,2003,rock,intl,,White Stripes,,,,verified
+S116,Bulería,David Bisbal,2004,latin,es,Buleria,Bisbal,,,,verified
+S117,Since U Been Gone,Kelly Clarkson,2004,pop,intl,,,,,,verified
+S118,Feel Good Inc.,Gorillaz,2005,indie,intl,Feel Good Inc,,,,,verified
+S119,I Bet You Look Good on the Dancefloor,Arctic Monkeys,2005,indie,intl,I Bet You Look Good on the Dance Floor,,,,,verified
+S120,Rehab,Amy Winehouse,2006,rnb,intl,,,,,,verified
+S121,Umbrella,Rihanna,2007,rnb,intl,,,,,,verified
+S122,Copenhague,Vetusta Morla,2008,indie,es,,Vetusta,,,,verified
+S123,Viva la Vida,Coldplay,2008,indie,intl,,,,,,verified
+S124,Poker Face,Lady Gaga,2008,pop,intl,,,,,,verified
+S125,I Gotta Feeling,The Black Eyed Peas,2009,pop,intl,,Black Eyed Peas,,,,verified
+S126,Solamente tú,Pablo Alborán,2010,pop,es,Solamente tu,Alborán|Alboran,"Single a finales de 2010, álbum 2011; confirmar la fecha del single",,,disputed
+S127,Rolling in the Deep,Adele,2010,pop,intl,,,"Single nov-2010, álbum 21 en 2011",,,verified
+S128,Just the Way You Are,Bruno Mars,2010,pop,intl,,,,,,verified
+S129,Video Games,Lana Del Rey,2011,indie,intl,,,,,,verified
+S130,Somebody That I Used to Know,Gotye,2011,indie,intl,,Gotye ft. Kimbra,,,,verified
+S131,Moves Like Jagger,Maroon 5,2011,pop,intl,,Maroon 5 ft. Christina Aguilera,,,,verified
+S132,Lágrimas desordenadas,Melendi,2012,pop,es,Lagrimas desordenadas,,,,,verified
+S133,Quédate conmigo,Pastora Soler,2012,pop,es,Quedate conmigo,,Canción de Eurovisión 2012,,,verified
+S134,Gangnam Style,PSY,2012,dance,intl,,Psy,,,,verified
+S135,Radioactive,Imagine Dragons,2012,rock,intl,,,,,,verified
+S136,Happy,Pharrell Williams,2013,pop,intl,,Pharrell,,,,verified
+S137,Get Lucky,Daft Punk,2013,dance,intl,,Daft Punk ft. Pharrell Williams,,,,verified
+S138,Do I Wanna Know?,Arctic Monkeys,2013,indie,intl,Do I Wanna Know,,,,,verified
+S139,Wake Me Up,Avicii,2013,dance,intl,,,,,,verified
+S140,Bailando,Enrique Iglesias,2014,latin,es,,Enrique,Fecha del single dudosa (finales de 2013 o principios de 2014); confirmar,,,disputed
+S141,Maldita dulzura,Vetusta Morla,2014,indie,es,,Vetusta,"Posible single a finales de 2013, álbum La deriva 2014; confirmar",,,disputed
+S142,Dancing in the Rain,Ruth Lorenzo,2014,pop,es,,,Canción de Eurovisión 2014,,,verified
+S143,Uptown Funk,Mark Ronson & Bruno Mars,2014,pop,intl,Uptown Funk!,Mark Ronson|Bruno Mars,,,,verified
+S144,Thinking Out Loud,Ed Sheeran,2014,pop,intl,,,,,,verified
+S145,Shake It Off,Taylor Swift,2014,pop,intl,,,,,,verified
+S146,Sofia,Álvaro Soler,2016,latin,es,Sofía,Alvaro Soler,single feb-2016,,,verified
+S147,Amanecer,Edurne,2015,pop,es,,,Canción de Eurovisión 2015,,,verified
+S148,Hello,Adele,2015,pop,intl,,,,,,verified
+S149,Hotline Bling,Drake,2015,hiphop,intl,,,,,,verified
+S150,La puerta violeta,Rozalén,2017,pop,es,,Rozalen,,,,verified
+S151,Shape of You,Ed Sheeran,2017,pop,intl,,,,,,verified
+S152,Despacito,Luis Fonsi & Daddy Yankee,2017,latin,intl,,Luis Fonsi|Daddy Yankee|Fonsi,,,,verified
+S153,New Rules,Dua Lipa,2017,pop,intl,,,,,,verified
+S154,HUMBLE.,Kendrick Lamar,2017,hiphop,intl,Humble,,,,,verified
+S155,Malamente,Rosalía,2018,latin,es,,Rosalia,,,,verified
+S156,Ya no quiero ná,Lola Índigo,2018,pop,es,Ya no quiero na,Lola Indigo,,,,verified
+S157,Mala mujer,C. Tangana,2018,hiphop,es,,Tangana|C Tangana|Pucho,,,,verified
+S158,Con altura,Rosalía & J Balvin,2019,latin,es,,Rosalia|J Balvin,,,,verified
+S159,bad guy,Billie Eilish,2019,pop,intl,Bad Guy,,,,,verified
+S160,Blinding Lights,The Weeknd,2019,pop,intl,,Weeknd,"Single nov-2019, álbum After Hours mar-2020. Vale 2019",,,verified
+S161,Levitating,Dua Lipa,2020,pop,intl,,,,,,verified
+S162,Tú me dejaste de querer,C. Tangana,2020,latin,es,Tu me dejaste de querer,Tangana|C Tangana,single oct-2020; álbum El Madrileño 2021,,,verified
+S163,drivers license,Olivia Rodrigo,2021,pop,intl,Drivers License,,,,,verified
+S164,Kiss Me More,Doja Cat,2021,pop,intl,,Doja Cat ft. SZA|SZA,,,,verified
+S165,"Quevedo: Bzrp Music Sessions, Vol. 52",Quevedo & Bizarrap,2022,hiphop,es,Bzrp Session 52|Quevedo Bzrp 52,Quevedo|Bizarrap,,,,verified
+S166,Despechá,Rosalía,2022,latin,es,Despecha,Rosalia,,,,verified
+S167,SloMo,Chanel,2022,pop,es,Slo Mo,,presentada para Benidorm Fest; posible publicación dic-2021,,,disputed
+S168,Ay mamá,Rigoberta Bandini,2022,pop,es,Ay mama,,Posible publicación en 2021 antes de Benidorm Fest 2022; confirmar,,,disputed
+S169,As It Was,Harry Styles,2022,pop,intl,,,,,,verified
+S170,Anti-Hero,Taylor Swift,2022,pop,intl,Anti Hero,,,,,verified
+S171,Tití Me Preguntó,Bad Bunny,2022,latin,intl,Titi Me Pregunto,,,,,verified
+S172,Formentera,Aitana,2023,pop,es,,,,,,verified
+S173,Flowers,Miley Cyrus,2023,pop,intl,,,,,,verified
+S174,What Was I Made For?,Billie Eilish,2023,pop,intl,What Was I Made For,,,,,verified
+S175,"Shakira: Bzrp Music Sessions, Vol. 53",Shakira & Bizarrap,2023,latin,intl,Bzrp Session 53|Shakira Bzrp 53,Shakira|Bizarrap,,,,verified
+S176,Espresso,Sabrina Carpenter,2024,pop,intl,,,,,,verified
+S177,Die with a Smile,Lady Gaga & Bruno Mars,2024,pop,intl,,Lady Gaga|Bruno Mars,,,,verified
+S178,"Good Luck, Babe!",Chappell Roan,2024,pop,intl,Good Luck Babe,,,,,verified
+S179,Not Like Us,Kendrick Lamar,2024,hiphop,intl,,,,,,verified
+S180,APT.,ROSÉ & Bruno Mars,2024,pop,intl,APT|Apateu,Rosé|Rose|Bruno Mars,,,,verified

@@ -1,0 +1,25 @@
+# Desarrollo: solo Postgres, expuesto solo en 127.0.0.1:5432. La contraseña sale de POSTGRES_PASSWORD (.env).
+# La API (make dev-api) y la web (make dev-web) corren en el host.
+# Uso: docker compose -f infra/docker-compose.dev.yml up -d
+name: hitster-dev
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: hitster
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hitster}
+      POSTGRES_DB: hitster
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hitster -d hitster"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  pgdata:

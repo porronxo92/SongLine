@@ -1,0 +1,44 @@
+/* Tokens de diseño según design-system/hitstercasero/MASTER.md.
+   Fuente display para años y números: Fredoka (no Caveat; ver CLAUDE.md). */
+
+:root {
+  --color-primary: #ec4899;
+  --color-on-primary: #000000;
+  --color-secondary: #8b5cf6;
+  --color-on-secondary: #000000;
+  --color-accent: #f59e0b;
+  --color-on-accent: #0f172a;
+  --color-background: #fdf2f8;
+  --color-foreground: #0f172a;
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+  --color-muted: #fdf4f8;
+  --color-muted-foreground: #475569;
+  --color-border: #fce9f2;
+  --color-destructive: #dc2626;
+  --color-on-destructive: #ffffff;
+  --color-ring: #ec4899;
+
+  --radius-sm: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+
+  /* Sombra "clay": doble sombra suave (externa + luz interior). */
+  --shadow-clay:
+    0 8px 20px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(236, 72, 153, 0.12),
+    inset 0 -2px 0 rgba(15, 23, 42, 0.04);
+
+  --font-body: 'Quicksand', system-ui, sans-serif;
+  --font-display: 'Fredoka', 'Quicksand', system-ui, sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body);
+}

@@ -1,0 +1,37 @@
+# Caddy: sirve la web estática (/srv) y hace de proxy de /api y /ws a la API.
+# DOMAIN viene del entorno (localhost en local; dominio real en producción, con TLS automático).
+{$DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+		Content-Security-Policy "default-src 'self'; script-src 'self' https://sdk.scdn.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob: https://*.scdn.co https://*.spotifycdn.com; connect-src 'self' wss://{$DOMAIN} https://*.spotify.com wss://*.spotify.com https://*.scdn.co https://*.spotifycdn.com; frame-src https://sdk.scdn.co; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+		Permissions-Policy "autoplay=(self \"https://sdk.scdn.co\"), encrypted-media=(self \"https://sdk.scdn.co\")"
+		-Server
+	}
+
+	# La administración del catálogo no se publica: se usa dentro de la red de Docker.
+	handle /api/admin/* {
+		respond 404
+	}
+
+	handle /api/* {
+		header Cache-Control "no-store"
+		request_body {
+			max_size 64KB
+		}
+		reverse_proxy api:8000
+	}
+
+	handle /ws/* {
+		reverse_proxy api:8000
+	}
+
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}
