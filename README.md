@@ -1,8 +1,8 @@
-# KnowSongs
+# SongLine
 
-Juego de adivinar las canciones con tus amigos.
+Escucha, adivina y ordena la historia de la música. ¿Qué año suena?
 
-**HitsterCasero** es una PWA multijugador para casa, tipo Hitster. El anfitrión reproduce la música desde su móvil con Spotify y el resto de jugadores adivinan título, artista y año desde el suyo.
+**SongLine** es una PWA multijugador para casa, tipo Hitster. El anfitrión reproduce la música desde su móvil con Spotify y el resto de jugadores adivinan título, artista y año desde el suyo.
 
 El diseño completo y las decisiones cerradas están en [`docs/DISENO.md`](docs/DISENO.md). Las reglas de `CLAUDE.md` mandan sobre cualquier otro documento.
 

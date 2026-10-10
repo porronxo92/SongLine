@@ -1,6 +1,6 @@
 // Textos de la UI en español. Frases directas y breves, "vosotros" para el equipo.
 export const es = {
-  appName: 'HitsterCasero',
+  appName: 'SongLine',
   common: {
     back: 'Atrás',
     continue: 'Continuar',

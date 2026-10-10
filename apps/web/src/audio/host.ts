@@ -27,13 +27,13 @@ export const useAudioUi = create<AudioUiState>(() => ({
 
 type Sender = <T extends ClientMessageType>(type: T, payload: ClientPayloads[T]) => Promise<void>;
 
-const MASK_TITLE = 'Canción misteriosa · HitsterCasero';
+const MASK_TITLE = 'Canción misteriosa · SongLine';
 
 function applyMask(): void {
   if (!('mediaSession' in navigator) || typeof MediaMetadata === 'undefined') return;
   navigator.mediaSession.metadata = new MediaMetadata({
     title: MASK_TITLE,
-    artist: 'HitsterCasero',
+    artist: 'SongLine',
     album: '',
     artwork: [{ src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' }],
   });

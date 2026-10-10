@@ -9,9 +9,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: 'HitsterCasero',
-        short_name: 'Hitster',
-        description: 'Juego multijugador casero tipo Hitster',
+        name: 'SongLine',
+        short_name: 'SongLine',
+        description: 'Escucha, adivina y ordena la historia de la música. ¿Qué año suena?',
         display: 'standalone',
         theme_color: '#EC4899',
         background_color: '#FDF2F8',

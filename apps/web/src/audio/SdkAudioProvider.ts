@@ -75,7 +75,7 @@ export class SdkAudioProvider implements AudioProvider {
     this.events = events;
     const sdk = await loadSdk();
     const player = new sdk.Player({
-      name: 'HitsterCasero',
+      name: 'SongLine',
       volume: 0.8,
       getOAuthToken: (cb) => {
         void api.spotifyToken().then((t) => {

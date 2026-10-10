@@ -41,7 +41,7 @@ def create_app(config: AppConfig | None = None, services: Services | None = None
         await svc.manager.shutdown()
         await svc.http.aclose()
 
-    app = FastAPI(title="HitsterCasero", lifespan=lifespan)
+    app = FastAPI(title="SongLine", lifespan=lifespan)
     app.state.services = svc
     app.add_middleware(
         CORSMiddleware,
