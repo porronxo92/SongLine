@@ -1,19 +1,22 @@
-import { Check, Pause, Volume2, WifiOff, X } from 'lucide-react';
+import { Check, Pause, Volume2, VolumeX, WifiOff, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Duel } from '../components/Duel';
 import { EndGameButton } from '../components/EndGame';
 import { CountdownRing, GuessModal, HonorClaim, ObjectionBanner, VoiceConfirmModal } from '../components/GameParts';
 import { MysteryCard } from '../components/MysteryCard';
+import { PlacementSummary } from '../components/PlacementSummary';
 import { RevealExplain } from '../components/RevealExplain';
 import { TeamPanel } from '../components/TeamPanel';
 import { TimelineCarousel } from '../components/TimelineCarousel';
+import { HintChooser, HintPanel, HintStrip, TurnTools } from '../components/TurnTools';
 import { Button, Card, Screen, TeamShape } from '../components/ui';
-import { useCountdown, useThrottled, vibrate } from '../hooks/hooks';
+import { useCountdown, useHintDeadline, useThrottled, vibrate } from '../hooks/hooks';
 import { es } from '../i18n/es';
 import { explainResult } from '../lib/explain';
+import { snapIndex } from '../lib/groups';
 import { colorFor, teamName } from '../lib/teams';
 import type { CardPublic, RoomView, TeamView, TurnView } from '../protocol/types';
-import { act } from '../store/controller';
+import { act, canChangePlace, cancelPlace, confirmPlace } from '../store/controller';
 import { useRoom } from '../store/room';
 
 function isRevealed(card: TurnView['card']): card is CardPublic {
@@ -86,13 +89,19 @@ export function Game({ view }: { view: RoomView }) {
         <h1 className="text-[22px] font-bold leading-tight" role="status" data-testid="turn-banner">
           {myTurn ? es.game.yourTurn : es.game.turnOf(teamName(activeTeam))}
         </h1>
-        {playing && phase !== 'reveal' ? (
+        {phase !== 'reveal' && turn.startedPlaying && view.audio.paused ? (
+          <span className="chip" data-testid="paused-chip">
+            <VolumeX size={16} aria-hidden />
+            {es.player.pausedChip}
+          </span>
+        ) : playing && phase !== 'reveal' ? (
           <span className="chip" data-testid="playing-chip">
             <Volume2 size={16} aria-hidden />
             {es.game.playing}
           </span>
         ) : null}
       </div>
+      {!myTurn && turn.hints && phase !== 'reveal' ? <HintStrip hints={turn.hints} /> : null}
 
       {audioError ? (
         <p role="alert" className="notice">
@@ -172,6 +181,7 @@ function PhaseBody(props: BodyProps) {
 }
 
 const mystery = <MysteryCard />;
+const noop = () => undefined;
 
 /** Línea de solo lectura para quien no juega: equipo activo con su forma y tres puntos. */
 function WaitCard({ team, title, sub }: { team: TeamView; title: string; sub?: string }) {
@@ -221,10 +231,19 @@ function TurnReady({ activeTeam, myTurn }: BodyProps) {
   );
 }
 
-function Placing({ activeTeam, turn, myTurn }: BodyProps) {
+function Placing({ activeTeam, turn, myTurn, view }: BodyProps) {
   const len = activeTeam.timeline.length;
-  const [index, setIndex] = useState(() => Math.floor(len / 2));
+  // Tras «Cambiar hueco» el servidor conserva el hueco elegido en `previewIndex`.
+  const [index, setIndex] = useState(() => turn.previewIndex ?? Math.floor(len / 2));
   const [busy, setBusy] = useState(false);
+  const [chooser, setChooser] = useState(false);
+  const hints = turn.hints;
+  // Al acabarse los 60 s tras una pista se confirma el hueco que haya seleccionado.
+  const secs = useHintDeadline(hints?.deadlineTs, view.phase === 'paused', myTurn, () => {
+    setBusy(true);
+    void confirmPlace(turn.card.instanceId, index);
+  });
+  const me = view.you.slot;
   const preview = useThrottled((i: number) => {
     void act('place_preview', { index: i });
   }, 4);
@@ -261,6 +280,23 @@ function Placing({ activeTeam, turn, myTurn }: BodyProps) {
           preview(i);
         }}
       />
+      {hints && hints.used.length > 0 ? <HintPanel hints={hints} secs={secs} paused={view.phase === 'paused'} /> : null}
+      <TurnTools
+        view={view}
+        hints
+        onHint={() => {
+          setChooser(true);
+        }}
+      />
+      {chooser ? (
+        <HintChooser
+          tokens={me !== null ? (view.teams[me]?.tokens ?? 0) : 0}
+          used={(hints?.used ?? []).map((h) => h.kind)}
+          onClose={() => {
+            setChooser(false);
+          }}
+        />
+      ) : null}
       <div className="grid grid-cols-2 gap-3">
         <Button
           variant="secondary"
@@ -274,7 +310,7 @@ function Placing({ activeTeam, turn, myTurn }: BodyProps) {
           busy={busy}
           onClick={() => {
             setBusy(true);
-            void act('place_confirm', { index }).then((ok) => {
+            void confirmPlace(turn.card.instanceId, index).then((ok) => {
               if (!ok) setBusy(false);
             });
           }}
@@ -287,6 +323,43 @@ function Placing({ activeTeam, turn, myTurn }: BodyProps) {
 }
 
 function Guessing({ activeTeam, turn, myTurn, view }: BodyProps) {
+  const [title, setTitle] = useState('');
+  const [artist, setArtist] = useState('');
+  const [chooser, setChooser] = useState(false);
+  const hints = turn.hints;
+  const me = view.you.slot;
+  // Al acabarse el límite se envía lo que haya escrito (aunque esté vacío) o la confirmación en voz alta.
+  const secs = useHintDeadline(hints?.deadlineTs, view.phase === 'paused', myTurn, () => {
+    if (view.settings.mode === 'voice') void act('voice_confirm', {});
+    else void act('guess_submit', { title: title.trim(), artist: artist.trim() });
+  });
+  const place = useRoom((s) => s.place);
+  const canChange = canChangePlace(place, turn.card.instanceId, turn);
+  const onChangeSlot = canChange
+    ? () => {
+        void cancelPlace(turn.card.instanceId);
+      }
+    : undefined;
+  const tools = (
+    <div className="flex flex-col gap-3">
+      {hints && hints.used.length > 0 ? <HintPanel hints={hints} secs={secs} paused={view.phase === 'paused'} /> : null}
+      <TurnTools
+        view={view}
+        hints
+        onHint={() => {
+          setChooser(true);
+        }}
+      />
+    </div>
+  );
+  const summary = (
+    <PlacementSummary
+      team={activeTeam}
+      years={activeTeam.timeline.map((c) => c.year)}
+      index={turn.placedIndex}
+      mine={myTurn}
+    />
+  );
   return (
     <>
       <TimelineCarousel
@@ -295,8 +368,31 @@ function Guessing({ activeTeam, turn, myTurn, view }: BodyProps) {
         selectedIndex={turn.placedIndex ?? 0}
         mystery={mystery}
       />
+      {myTurn ? null : summary}
       <WaitCard team={activeTeam} title={es.game.thinking} />
-      {myTurn ? view.settings.mode === 'app' ? <GuessModal /> : <VoiceConfirmModal /> : null}
+      {myTurn && chooser ? (
+        <HintChooser
+          tokens={me !== null ? (view.teams[me]?.tokens ?? 0) : 0}
+          used={(hints?.used ?? []).map((h) => h.kind)}
+          onClose={() => {
+            setChooser(false);
+          }}
+        />
+      ) : myTurn ? (
+        view.settings.mode === 'app' ? (
+          <GuessModal
+            summary={summary}
+            tools={tools}
+            title={title}
+            artist={artist}
+            onTitle={setTitle}
+            onArtist={setArtist}
+            onChangeSlot={onChangeSlot}
+          />
+        ) : (
+          <VoiceConfirmModal summary={summary} tools={tools} onChangeSlot={onChangeSlot} />
+        )
+      ) : null}
     </>
   );
 }
@@ -307,10 +403,22 @@ function Objection({ activeTeam, turn, view }: BodyProps) {
   const [passed, setPassed] = useState(false);
   const placed = turn.placedIndex ?? 0;
   const len = activeTeam.timeline.length;
-  const [index, setIndex] = useState(() => (placed === 0 ? Math.min(1, len) : 0));
+  const lineYears = useMemo(() => activeTeam.timeline.map((c) => c.year), [activeTeam]);
+  const placedStop = snapIndex(lineYears, placed);
+  const [index, setIndex] = useState(() => snapIndex(lineYears, placedStop === 0 ? Math.min(1, len) : 0));
   const secs = useCountdown(turn.deadlineTs);
   const objector = turn.objection ? view.teams[turn.objection.slot] : undefined;
   const canObject = eligible && !passed && turn.objection === null;
+  const myTeam = me !== null ? view.teams[me] : undefined;
+  const myColor = myTeam ? colorFor(myTeam).hex : undefined;
+  const summary = (
+    <PlacementSummary team={activeTeam} years={lineYears} index={turn.placedIndex} mine={me === activeTeam.slot} />
+  );
+
+  // Una sola vibración corta al pasar a «te toca objetar».
+  useEffect(() => {
+    if (canObject) vibrate(150);
+  }, [canObject]);
 
   if (canObject) {
     return (
@@ -320,17 +428,20 @@ function Objection({ activeTeam, turn, view }: BodyProps) {
           totalS={view.settings.objectionWindowS}
           title={es.game.objectQuestion}
           body={es.game.objectBody}
+          kicker={es.game.objectKicker}
+          color={myColor}
         />
+        {summary}
         <TimelineCarousel
           cards={activeTeam.timeline}
           mode="object"
           equalHint
           selectedIndex={index}
-          blockedIndex={placed}
+          blockedIndex={placedStop}
           mystery={mystery}
           onIndexChange={setIndex}
         />
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3" style={myColor ? ({ '--tc': myColor } as React.CSSProperties) : undefined}>
           <Button
             variant="secondary"
             onClick={() => {
@@ -342,7 +453,8 @@ function Objection({ activeTeam, turn, view }: BodyProps) {
           </Button>
           <Button
             variant="danger"
-            disabled={index === placed}
+            className="btn-pulse"
+            disabled={index === placedStop}
             onClick={() => {
               void act('objection', { index });
             }}
@@ -353,10 +465,16 @@ function Objection({ activeTeam, turn, view }: BodyProps) {
       </>
     );
   }
-  const years = activeTeam.timeline.map((c) => c.year);
+  const years = lineYears;
+  let reason: string | null = null;
+  if (!passed && turn.objection === null && me !== null) {
+    reason = me === activeTeam.slot ? es.game.objectOthers : eligible ? null : es.game.objectNoTokens;
+  }
   return (
     <>
+      {summary}
       <TimelineCarousel cards={activeTeam.timeline} mode="readonly" selectedIndex={placed} mystery={mystery} />
+      {me === activeTeam.slot ? <TurnTools view={view} hints={false} onHint={noop} /> : null}
       {turn.objection && objector ? (
         <>
           <Duel
@@ -373,9 +491,16 @@ function Objection({ activeTeam, turn, view }: BodyProps) {
       ) : (
         <Card className="flex items-center gap-4">
           <CountdownRing deadlineTs={turn.deadlineTs} totalS={view.settings.objectionWindowS} />
-          <p role="status" className="h2">
-            {passed ? es.game.passed : es.game.waitingObjections(secs ?? 0)}
-          </p>
+          <div>
+            <p role="status" className="h2">
+              {passed ? es.game.passed : es.game.waitingObjections(secs ?? 0)}
+            </p>
+            {reason ? (
+              <p className="obj-reason mt-1" data-testid="objection-reason">
+                {reason}
+              </p>
+            ) : null}
+          </div>
         </Card>
       )}
     </>
@@ -435,6 +560,8 @@ function Reveal({ view, turn, activeTeam, myTurn }: BodyProps) {
         <MysteryCard card={shown ? card : null} large />
       </div>
 
+      <PlacementSummary team={activeTeam} years={baseYears} index={turn.placedIndex} mine={myTurn} />
+
       {showDuel && objector && result && objIndex !== null ? (
         <Duel
           original={activeTeam}
@@ -447,7 +574,12 @@ function Reveal({ view, turn, activeTeam, myTurn }: BodyProps) {
       ) : null}
 
       {result && explanation ? (
-        <RevealExplain explanation={explanation} active={activeTeam} objector={objector ?? null} />
+        <RevealExplain
+          explanation={explanation}
+          active={activeTeam}
+          objector={objector ?? null}
+          hidePending={view.settings.mode === 'voice' && myTurn}
+        />
       ) : null}
 
       {result && view.settings.mode === 'app' ? (

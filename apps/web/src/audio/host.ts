@@ -122,8 +122,59 @@ class AudioHost {
     }
   }
 
-  handleCommand(action: AudioCommandAction): void {
+  /** Proveedor que suena ahora mismo: la reserva si el turno la usa, si no el principal. */
+  private current(): AudioProvider | null {
+    return this.previewActive || this.primary === this.preview ? this.preview : this.primary;
+  }
+
+  /** Órdenes del mini reproductor (seek, pausa, reanudar, reiniciar). */
+  private async control(action: 'seek' | 'pause' | 'resume' | 'restart', deltaMs: number): Promise<void> {
+    const p = this.current();
+    if (!p) return;
+    try {
+      switch (action) {
+        case 'seek':
+          await p.seekBy(deltaMs);
+          return;
+        case 'pause':
+          await p.pause();
+          this.report(false);
+          return;
+        case 'resume':
+          await p.resume();
+          this.report(true);
+          this.checkStarted();
+          return;
+        case 'restart':
+          await p.restart();
+          this.report(true);
+          this.checkStarted();
+          return;
+      }
+    } catch (e) {
+      if (e instanceof DOMException && e.name === 'NotAllowedError') {
+        useAudioUi.setState({ tapRequired: true });
+      } else {
+        this.fail('unknown');
+      }
+    }
+  }
+
+  /** En iPhone un `resume` sin gesto puede no arrancar: si no suena en 1,5 s, pide el toque. */
+  private checkStarted(): void {
+    setTimeout(() => {
+      if (this.reported !== true) useAudioUi.setState({ tapRequired: true });
+    }, 1500);
+  }
+
+  handleCommand(action: AudioCommandAction, deltaMs = 0): void {
     switch (action) {
+      case 'seek':
+      case 'pause':
+      case 'resume':
+      case 'restart':
+        void this.control(action, deltaMs);
+        break;
       case 'prepare':
         this.previewActive = false;
         this.primary?.onPrepare?.();
@@ -145,8 +196,7 @@ class AudioHost {
   /** Gesto del usuario sobre «Toca para que suene». */
   async tapToPlay(): Promise<void> {
     try {
-      if (this.previewActive || this.primary === this.preview) await this.preview.resume();
-      else await this.primary?.resume();
+      await this.current()?.resume();
       useAudioUi.setState({ tapRequired: false });
       this.report(true);
     } catch {

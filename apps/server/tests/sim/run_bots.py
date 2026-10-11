@@ -26,7 +26,7 @@ from app.game.commands import GameError  # noqa: E402
 from app.game.engine import reduce  # noqa: E402
 from app.game.models import Phase, Room, Song, new_room  # noqa: E402
 from app.game.projection import standings, view_json  # noqa: E402
-from app.game.rules import is_sorted  # noqa: E402
+from app.game.rules import hint_seed, is_sorted, mask_text  # noqa: E402
 
 MAX_STEPS = 6000
 
@@ -78,6 +78,24 @@ def check_result(room: Room) -> None:
     assert r.headline == expected
 
 
+def check_hints(room: Room) -> None:
+    turn = room.turn
+    if "hint" in room.timers or "hint" in room.frozen:
+        assert turn is not None and turn.hints_used, "hint timer without hints"
+        assert turn.hint_deadline_ts is not None
+        assert room.phase in (Phase.PLACING, Phase.GUESSING, Phase.PAUSED)
+    if turn is not None:
+        assert len(set(turn.hints_used)) == len(turn.hints_used) <= 2
+        assert turn.audio_commands >= 0
+        assert 0 <= turn.place_changes <= 3
+        if room.phase == Phase.PLACING:
+            assert turn.placed_index is None and not turn.guessed, "PLACING keeps a placement"
+        if room.phase == Phase.GUESSING:
+            assert turn.placed_index is not None, "GUESSING without placement"
+    if room.phase in (Phase.OBJECTION, Phase.REVEAL, Phase.GAME_OVER, Phase.LOBBY):
+        assert "hint" not in room.timers and "hint" not in room.frozen, "hint timer outlived GUESSING"
+
+
 def check_ranking(room: Room) -> None:
     """Final ranking: by cards only, competition ranks (1, 1, 3), winners = rank 1."""
     rows = standings(room)
@@ -102,6 +120,7 @@ def check_invariants(room: Room, expected_total: int) -> None:
     ids = [c.instance_id for t in room.teams for c in t.timeline] + [c.instance_id for c in room.deck]
     ids += [c.instance_id for c in room.discard]
     assert len(ids) == len(set(ids)), "duplicate card"
+    check_hints(room)
     if room.phase == Phase.GAME_OVER:
         assert room.winners, "no winners"
         check_ranking(room)
@@ -113,6 +132,8 @@ def setup_lobby(
     target: int = 10,
     code: str = "0001",
     objection_window_s: int = 15,
+    initial_tokens: int = 0,
+    hints_enabled: bool = True,
 ) -> Room:
     """Lobby with every slot claimed and connected, host audio ready (fake-mode equivalent)."""
     room = new_room(code, "hash0", "Host")
@@ -126,6 +147,8 @@ def setup_lobby(
                 "mode": mode,
                 "target_cards": target,
                 "objection_window_s": objection_window_s,
+                "initial_tokens": initial_tokens,
+                "hints_enabled": hints_enabled,
             },
         ),
         now,
@@ -156,6 +179,8 @@ class GameStats:
     objections: int
     pauses: int
     skipped: int
+    hints: int = 0
+    cancels: int = 0
 
 
 def play_game(
@@ -175,11 +200,19 @@ def play_game(
     md = mode or rng.choice(["voice", "app"])
     tg = target or rng.choice([3, 5, 10])
     songs = songs or make_songs(rng.choice([8, 15, 60]), seed=seed)
-    room = setup_lobby(tc, md, tg)
+    hint_rng0 = random.Random(seed + 104729)
+    room = setup_lobby(
+        tc, md, tg, initial_tokens=hint_rng0.choice([0, 1, 2, 3]), hints_enabled=hint_rng0.random() < 0.8
+    )
     now = 100.0
     room, _ = reduce(room, C.Start(0, songs, seed), now)
     expected_total = len(set(s.id for s in songs)) if len(songs) >= tc + 1 else len(songs)
     skill = rng.choice([0.2, 0.5, 0.9])
+    hint_rng = random.Random(seed + 104730)  # separate stream: hints do not change the other games
+    hint_p = hint_rng.choice([0.0, 0.2, 0.6])
+    hint_expire_p = hint_rng.choice([0.0, 0.3])
+    cancel_rng = random.Random(seed + 104731)  # separate stream again
+    cancel_p = cancel_rng.choice([0.0, 0.3, 0.7])
     obj_p = rng.choice([0.0, 0.5, 1.0])
     drop_p = rng.choice([0.0, 0.05, 0.15])
     stats = GameStats(0, 0, None, 0, 0, 0)
@@ -193,6 +226,61 @@ def play_game(
             assert_no_leak(room)
         if on_step:
             on_step(room)
+
+    def try_hint() -> bool:
+        """Maybe ask for a hint; returns True if the state moved or a timer fired (caller re-reads it)."""
+        nonlocal now
+        t = room.turn
+        assert t is not None
+        if "hint" in room.timers and hint_rng.random() < hint_expire_p:
+            now = max(now, room.timers["hint"].deadline_ts)
+            step(fire(room, "hint"))
+            return True
+        if hint_rng.random() >= hint_p:
+            return False
+        kind = hint_rng.choice(["artist", "title"])
+        before = room.teams[t.team_slot].tokens
+        try:
+            step(C.UseHint(t.team_slot, kind))
+        except GameError as e:
+            assert e.code in ("no_tokens", "hint_already_used", "hints_disabled"), e.code
+            assert room.teams[t.team_slot].tokens == before
+            return False
+        assert room.teams[t.team_slot].tokens == before - 1
+        stats.hints += 1
+        return False
+
+    def try_cancel() -> bool:
+        """Maybe go back from GUESSING to PLACING; checks the guards. True if the state moved."""
+        t = room.turn
+        assert t is not None and room.phase == Phase.GUESSING
+        if cancel_rng.random() >= cancel_p:
+            return False
+        # a stranger can never cancel
+        other = next((x.slot for x in room.teams if x.claimed and x.slot != t.team_slot), None)
+        if other is not None:
+            try:
+                reduce(room, C.PlaceCancel(other), now)
+                raise AssertionError("place_cancel accepted from another team")
+            except GameError as e:
+                assert e.code == "not_your_turn", e.code
+        allowed = not t.guessed and not t.placed_auto and t.place_changes < 3
+        snapshot = room.model_dump()
+        before = (t.place_changes, t.preview_index, [tm.tokens for tm in room.teams], list(t.hints_used))
+        try:
+            step(C.PlaceCancel(t.team_slot))
+        except GameError as e:
+            assert not allowed, f"rejected {e.code} but allowed"
+            assert e.code in ("wrong_phase", "already_guessed", "too_many_changes"), e.code
+            assert room.model_dump() == snapshot, "rejected place_cancel changed the state"
+            return False
+        assert allowed, "accepted but should be rejected"
+        t2 = room.turn
+        assert t2 is not None and room.phase == Phase.PLACING and t2.placed_index is None
+        assert (t2.place_changes, t2.preview_index) == (before[0] + 1, before[1])
+        assert ([tm.tokens for tm in room.teams], list(t2.hints_used)) == (before[2], before[3])
+        stats.cancels += 1
+        return True
 
     while room.phase != Phase.GAME_OVER:
         if stats.steps > MAX_STEPS:
@@ -230,6 +318,8 @@ def play_game(
             step(C.PlayRequest(turn.team_slot))
         elif ph == Phase.PLACING:
             assert turn is not None
+            if try_hint() or room.phase != Phase.PLACING:
+                continue
             years = [c.year for c in room.teams[turn.team_slot].timeline]
             if rng.random() < skill:
                 idx = sum(1 for y in years if y <= turn.card.year)
@@ -240,6 +330,10 @@ def play_game(
             step(C.PlaceConfirm(turn.team_slot, idx))
         elif ph == Phase.GUESSING:
             assert turn is not None
+            if try_hint() or room.phase != Phase.GUESSING:
+                continue
+            if try_cancel():
+                continue
             if md == "app":
                 good = rng.random() < skill
                 step(
@@ -310,8 +404,18 @@ def assert_no_leak(room: Room) -> None:
     c = turn.card
     for viewer in [None, *range(len(room.teams))]:
         view = view_json(room, viewer)
+        hints = (view.get("turn") or {}).get("hints")
         if viewer == turn.team_slot and view.get("turn"):
             view["turn"].pop("guess", None)  # the active team sees what it typed itself
+            used = {h["kind"]: h["masked"] for h in (hints or {}).get("used", [])}
+            assert list(used) == turn.hints_used
+            for kind, masked in used.items():
+                src = c.artist if kind == "artist" else c.title
+                assert masked == mask_text(src, hint_seed(c.instance_id, kind))
+        else:
+            assert "masked" not in json.dumps(view), "masked hint text sent to a non-active viewer"
+            if hints is not None:
+                assert all(set(h) == {"kind"} for h in hints["used"])
         blob = json.dumps(view, ensure_ascii=False)
         assert c.title not in blob and c.artist not in blob, "title/artist leaked"
         assert c.track_id not in blob or not c.track_id, "track_id leaked"
@@ -326,7 +430,7 @@ def main() -> int:
     args = ap.parse_args()
     t0 = time.time()
     reasons: dict[str | None, int] = {}
-    steps = pauses = skipped = objections = 0
+    steps = pauses = skipped = objections = hints = cancels = 0
     for i in range(args.n):
         _, st = play_game(args.seed + i, check_leaks=args.leaks, end_p=args.end_p)
         reasons[st.reason] = reasons.get(st.reason, 0) + 1
@@ -334,9 +438,11 @@ def main() -> int:
         pauses += st.pauses
         skipped += st.skipped
         objections += st.objections
+        hints += st.hints
+        cancels += st.cancels
     print(
         f"OK: {args.n} games finished in {time.time() - t0:.1f}s | endings={reasons} "
-        f"steps={steps} pauses={pauses} skipped_turns={skipped} objections={objections}"
+        f"steps={steps} pauses={pauses} skipped_turns={skipped} objections={objections} hints={hints} cancels={cancels}"
     )
     return 0
 

@@ -14,6 +14,7 @@ from pydantic import ValidationError
 
 from app.game.commands import (
     AcceptGuess,
+    AudioControl,
     AudioFailed,
     AudioReport,
     AudioUnlocked,
@@ -35,6 +36,7 @@ from app.game.commands import (
     Objection,
     ObjectionPass,
     PersistSnapshot,
+    PlaceCancel,
     PlaceConfirm,
     PlacePreview,
     PlayRequest,
@@ -48,12 +50,14 @@ from app.game.commands import (
     StartTimer,
     TimerFired,
     UpdateSettings,
+    UseHint,
     VoiceConfirm,
 )
 from app.game.models import (
     EDITABLE_SETTINGS,
     Card,
     Headline,
+    HintKind,
     ObjectionExplanation,
     PauseInfo,
     PauseReason,
@@ -69,6 +73,7 @@ from app.game.models import (
 )
 from app.game.projection import audio_ready, card_public, standings
 from app.game.rules import (
+    MAX_PLACE_CHANGES_PER_TURN,
     card_count,
     deal_initial,
     explain_slot,
@@ -84,7 +89,13 @@ LOBBY_HOST_S = 30.0
 TAP_CHECK_S = 1.5
 GAME_OVER_GC_S = 900.0
 DECK_LOW = 5
-FREEZABLE = ("countdown", "objection", "reveal_auto", "tap_check")
+HINT_LIMIT_S = 60.0  # visible "limit to answer", counted from the first hint of the turn
+HINT_GRACE_S = 2.0  # the client sends what is on screen at 60 s; the server fires at 62 s
+HINT_FALLBACK_S = 8.0  # visible window left to answer after a PLACING expiry confirmed the slot
+MAX_AUDIO_COMMANDS_PER_TURN = 80
+AUDIO_CONTROL_PHASES = (Phase.PLACING, Phase.GUESSING, Phase.OBJECTION)
+SEEK_LIMIT_MS = 30_000
+FREEZABLE = ("countdown", "objection", "reveal_auto", "tap_check", "hint")
 IN_GAME = (
     Phase.COUNTDOWN,
     Phase.TURN_READY,
@@ -135,6 +146,13 @@ def _cancel_timer(room: Room, fx: Fx, name: str) -> None:
     if name in room.timers:
         del room.timers[name]
         fx.append(CancelTimer(name))
+
+
+def _clear_hint_timer(room: Room, fx: Fx) -> None:
+    _cancel_timer(room, fx, "hint")
+    room.frozen.pop("hint", None)
+    if room.turn is not None:
+        room.turn.hint_deadline_ts = None
 
 
 def _cancel_all_timers(room: Room, fx: Fx) -> None:
@@ -222,6 +240,8 @@ def _sync_pause(room: Room, fx: Fx, now: float) -> None:
             deadline = _start_timer(room, fx, now, name, remaining)
             if name in ("objection", "reveal_auto") and room.turn is not None:
                 room.turn.deadline_ts = deadline
+            elif name == "hint" and room.turn is not None:
+                room.turn.hint_deadline_ts = deadline - HINT_GRACE_S
     else:
         _set_pause(room, fx, now, need)
 
@@ -275,6 +295,7 @@ def _eligible_objectors(room: Room) -> list[int]:
 def _after_guess(room: Room, fx: Fx, now: float) -> None:
     turn = room.turn
     assert turn is not None
+    _clear_hint_timer(room, fx)
     if _eligible_objectors(room):
         room.phase = Phase.OBJECTION
         turn.deadline_ts = _start_timer(room, fx, now, "objection", float(room.settings.objection_window_s))
@@ -310,6 +331,7 @@ def _reveal(room: Room, fx: Fx, now: float) -> None:
     assert turn is not None
     _cancel_timer(room, fx, "objection")
     _cancel_timer(room, fx, "tap_check")
+    _clear_hint_timer(room, fx)
     card = turn.card
     active = room.teams[turn.team_slot]
     assert turn.placed_index is not None
@@ -391,6 +413,7 @@ def _finish_turn(room: Room, fx: Fx, now: float) -> None:
     turn = room.turn
     assert turn is not None and turn.result is not None
     _cancel_timer(room, fx, "reveal_auto")
+    _clear_hint_timer(room, fx)
     _stop_audio(room, fx)
     delta = {str(turn.team_slot): 1 if turn.token_awarded else 0}
     if turn.objection is not None:
@@ -428,6 +451,7 @@ def _play(room: Room, fx: Fx) -> None:
     turn = room.turn
     assert turn is not None
     turn.started_playing = True
+    turn.audio_paused = False
     room.audio.playing = False
     if room.settings.audio_source == "preview" or not room.audio.sdk_ready or room.audio.device_id is None:
         turn.audio_source = "preview"
@@ -633,6 +657,8 @@ def _h_audio_unlocked(room: Room, cmd: AudioUnlocked, now: float, fx: Fx) -> Non
 def _h_audio_report(room: Room, cmd: AudioReport, now: float, fx: Fx) -> None:
     _require_host(room, cmd.sender)
     room.audio.playing = cmd.playing
+    if cmd.playing and room.turn is not None:
+        room.turn.audio_paused = False
     source = room.turn.audio_source if room.turn else room.settings.audio_source
     fx.append(Broadcast("audio_status", {"playing": cmd.playing, "source": source}))
 
@@ -684,6 +710,68 @@ def _h_play_result(room: Room, cmd: PlayResult, now: float, fx: Fx) -> None:
         fx.append(Broadcast("audio_status", {"playing": False, "source": "preview"}))
 
 
+def _h_audio_control(room: Room, cmd: AudioControl, now: float, fx: Fx) -> None:
+    _require(room, *AUDIO_CONTROL_PHASES)
+    turn = _require_active(room, cmd.sender)
+    if not turn.started_playing:
+        raise GameError("wrong_phase", "La cancion aun no ha empezado")
+    if cmd.action == "seek":
+        if cmd.delta_ms is None or isinstance(cmd.delta_ms, bool) or abs(cmd.delta_ms) > SEEK_LIMIT_MS:
+            raise GameError("bad_payload", "Salto no valido")
+    elif cmd.action not in ("pause", "resume", "restart") or cmd.delta_ms is not None:
+        raise GameError("bad_payload", "Accion no valida")
+    if turn.audio_commands >= MAX_AUDIO_COMMANDS_PER_TURN:
+        raise GameError("rate_limited", "Demasiados controles de audio en este turno")
+    turn.audio_commands += 1
+    if cmd.action == "pause":
+        turn.audio_paused = True
+    elif cmd.action in ("resume", "restart"):
+        turn.audio_paused = False
+    payload: dict[str, Any] = {"action": cmd.action}
+    if cmd.action == "seek":
+        payload["delta_ms"] = cmd.delta_ms
+    fx.append(SendTo(room.host_slot, "audio_command", payload))  # host only, no song data
+
+
+def _h_use_hint(room: Room, cmd: UseHint, now: float, fx: Fx) -> None:
+    _require(room, Phase.PLACING, Phase.GUESSING)
+    turn = _require_active(room, cmd.sender)
+    if not room.settings.hints_enabled:
+        raise GameError("hints_disabled", "Las pistas estan desactivadas")
+    if cmd.kind not in ("artist", "title"):
+        raise GameError("bad_payload", "Tipo de pista no valido")
+    kind: HintKind = "artist" if cmd.kind == "artist" else "title"
+    if kind in turn.hints_used:
+        raise GameError("hint_already_used", "Esa pista ya se pidio en este turno")
+    team = room.teams[turn.team_slot]
+    if team.tokens < 1:
+        raise GameError("no_tokens", "No tienes fichas")
+    team.tokens -= 1  # spent immediately, never refunded
+    turn.hints_used.append(kind)
+    if "hint" not in room.timers:
+        turn.hint_deadline_ts = now + HINT_LIMIT_S
+        _start_timer(room, fx, now, "hint", HINT_LIMIT_S + HINT_GRACE_S)
+    fx.append(Broadcast("hint_used", {"slot": turn.team_slot, "kind": kind}))  # never the text
+
+
+def _hint_expired(room: Room, fx: Fx, now: float) -> None:
+    turn = room.turn
+    if turn is None:
+        return
+    if room.phase == Phase.PLACING:
+        tl = room.teams[turn.team_slot].timeline
+        idx = turn.preview_index if turn.preview_index is not None else len(tl) // 2
+        _confirm_slot(room, fx, turn, min(max(idx, 0), len(tl)))
+        turn.placed_auto = True
+        # the slot is confirmed; the answer gets a short last window so the turn cannot stall
+        turn.hint_deadline_ts = now + HINT_FALLBACK_S
+        _start_timer(room, fx, now, "hint", HINT_FALLBACK_S + HINT_GRACE_S)
+    elif room.phase == Phase.GUESSING:
+        if room.settings.mode == "app":
+            turn.guess_title, turn.guess_artist, turn.guessed = "", "", True
+        _after_guess(room, fx, now)
+
+
 def _h_place_preview(room: Room, cmd: PlacePreview, now: float, fx: Fx) -> None:
     _require(room, Phase.PLACING)
     turn = _require_active(room, cmd.sender)
@@ -692,15 +780,35 @@ def _h_place_preview(room: Room, cmd: PlacePreview, now: float, fx: Fx) -> None:
     turn.preview_index = cmd.index
 
 
+def _confirm_slot(room: Room, fx: Fx, turn: Turn, index: int) -> None:
+    turn.placed_index = index
+    turn.preview_index = index
+    _cancel_timer(room, fx, "tap_check")
+    room.phase = Phase.GUESSING
+
+
 def _h_place_confirm(room: Room, cmd: PlaceConfirm, now: float, fx: Fx) -> None:
     _require(room, Phase.PLACING)
     turn = _require_active(room, cmd.sender)
     if not 0 <= cmd.index <= len(room.teams[turn.team_slot].timeline):
         raise GameError("invalid_index", "Hueco fuera de rango")
-    turn.placed_index = cmd.index
-    turn.preview_index = cmd.index
-    _cancel_timer(room, fx, "tap_check")
-    room.phase = Phase.GUESSING
+    _confirm_slot(room, fx, turn, cmd.index)
+
+
+def _h_place_cancel(room: Room, cmd: PlaceCancel, now: float, fx: Fx) -> None:
+    _require(room, Phase.GUESSING)
+    turn = _require_active(room, cmd.sender)
+    if turn.guessed:
+        raise GameError("already_guessed", "Ya has respondido")
+    if turn.placed_auto:
+        raise GameError("wrong_phase", "El hueco se confirmo solo al acabar el tiempo")
+    if turn.place_changes >= MAX_PLACE_CHANGES_PER_TURN:
+        raise GameError("too_many_changes", "Ya has cambiado el hueco demasiadas veces")
+    turn.place_changes += 1
+    turn.placed_index = None  # preview_index is kept; timers (hint, tap_check) are left alone
+    turn.guess_title = turn.guess_artist = None
+    turn.guessed = False
+    room.phase = Phase.PLACING
 
 
 def _h_guess_submit(room: Room, cmd: GuessSubmit, now: float, fx: Fx) -> None:
@@ -794,7 +902,7 @@ def _h_rematch(room: Room, cmd: Rematch, now: float, fx: Fx) -> None:
     _cancel_all_timers(room, fx)
     for t in room.teams:
         t.timeline = []
-        t.tokens = 0
+        t.tokens = room.settings.initial_tokens
     room.deck = []
     room.discard = []
     room.turn = None
@@ -828,6 +936,9 @@ def _h_timer(room: Room, cmd: TimerFired, now: float, fx: Fx) -> None:
     elif name == "objection":
         if room.phase == Phase.OBJECTION:
             _reveal(room, fx, now)
+    elif name == "hint":
+        if room.phase in (Phase.PLACING, Phase.GUESSING):
+            _hint_expired(room, fx, now)
     elif name == "reveal_auto":
         if room.phase == Phase.REVEAL:
             _finish_turn(room, fx, now)
@@ -838,6 +949,7 @@ def _h_timer(room: Room, cmd: TimerFired, now: float, fx: Fx) -> None:
             and t is not None
             and t.audio_source == "spotify"
             and not room.audio.playing
+            and not t.audio_paused  # el equipo pausó a propósito: no hay que pedir un toque
         ):
             fx.append(SendTo(room.host_slot, "audio_command", {"action": "tap_required"}))
     elif name.startswith("grace:"):
@@ -867,10 +979,13 @@ _HANDLERS: dict[type, Callable[[Room, Any, float, Fx], None]] = {
     AudioUnlocked: _h_audio_unlocked,
     AudioReport: _h_audio_report,
     AudioFailed: _h_audio_failed,
+    AudioControl: _h_audio_control,
+    UseHint: _h_use_hint,
     PlayRequest: _h_play_request,
     PlayResult: _h_play_result,
     PlacePreview: _h_place_preview,
     PlaceConfirm: _h_place_confirm,
+    PlaceCancel: _h_place_cancel,
     GuessSubmit: _h_guess_submit,
     VoiceConfirm: _h_voice_confirm,
     Objection: _h_objection,
@@ -883,7 +998,7 @@ _HANDLERS: dict[type, Callable[[Room, Any, float, Fx], None]] = {
     TimerFired: _h_timer,
 }
 
-_NO_PERSIST = (PlacePreview, AudioReport, PlayResult)
+_NO_PERSIST = (PlacePreview, AudioReport, PlayResult, AudioControl)
 
 
 def reduce(room: Room, command: Command, now: float) -> tuple[Room, list[Effect]]:

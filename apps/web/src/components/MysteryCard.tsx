@@ -7,11 +7,11 @@ import type { CardPublic } from '../protocol/types';
 import { useRoom } from '../store/room';
 
 /** Carta de la línea del tiempo (ya revelada). Sin portada: un vinilo del color de la década. */
-export function YearCard({ card, highlight }: { card: CardPublic; highlight?: boolean }) {
+export function YearCard({ card, highlight, stack }: { card: CardPublic; highlight?: boolean; stack?: boolean }) {
   return (
     <div className="relative">
       <div
-        className={clsx('ycard', highlight && 'hit')}
+        className={clsx('ycard', stack && 'stack', highlight && 'hit')}
         style={{ '--dc': decadeVar(card.year) } as React.CSSProperties}
         aria-label={`${String(card.year)}, ${card.title}, ${card.artist}`}
       >

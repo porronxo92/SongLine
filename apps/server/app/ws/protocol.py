@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, ValidationError, model_validator
 
 from app.game.projection import CardPublic
 
@@ -58,9 +58,29 @@ class KickMsg(BaseModel):
 
 
 class UpdateSettingsMsg(BaseModel):
-    """Partial<Settings>. Editable keys: team_count, mode, target_cards, objection_window_s, audio_source, packs."""
+    """Partial<Settings>. Editable keys: team_count, mode, target_cards, objection_window_s, audio_source,
+    packs, hints_enabled, initial_tokens."""
 
     model_config = ConfigDict(extra="allow")
+
+
+class AudioControlMsg(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    action: Literal["seek", "pause", "resume", "restart"]
+    delta_ms: StrictInt | None = Field(default=None, ge=-30000, le=30000)
+
+    @model_validator(mode="after")
+    def _delta_only_for_seek(self) -> AudioControlMsg:
+        if (self.action == "seek") != (self.delta_ms is not None):
+            raise ValueError("delta_ms is required for seek and forbidden otherwise")
+        return self
+
+
+class UseHintMsg(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    kind: Literal["artist", "title"]
 
 
 class IndexMsg(BaseModel):
@@ -88,12 +108,15 @@ CLIENT_MESSAGES: dict[str, type[BaseModel]] = {
     "audio_unlocked": Empty,
     "audio_report": AudioReportMsg,
     "audio_failed": AudioFailedMsg,
+    "audio_control": AudioControlMsg,
+    "use_hint": UseHintMsg,
     "kick": KickMsg,
     "update_settings": UpdateSettingsMsg,
     "start_game": Empty,
     "play_request": Empty,
     "place_preview": IndexMsg,
     "place_confirm": IndexMsg,
+    "place_cancel": Empty,
     "guess_submit": GuessSubmitMsg,
     "voice_confirm": Empty,
     "objection": IndexMsg,
@@ -144,7 +167,15 @@ class CountdownPayload(BaseModel):
 class AudioCommandPayload(BaseModel):
     """Only sent to the host phone. Never carries a URI."""
 
-    action: Literal["prepare", "tap_required", "play_preview", "stop"]
+    action: Literal["prepare", "tap_required", "play_preview", "stop", "seek", "pause", "resume", "restart"]
+    delta_ms: int | None = None  # only with action "seek"
+
+
+class HintUsedPayload(BaseModel):
+    """Public notice. Never carries the masked text."""
+
+    slot: int
+    kind: Literal["artist", "title"]
 
 
 class AudioStatusPayload(BaseModel):
@@ -226,6 +257,7 @@ SERVER_MESSAGES: dict[str, type[BaseModel]] = {
     "countdown": CountdownPayload,
     "audio_command": AudioCommandPayload,
     "audio_status": AudioStatusPayload,
+    "hint_used": HintUsedPayload,
     "audio_error": AudioErrorPayload,
     "reveal": RevealPayload,
     "turn_resolved": TurnResolvedPayload,

@@ -24,6 +24,7 @@ log = logging.getLogger(__name__)
 router = APIRouter()
 
 PREVIEW_MIN_INTERVAL_S = 0.1
+AUDIO_CONTROL_PER_S = 4
 HELLO_TIMEOUT_S = 5.0
 MAX_MESSAGE_CHARS = 16384
 
@@ -82,6 +83,16 @@ def build_command(
     if t == "audio_failed":
         assert isinstance(m, P.AudioFailedMsg)
         return C.AudioFailed(sender, m.code)
+    if t == "audio_control":
+        assert isinstance(m, P.AudioControlMsg)
+        if conn.audio_bucket is None:
+            conn.audio_bucket = TokenBucket(AUDIO_CONTROL_PER_S, AUDIO_CONTROL_PER_S)
+        if not conn.audio_bucket.take():
+            raise GameError("rate_limited", "Demasiados controles de audio por segundo")
+        return C.AudioControl(sender, m.action, m.delta_ms)
+    if t == "use_hint":
+        assert isinstance(m, P.UseHintMsg)
+        return C.UseHint(sender, m.kind)
     if t == "kick":
         assert isinstance(m, P.KickMsg)
         return C.Kick(sender, m.slot)
@@ -105,6 +116,8 @@ def build_command(
     if t == "place_confirm":
         assert isinstance(m, P.IndexMsg)
         return C.PlaceConfirm(sender, m.index)
+    if t == "place_cancel":
+        return C.PlaceCancel(sender)
     if t == "guess_submit":
         assert isinstance(m, P.GuessSubmitMsg)
         return C.GuessSubmit(sender, m.title, m.artist)

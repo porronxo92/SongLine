@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { serverNow } from '../store/room';
+import { shouldAutoSend } from '../lib/hints';
 import { getVibrateEnabled } from '../lib/session';
 
 /** Segundos que faltan hasta `deadlineTs` (hora del servidor). `null` si no hay plazo. */
@@ -115,4 +116,28 @@ export function usePrefersReducedMotion(): boolean {
     };
   }, []);
   return reduced;
+}
+
+/**
+ * Cuenta atrás del límite de 60 s tras pedir una pista. Cuando llega a 0 llama a `onExpire` una vez
+ * por cada `deadlineTs` (el servidor cambia el plazo al pasar de colocar a responder).
+ */
+export function useHintDeadline(
+  deadlineTs: number | null | undefined,
+  paused: boolean,
+  enabled: boolean,
+  onExpire: () => void,
+): number | null {
+  const secs = useCountdown(deadlineTs);
+  const handled = useRef<number | null>(null);
+  const cb = useRef(onExpire);
+  cb.current = onExpire;
+  useEffect(() => {
+    const ts = deadlineTs ?? null;
+    if (enabled && shouldAutoSend(ts, secs, handled.current, paused)) {
+      handled.current = ts;
+      cb.current();
+    }
+  });
+  return secs;
 }

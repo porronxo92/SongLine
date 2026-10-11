@@ -124,6 +124,40 @@ export function Toast() {
   );
 }
 
+/** Interruptor accesible (role="switch") con texto de ayuda opcional. */
+export function Switch({
+  label,
+  help,
+  checked,
+  onChange,
+}: {
+  label: string;
+  help?: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <div className="min-w-0">
+        <span className="font-bold">{label}</span>
+        {help ? <p className="help">{help}</p> : null}
+      </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        aria-label={label}
+        className="sw"
+        onClick={() => {
+          onChange(!checked);
+        }}
+      >
+        <span className="sw-knob" aria-hidden />
+      </button>
+    </div>
+  );
+}
+
 export function Stepper({
   label,
   value,

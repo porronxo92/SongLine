@@ -151,7 +151,7 @@ def test_play_request_effects_and_guards() -> None:
     room2, fx = reduce(room, C.PlayRequest(0), now)
     assert room2.phase == Phase.PLACING
     plays = [e for e in fx if isinstance(e, C.SpotifyPlay)]
-    assert len(plays) == 1 and plays[0].position_ms == 10_000 and plays[0].device_id == "dev"  # D1, D9
+    assert len(plays) == 1 and plays[0].position_ms == 15_000 and plays[0].device_id == "dev"  # D1, D9
     cmds = [e for e in fx if isinstance(e, C.SendTo) and e.type == "audio_command"]
     assert cmds[0].slot == 0 and cmds[0].payload == {"action": "prepare"}  # to the host only
     # "Repetir": play_request again in PLACING
@@ -186,6 +186,15 @@ def test_play_ok_arms_tap_check_and_asks_for_tap() -> None:
     room, _ = reduce(room, C.PlayResult(room.turn.card.instance_id, True), now)  # type: ignore[union-attr]
     _, fx = reduce(room, fire(room, "tap_check"), now + 1.5)
     assert not any(isinstance(e, C.SendTo) for e in fx)  # already playing
+
+
+def test_tap_check_skips_when_the_team_paused_on_purpose() -> None:
+    room, now = rigged({0: [1980], 1: [1990]}, 1985)
+    room, _ = reduce(room, C.PlayRequest(0), now)
+    room, _ = reduce(room, C.PlayResult(room.turn.card.instance_id, True), now)  # type: ignore[union-attr]
+    room, _ = reduce(room, C.AudioControl(0, "pause"), now + 0.5)
+    _, fx = reduce(room, fire(room, "tap_check"), now + 1.5)
+    assert not any(isinstance(e, C.SendTo) and e.payload == {"action": "tap_required"} for e in fx)
 
 
 def test_audio_report_broadcasts_status() -> None:

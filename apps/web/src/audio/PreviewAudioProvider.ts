@@ -91,6 +91,20 @@ export class PreviewAudioProvider implements AudioProvider {
     return Promise.resolve();
   }
 
+  seekBy(deltaMs: number): Promise<void> {
+    const a = this.audio;
+    if (!a) return Promise.resolve();
+    const max = Number.isFinite(a.duration) ? a.duration : Number.POSITIVE_INFINITY;
+    a.currentTime = Math.min(Math.max(0, a.currentTime + deltaMs / 1000), max);
+    return Promise.resolve();
+  }
+
+  async restart(): Promise<void> {
+    const a = this.ensure();
+    a.currentTime = 0;
+    await a.play();
+  }
+
   dispose(): void {
     this.audio?.pause();
     if (this.currentUrl) URL.revokeObjectURL(this.currentUrl);

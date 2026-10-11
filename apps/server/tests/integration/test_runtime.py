@@ -140,7 +140,7 @@ async def test_play_effect_runs_backend_and_failures_fall_back_to_preview() -> N
     await rt.dispatch(C.PlayRequest(0))
     await settle(20)
     assert len(backend.plays) == 2  # one automatic retry
-    assert backend.plays[0][1:4] == ("dev", rt.room.turn.card.track_id, 10_000)  # type: ignore[union-attr]
+    assert backend.plays[0][1:4] == ("dev", rt.room.turn.card.track_id, 15_000)  # type: ignore[union-attr]
     assert rt.room.turn.audio_source == "preview"  # type: ignore[union-attr]
     actions = [m["payload"]["action"] for m in ws.sent if m["type"] == "audio_command"]
     assert actions == ["prepare", "play_preview"]

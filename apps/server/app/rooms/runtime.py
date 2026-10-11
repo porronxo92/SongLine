@@ -45,6 +45,7 @@ class Conn:
     ws: Socket
     session_hash: str
     last_preview_at: float = 0.0
+    audio_bucket: Any = None  # TokenBucket for audio_control (4/s), created lazily by the router
 
 
 @dataclass

@@ -33,6 +33,7 @@ export interface SettingsView {
   targetCards: number;
   initialCardCounts: true;
   initialTokens: number;
+  hintsEnabled: boolean;
   objectionCost: 'always';
   objectionWindowS: number;
   tokenRequiresCorrectSlot: true;
@@ -91,6 +92,17 @@ export interface TurnResult {
   tokenDelta: Record<string, number>;
 }
 
+export type HintKind = 'artist' | 'title';
+/** `masked` solo existe para el equipo del turno. */
+export interface HintUsed {
+  kind: HintKind;
+  masked?: string;
+}
+export interface HintsView {
+  deadlineTs: number | null;
+  used: HintUsed[];
+}
+
 export interface TurnView {
   teamSlot: number;
   card: MysteryCardData | CardPublic;
@@ -102,6 +114,11 @@ export interface TurnView {
   guess: { title: string; artist: string } | null;
   audioSource: AudioSource;
   startedPlaying: boolean;
+  hints: HintsView | null;
+  /** 3 menos los `place_cancel` usados. Opcional por si el servidor aún no lo envía. */
+  placeChangesLeft?: number;
+  /** El servidor confirmó el hueco al vencer el límite de la pista: no se puede cambiar. */
+  placedAuto?: boolean;
   result: TurnResult | null;
   revealUnlocksAt: number | null;
 }
@@ -132,7 +149,7 @@ export interface RoomView {
   teams: TeamView[];
   turn: TurnView | null;
   deckRemaining: number;
-  audio: { hostReady: boolean; playing: boolean; source: AudioSource };
+  audio: { hostReady: boolean; playing: boolean; paused: boolean; source: AudioSource };
   pause: PauseView | null;
   winners: number[] | null;
   gameOverReason: 'target' | 'deck_exhausted' | 'host_ended' | null;
@@ -150,7 +167,11 @@ export interface EditableSettings {
   objection_window_s: number;
   audio_source: AudioSource;
   packs: string[];
+  hints_enabled: boolean;
+  initial_tokens: number;
 }
+
+export type AudioControlAction = 'seek' | 'pause' | 'resume' | 'restart';
 
 export interface ClientPayloads {
   hello: { session_token: string; last_version?: number };
@@ -165,6 +186,7 @@ export interface ClientPayloads {
   play_request: Record<string, never>;
   place_preview: { index: number };
   place_confirm: { index: number };
+  place_cancel: Record<string, never>;
   guess_submit: { title: string; artist: string };
   voice_confirm: Record<string, never>;
   objection: { index: number };
@@ -174,6 +196,8 @@ export interface ClientPayloads {
   next_turn: Record<string, never>;
   rematch: Record<string, never>;
   end_game: Record<string, never>;
+  audio_control: { action: AudioControlAction; delta_ms?: number };
+  use_hint: { kind: HintKind };
   ping: { t?: number };
 }
 export type ClientMessageType = keyof ClientPayloads;
@@ -190,7 +214,15 @@ export interface RevealPayload {
   reveal_unlocks_at: number;
 }
 
-export type AudioCommandAction = 'prepare' | 'tap_required' | 'play_preview' | 'stop';
+export type AudioCommandAction =
+  | 'prepare'
+  | 'tap_required'
+  | 'play_preview'
+  | 'stop'
+  | 'seek'
+  | 'pause'
+  | 'resume'
+  | 'restart';
 
 export interface GameOverPayload {
   winners: number[];
@@ -203,7 +235,8 @@ export interface ServerPayloads {
   ack: { ref_id: string };
   error: { ref_id: string; code: string; message: string };
   countdown: { deadline_ts: number; first_slot: number };
-  audio_command: { action: AudioCommandAction };
+  audio_command: { action: AudioCommandAction; delta_ms?: number };
+  hint_used: { slot: number; kind: HintKind };
   audio_status: { playing: boolean; source: AudioSource };
   audio_error: { code: AudioFailCode; retry: boolean };
   reveal: RevealPayload;

@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 
 const FOCUSABLE =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -11,6 +11,7 @@ export function Modal({
   labelledBy = 'modal-title',
   icon,
   wide,
+  closeOnBackdrop,
 }: {
   title: string;
   children: ReactNode;
@@ -19,8 +20,16 @@ export function Modal({
   /** Icono lucide opcional sobre el título. */
   icon?: ReactNode;
   wide?: boolean;
+  /** Un toque en el fondo, fuera del panel, también cierra. Solo para paneles informativos, nunca para decisiones. */
+  closeOnBackdrop?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  // `onClose` puede cambiar en cada render: se guarda aparte para no reiniciar el foco ni el atrapado.
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
+  const hasClose = onClose !== undefined;
+  // El gesto solo cuenta si empieza y acaba en el fondo.
+  const downOnBackdrop = useRef(false);
 
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null;
@@ -29,8 +38,8 @@ export function Modal({
     (items()[0] ?? node)?.focus();
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && onClose) {
-        onClose();
+      if (e.key === 'Escape' && closeRef.current) {
+        closeRef.current();
         return;
       }
       if (e.key !== 'Tab') return;
@@ -55,10 +64,22 @@ export function Modal({
       document.removeEventListener('keydown', onKey);
       previous?.focus();
     };
-  }, [onClose]);
+  }, [hasClose]);
 
   return (
-    <div className="scrim" style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}>
+    <div
+      className="scrim"
+      style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}
+      data-testid="modal-backdrop"
+      onPointerDown={(e: ReactPointerEvent<HTMLDivElement>) => {
+        downOnBackdrop.current = e.target === e.currentTarget;
+      }}
+      onClick={(e) => {
+        const startedOutside = downOnBackdrop.current;
+        downOnBackdrop.current = false;
+        if (closeOnBackdrop && startedOutside && e.target === e.currentTarget) closeRef.current?.();
+      }}
+    >
       <div
         ref={ref}
         role="dialog"

@@ -80,13 +80,16 @@ La identidad del emisor sale **siempre del token**, nunca del payload.
 | `audio_report` | `{playing: boolean}` | Solo anfitrión. Envíalo cuando el audio empieza o se detiene de verdad. El servidor lo difunde como `audio_status`. |
 | `audio_failed` | `{code}`; `"premium_required"` \| `"device_gone"` \| `"rate_limited"` \| `"unknown"` | Solo anfitrión. `device_gone` y `premium_required` pausan la partida. |
 | `kick` | `{slot}` | LOBBY, anfitrión. No puede expulsarse a sí mismo. |
-| `update_settings` | Parcial: `team_count` (2 a 4), `mode` (`"app"`\|`"voice"`), `target_cards` (3 a 30), `objection_window_s` (5 a 60), `audio_source` (`"spotify"`\|`"preview"`), `packs` (lista de slugs de packs de géneros, ver `GET /api/catalog/packs`; al menos uno, sin repetidos, solo slugs conocidos; por defecto `["mix"]`) | LOBBY, anfitrión. Cualquier otra clave da `invalid_settings` (las reglas D1 a D9 son fijas). `team_count` no puede dejar huecos ocupados fuera. `packs` lo sustituye entero (no es un parche de la lista). |
+| `update_settings` | Parcial: `team_count` (2 a 4), `mode` (`"app"`\|`"voice"`), `target_cards` (3 a 30), `objection_window_s` (5 a 60), `audio_source` (`"spotify"`\|`"preview"`), `packs` (lista de slugs de packs de géneros, ver `GET /api/catalog/packs`; al menos uno, sin repetidos, solo slugs conocidos; por defecto `["mix"]`), `hints_enabled` (booleano, por defecto `true`), `initial_tokens` (entero 0 a 3, por defecto **1**: fichas con las que empieza cada equipo, también en la revancha) | LOBBY, anfitrión. Cualquier otra clave da `invalid_settings` (las reglas D1 a D9 son fijas). `team_count` no puede dejar huecos ocupados fuera. `packs` lo sustituye entero (no es un parche de la lista). |
 | `start_game` | `{}` | LOBBY, anfitrión. Ver guardas abajo. |
 | `play_request` | `{}` | TURN_READY o PLACING, equipo activo. En PLACING repite la canción («Repetir»). |
 | `place_preview` | `{index}` | PLACING, activo. Máximo 10 por segundo; el exceso se ignora con `ack`. |
 | `place_confirm` | `{index}` | PLACING, activo. `0 ≤ index ≤ nº de cartas de su línea`. |
+| `place_cancel` | `{}` | GUESSING, activo, antes de responder. Deshace el `place_confirm` y vuelve a PLACING (ver abajo). |
 | `guess_submit` | `{title, artist}` | GUESSING, activo, modo `app`. Vale vacío («No lo sé»). |
 | `voice_confirm` | `{}` | GUESSING, activo, modo `voice`. |
+| `audio_control` | `{action, delta_ms?}`; `action` = `"seek"` \| `"pause"` \| `"resume"` \| `"restart"`. `seek` exige `delta_ms` **entero** en `[-30000, 30000]` (la web envía ±10000); en las demás acciones `delta_ms` no puede venir. Claves extra, tipos no enteros (`1.5`, `"10000"`, `true`) o acciones desconocidas: `bad_payload` | Mini reproductor. Solo el **equipo del turno**; fases PLACING, GUESSING u OBJECTION y con la canción ya iniciada (`turn.startedPlaying`). Ver «Control de audio» abajo. |
+| `use_hint` | `{kind}`; `kind` = `"artist"` \| `"title"`. Sin claves extra | Pista con ficha. Solo el equipo del turno, en PLACING o GUESSING. Ver «Pistas» abajo. |
 | `objection` | `{index}` | OBJECTION, equipos distintos del activo con ficha. `index` es un hueco de **la línea del equipo activo**, distinto de `placedIndex`. |
 | `objection_pass` | `{}` | OBJECTION, equipos elegibles (ver `eligibleObjectors`). |
 | `honor_claim` | `{title_ok, artist_ok}` | REVEAL, activo, modo `voice`. Se puede enviar varias veces hasta salir de REVEAL. |
@@ -95,6 +98,24 @@ La identidad del emisor sale **siempre del token**, nunca del payload.
 | `rematch` | `{}` | GAME_OVER, anfitrión. Vuelve a LOBBY conservando equipos y dispositivos. |
 | `end_game` | `{}` | Cualquier fase de partida (COUNTDOWN a REVEAL y PAUSED), solo anfitrión. En LOBBY y GAME_OVER da `wrong_phase`; si no es el anfitrión, `not_host`. Termina la partida con `game_over` `reason: "host_ended"`: ganan los equipos en posición 1 (más cartas; las fichas no desempatan, los empatados comparten posición). La carta en curso no se revela ni entra en ninguna línea. |
 | `ping` | `{t?}` | Cada 15 s. Responde `pong`. `t` es número o cadena de hasta 64 caracteres. |
+
+**Control de audio (`audio_control`).** Guardas, en este orden: `paused` (partida en PAUSED) o `wrong_phase` (fase distinta de PLACING, GUESSING, OBJECTION) → `not_your_turn` (emisor distinto del equipo activo, o espectador) → `wrong_phase` (la canción aún no ha empezado: `startedPlaying` es `false`) → `bad_payload` → `rate_limited`. Dos límites de frecuencia: **4 comandos por segundo y por conexión** (cubo con ráfaga de 4; el exceso da `rate_limited` y no cambia nada) y **80 por turno** (después, `rate_limited` hasta el siguiente turno). El servidor no llama a la Web API de Spotify: reenvía el comando al móvil del anfitrión (`audio_command`, ver 3.2) y este lo ejecuta en local. El anfitrión no recibe ningún dato de la canción.
+- `seek`: salto **relativo** de `delta_ms` desde la posición actual (negativo = atrás). El reproductor del anfitrión debe limitarlo a `[0, duración]`.
+- `pause` / `resume`: pausa y reanuda.
+- `restart`: vuelve a la posición 0 de la canción (el principio, no el segundo 15) y deja la canción sonando.
+- Estado visible: tras cada comando válido el servidor difunde un `state` con `audio.paused` (intención del equipo: `true` tras `pause`, `false` tras `resume`, `restart`, `play_request` o un `audio_report {playing:true}`). `audio.playing` sigue siendo lo que el anfitrión informa con `audio_report`. Para mostrar el botón: «pausado» = `audio.paused`; «suena» = `audio.playing && !audio.paused`.
+
+**Cambiar hueco (`place_cancel`).** Permite corregir un hueco confirmado por error. Guardas, en este orden: `paused` o `wrong_phase` (fase distinta de GUESSING) → `not_your_turn` (emisor distinto del equipo activo, o espectador) → `already_guessed` (el equipo ya tiene respuesta guardada) → `wrong_phase` (el hueco lo confirmó el servidor al vencer el límite de la pista: la confirmación automática es definitiva) → `too_many_changes` (ya hubo 3 cambios en el turno). En modo `app` y en modo `voice`, `guess_submit` y `voice_confirm` salen de GUESSING, así que tras responder la fase ya no es GUESSING y el código es `wrong_phase`. `already_guessed` es una guarda defensiva. Efecto: la fase vuelve a **PLACING**, `view.turn.placedIndex` pasa a `null`, se conserva `previewIndex` (el hueco que acababa de confirmar, para que la web lo deje seleccionado) y se descarta cualquier respuesta guardada del turno. No cambia fichas, pistas, ni el temporizador «límite para responder»: sigue su curso y, si vence en PLACING, confirma `previewIndex` como siempre. No hay objeción hasta salir de GUESSING. Se difunde el `state` habitual; no sale ningún dato de la canción. La vista expone `turn.placeChangesLeft` (3 menos los cambios usados) y `turn.placedAuto` (hueco confirmado por el servidor) a todos, para que la web oculte el botón sin esperar al error. Un rechazo no cambia nada ni cuenta como cambio.
+
+**Pistas (`use_hint`).** Cuesta **1 ficha** (se resta en el acto y no se devuelve, acierte o no). Dos tipos y se pueden pedir los dos pagando dos; cada tipo una vez por turno. Guardas, en este orden: `paused` o `wrong_phase` (fase distinta de PLACING y GUESSING) → `not_your_turn` → `hints_disabled` (`settings.hintsEnabled` es `false`) → `bad_payload` → `hint_already_used` (ese tipo ya se pidió este turno) → `no_tokens` (el equipo tiene 0 fichas). Un rechazo no cuesta nada.
+- **Solo el equipo del turno ve el texto enmascarado** (en `view.turn.hints.used[].masked` de su propio `state`). Los demás equipos, el anfitrión (si no es el activo) y los espectadores solo ven `used: [{"kind": "artist"}]`; con ese dato y con el evento `hint_used` la web puede mostrar «X ha pedido una pista de artista/título». El texto no sale en ningún evento efímero, ni en errores, ni en logs.
+- **Enmascarado** (calculado en el servidor, `mask_text`): solo se ocultan las **letras** (acentuadas y ñ incluidas) y se sustituyen por `_`; espacios, dígitos y signos salen tal cual. Se revela alrededor del 40 % de las letras (siempre entre el 25 % y el 60 %) en posiciones fijas por `(carta del turno, tipo)`: pedir de nuevo o recargar nunca destapa más, y la pista de artista no revela nada del título ni al revés. Cada palabra de 3 o más letras muestra al menos una letra y oculta al menos una; con 2 o más letras en total siempre queda alguna oculta. `"artist"` enmascara el artista de la carta; `"title"`, el título. Ejemplo: `"Alejandro Sanz"` → `"A___a__r_ _a_z"` (las posiciones concretas dependen de la carta; el formato es este).
+- **Temporizador «límite para responder» (60 s).** Al pedir la **primera** pista del turno arranca; una segunda pista no lo reinicia. `view.turn.hints.deadlineTs` (epoch s) es el final visible: 60 s exactos tras la primera pista. El servidor actúa a los **62 s** (2 s de gracia), para que el cliente tenga tiempo de enviar lo que haya en pantalla justo a los 60 s; si el cliente llega a tiempo, el servidor cancela su temporizador al salir de GUESSING. Al vencer:
+  - En **PLACING**: el servidor confirma el hueco de `previewIndex` (si es `null`, el hueco central: `floor(n / 2)` con `n` cartas en la línea) como si el equipo hubiera enviado `place_confirm`, y pasa a GUESSING. Como la respuesta aún falta, arranca una **última ventana de 8 s** (`hints.deadlineTs` pasa a ser `ahora + 8`, el servidor actúa a los 10 s) para no dejar el turno colgado.
+  - En **GUESSING**: modo `voice`, equivale a `voice_confirm`; modo `app`, se envía una respuesta vacía (`guess = {title:"", artist:""}`, cuenta como «No lo sé» y no da ficha). Después sigue el flujo normal (OBJECTION o REVEAL).
+  - El temporizador se cancela al salir de GUESSING (a OBJECTION o REVEAL), al terminar o saltarse el turno y en `end_game`.
+  - **Pausa:** si la partida pasa a PAUSED (anfitrión o equipo activo desconectados), el temporizador se congela y se reanuda con el tiempo restante al volver (igual que el de objeción). Mientras dura la pausa `hints.deadlineTs` conserva el valor anterior; al reanudar se recalcula. Calcula la cuenta atrás en el cliente con `pause`/`deadlineTs`, no con un reloj propio.
+- `turn_resolved.token_delta` y `result.tokenDelta` **no** incluyen las fichas gastadas en pistas (ya se restaron en `teams[].tokens` al pedirlas).
 
 **Guardas de `start_game`** (en este orden): remitente = anfitrión (`not_host`); fase LOBBY (`wrong_phase`); todos los huecos de `team_count` ocupados (`teams_incomplete`); todos conectados (`teams_offline`); audio del anfitrión listo (`audio_not_ready`: `unlocked` y `sdkReady`+`premiumOk`, o `audio_source = "preview"` y `unlocked`); canciones suficientes (`catalog_too_small`). El mazo se construye con las canciones habilitadas de `settings.packs`, sin duplicados (por `track_id` y por título+artista normalizados); `catalog_too_small` se evalúa sobre ese mazo ya filtrado. La revancha conserva `packs`.
 
@@ -105,10 +126,15 @@ Ejemplos:
 {"type":"device_ready","id":"…","payload":{"device_id":"9f3c…","provider":"sdk"}}
 {"type":"update_settings","id":"…","payload":{"mode":"app","target_cards":8}}
 {"type":"place_confirm","id":"…","payload":{"index":2}}
+{"type":"place_cancel","id":"…","payload":{}}
 {"type":"guess_submit","id":"…","payload":{"title":"bohemian rapsody","artist":"queen"}}
 {"type":"objection","id":"…","payload":{"index":0}}
 {"type":"honor_claim","id":"…","payload":{"title_ok":true,"artist_ok":false}}
 {"type":"ping","id":"…","payload":{"t":1760000000123}}
+{"type":"audio_control","id":"…","payload":{"action":"seek","delta_ms":-10000}}
+{"type":"audio_control","id":"…","payload":{"action":"pause"}}
+{"type":"use_hint","id":"…","payload":{"kind":"artist"}}
+{"type":"update_settings","id":"…","payload":{"hints_enabled":true,"initial_tokens":2}}
 ```
 
 ### 3.2 Servidor a cliente
@@ -119,9 +145,10 @@ Ejemplos:
 | `ack` | `{ref_id}` | Remitente. |
 | `error` | `{ref_id, code, message}` | Remitente. `ref_id` es el `id` del mensaje rechazado (cadena vacía si no se pudo leer). `message` está en español. |
 | `countdown` | `{deadline_ts, first_slot}` | Todos, al empezar. Dura 3 s. |
-| `audio_command` | `{action}`; `"prepare"` \| `"tap_required"` \| `"play_preview"` \| `"stop"` | **Solo el móvil del anfitrión.** Nunca lleva URI. |
+| `audio_command` | `{action, delta_ms?}`; `"prepare"` \| `"tap_required"` \| `"play_preview"` \| `"stop"` \| `"seek"` \| `"pause"` \| `"resume"` \| `"restart"`. `delta_ms` (entero) solo viene con `seek` | **Solo el móvil del anfitrión.** Nunca lleva URI ni datos de la canción. |
 | `audio_status` | `{playing: boolean, source: "spotify"\|"preview"}` | Todos (para mostrar «Sonando…»). |
 | `audio_error` | `{code, retry: boolean}`; `code` = `"premium_required"` \| `"device_gone"` \| `"rate_limited"` \| `"unknown"` | Todos. |
+| `hint_used` | `{slot: number, kind: "artist"\|"title"}` | Todos (incluido el activo), cuando un equipo paga una pista. **Nunca lleva el texto**; el enmascarado solo está en `state` del equipo activo. Sirve para el aviso «X ha pedido una pista de artista». |
 | `reveal` | ver abajo | Todos, al entrar en REVEAL. |
 | `turn_resolved` | `{to_slot: number\|null, token_delta: {"<slot>": number}}` | Todos, al salir de REVEAL (resultado definitivo de fichas). |
 | `deck_low` | `{remaining}` | Todos, al empezar un turno con menos de 5 cartas en el mazo. |
@@ -135,6 +162,11 @@ Semántica de `audio_command` (solo anfitrión):
 - `tap_required`: muestra a pantalla completa «Toca para que suene» (sin metadatos) y llama a `player.resume()` dentro del gesto. Después envía `audio_report {playing:true}`.
 - `play_preview`: el turno usa la reserva (D7). Pide el audio con `GET /api/turn/audio?code=<code>` (Bearer del anfitrión), reprodúcelo en un `<audio>` desde el inicio (0 s) y envía `audio_report {playing:true}`.
 - `stop`: pausa/detén todo (se envía al salir de REVEAL).
+- `seek` `{delta_ms}`: salta `delta_ms` ms respecto a la posición actual (p. ej. `player.getCurrentState()` + `player.seek(pos + delta_ms)` en el SDK; en preview, `audio.currentTime`). Limita el resultado a `[0, duración]`. No envíes `audio_report` por esto.
+- `pause`: `player.pause()` / `audio.pause()`. Envía `audio_report {playing:false}`.
+- `resume`: `player.resume()` / `audio.play()`. Envía `audio_report {playing:true}`.
+- `restart`: `player.seek(0)` y, si estaba en pausa, `resume`. Envía `audio_report {playing:true}`. Es el principio de la canción, no el segundo 15.
+- Estos cuatro comandos solo se envían a petición del equipo del turno, validados y limitados por el servidor; ejemplos: `{"type":"audio_command","id":"…","payload":{"action":"seek","delta_ms":-10000}}` y `{"type":"audio_command","id":"…","payload":{"action":"pause"}}`.
 
 Ejemplo de `reveal` (claves de la carta en camelCase):
 
@@ -242,6 +274,12 @@ Ejemplo 2: la carta (1990) se colocó tras 2000 (debía ir antes); el equipo 1 o
 | `wrong_mode` | Orden de modo `app` en sala `voice` o al revés. |
 | `objection_closed` | Llegó tarde: ya hay objeción o ya se pasó a REVEAL. No gasta ficha. |
 | `no_token` | Objeción sin ficha. |
+| `no_tokens` | `use_hint` con 0 fichas. |
+| `hint_already_used` | `use_hint` de un tipo (`artist`/`title`) ya pedido en este turno. |
+| `hints_disabled` | `use_hint` con `settings.hintsEnabled = false`. |
+| `already_guessed` | `place_cancel` cuando el equipo ya respondió en este turno. |
+| `too_many_changes` | `place_cancel` por cuarta vez en el turno (máximo 3). |
+| `rate_limited` | `audio_control` por encima de 4 por segundo y conexión, o más de 80 en el turno. No cambia el estado. Es un `error` de WS (no confundir con el `audio_error` ni con el cierre `4429`). |
 | `same_slot` | Objeción al mismo hueco que colocó el activo. |
 | `too_early` | `next_turn` antes de `revealUnlocksAt` (5 s tras revelar). |
 
@@ -270,15 +308,20 @@ interface SettingsView {
   mode: "app" | "voice";
   targetCards: number;             // 3..30
   initialCardCounts: true;         // D3, fijo
-  initialTokens: number;           // 0
+  initialTokens: number;           // 0..3, por defecto 1 (S2); se aplica al empezar y en la revancha
+  hintsEnabled: boolean;           // por defecto true
   objectionWindowS: number;        // 5..60, por defecto 15
   objectionCost: "always";         // D2, fijo
   tokenRequiresCorrectSlot: true;  // D5, fijo
   placementTimeoutS: null;         // D8, fijo
   disconnectGraceS: number;        // 60
-  startPositionMs: number;         // 10000 (D9)
+  startPositionMs: number;         // 15000 (D9, segundo 15)
   audioSource: "spotify" | "preview";
+  packs: string[];
 }
+
+// Para el equipo activo: { kind, masked }. Para todos los demás: { kind } (la clave `masked` no existe).
+type HintUsed = { kind: "artist" | "title"; masked?: string };   // masked, p. ej. "A___a__r_ _a_z"
 
 interface TeamView {
   slot: number;
@@ -303,6 +346,13 @@ interface TurnView {
   guess: { title: string; artist: string } | null; // modo app: solo el activo hasta REVEAL; todos en REVEAL
   audioSource: "spotify" | "preview";     // "preview" si este turno usa la reserva
   startedPlaying: boolean;
+  placeChangesLeft: number;  // 3 menos los place_cancel usados este turno; visible para todos
+  placedAuto: boolean;       // true si el servidor confirmó el hueco al vencer la pista (place_cancel ya no vale)
+  // Pistas. null si hintsEnabled es false o si la carta ya está revelada (REVEAL; las pistas desaparecen).
+  hints: {
+    deadlineTs: number | null;            // fin visible de los 60 s (epoch s); null si no hay temporizador
+    used: HintUsed[];                     // en orden de petición
+  } | null;
   result: {                               // solo REVEAL
     placedOk: boolean;
     objectionSlot: number | null;
@@ -333,7 +383,8 @@ interface RoomView {
   deckRemaining: number;
   audio: {
     hostReady: boolean;     // anfitrión conectado y con audio listo
-    playing: boolean;
+    playing: boolean;       // lo que informa el anfitrión con audio_report
+    paused: boolean;        // el equipo del turno pidió pausa (audio_control); false en cualquier otro caso
     source: "spotify" | "preview";
   };
   pause: {                  // solo en PAUSED
@@ -352,6 +403,7 @@ Reglas de interpretación:
 
 - **Quién tiene el turno:** `view.turn.teamSlot`. «Es mi turno» = `view.you.slot === view.turn.teamSlot`.
 - **Anfitrión:** `view.you.isHost`. Solo ese móvil recibe `audio_command` y reproduce audio.
+- **Pistas:** `view.turn.hints?.used` con `masked` solo existe si `view.you.slot === view.turn.teamSlot`. Las fichas gastadas ya están restadas en `teams[].tokens`.
 - **Línea de objeción:** durante OBJECTION el objetor elige un hueco entre `0` y `teams[turn.teamSlot].timeline.length`, distinto de `turn.placedIndex`.
 - **Hueco correcto:** `timeline[i-1].year <= año <= timeline[i].year`; los años iguales valen a ambos lados.
 - **PAUSED:** `view.turn` sigue presente. `pause.resumePhase` indica a dónde se vuelve. Los temporizadores de objeción y revelación quedan congelados y se reanudan con el tiempo restante.
@@ -371,6 +423,8 @@ Carta en curso (la que se está jugando), por fase:
 | `track_id`, URI, ISRC, portada | nunca | nunca | nunca | **nunca** | nunca |
 | `song_id` | nunca | nunca | nunca | **nunca** (solo `instanceId`, aleatorio por partida) | nunca |
 | `turn.guess` (modo app) | n/a | solo al activo | solo al activo | a todos | n/a |
+| `turn.hints.used[].masked` | n/a | **solo al equipo activo** (nunca a los demás, ni al anfitrión si no es el activo) | `null` si no hay pistas; el activo conserva `masked` mientras dure la fase | `hints = null` | n/a |
+| `turn.hints.used[].kind`, `turn.hints.deadlineTs` | n/a | a todos | a todos (`deadlineTs = null`) | `hints = null` | n/a |
 | `turn.previewIndex` | n/a | a todos (solo PLACING) | `null` | `null` | n/a |
 | `turn.result` (incl. `songYear`, `placement`, `objection`, `token`, `headline`) | n/a | `null` | `null` | presente | n/a |
 | Mazo | solo `deckRemaining` | igual | igual | igual | igual |
@@ -433,6 +487,8 @@ Arranque: `AUTH_MODE=fake CATALOG_SOURCE=csv PERSISTENCE=none uvicorn app.main:a
 | Gracia por desconexión del equipo activo | 60 s (`pause.deadlineTs`). Si vence: se salta el turno y la carta vuelve al fondo del mazo. Si vuelve, se reanuda en la misma fase |
 | Anfitrión sin conexión en partida | PAUSED `audio_host_offline`, sin temporizador de salto. Se reanuda cuando el anfitrión reconecta y envía `device_ready` + `audio_unlocked` |
 | Anfitrión sin conexión en el lobby | A los 30 s el anfitrión pasa al siguiente hueco ocupado y conectado (`you.isHost`/`teams[].isHost` cambian) |
+| Pistas | 1 ficha cada una (`artist`, `title`); 60 s para responder desde la primera (el servidor actúa a los 62 s); al vencer se confirma lo que haya (ver «Pistas» en 3.1) |
+| Audio | La canción empieza en `settings.startPositionMs` (15 000 ms). El mini reproductor usa `audio_control` (±10 s, pausa, desde el principio) |
 | Ficha | +1 al activo si hueco correcto **y** título **y** artista correctos (D5). La ficha del objetor se gasta siempre (D2). Se puede corregir (`honor_claim` / `accept_guess`) hasta salir de REVEAL |
 | Resolución | Hueco del activo correcto: se queda la carta. Si no, objeción correcta: la carta va a la línea del objetor (en su sitio). Si no: se descarta |
 | Fin | Al salir de REVEAL, si alguien tiene `targetCards` cartas (la inicial cuenta, D3) → `target`. Si el mazo está vacío al empezar un turno → `deck_exhausted`: ranking solo por cartas (ver abajo). El anfitrión puede cortar antes con `end_game` → `host_ended` (misma regla de ranking; la carta en curso, si no estaba revelada, vuelve al fondo del mazo sin enviarse a nadie) |

@@ -15,6 +15,8 @@ export function settingsOf(view: RoomView): EditableSettings {
     objection_window_s: s.objectionWindowS,
     audio_source: s.audioSource,
     packs: s.packs,
+    hints_enabled: s.hintsEnabled,
+    initial_tokens: s.initialTokens,
   };
 }
 

@@ -1,7 +1,9 @@
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useState } from 'react';
 import type { EditableSettings } from '../protocol/types';
 import { es } from '../i18n/es';
 import { PackPicker } from './PackPicker';
-import { Stepper } from './ui';
+import { Stepper, Switch } from './ui';
 
 interface Option<T extends string> {
   value: T;
@@ -51,10 +53,46 @@ interface FieldsProps {
   values: EditableSettings;
   onChange: (patch: Partial<EditableSettings>) => void;
   minTeams?: number;
+  /** Esconde los ajustes menos usados tras «Más ajustes» (paso 1 de Nueva sala). */
+  collapseExtras?: boolean;
 }
 
 /** Ajustes de juego sin géneros: paso 1 de Crear y base de los ajustes del lobby. */
-export function GameSettingsFields({ values, onChange, minTeams = 2 }: FieldsProps) {
+export function GameSettingsFields({ values, onChange, minTeams = 2, collapseExtras }: FieldsProps) {
+  const [moreOpen, setMoreOpen] = useState(false);
+  const extras = (
+    <>
+      <Stepper
+        label={es.create.objection}
+        value={values.objection_window_s}
+        min={5}
+        max={60}
+        step={5}
+        format={es.common.seconds}
+        onChange={(n) => {
+          onChange({ objection_window_s: n });
+        }}
+      />
+      <Switch
+        label={es.create.hints}
+        help={es.create.hintsHelp}
+        checked={values.hints_enabled}
+        onChange={(v) => {
+          onChange({ hints_enabled: v });
+        }}
+      />
+      <Stepper
+        label={es.create.initialTokens}
+        value={values.initial_tokens}
+        min={0}
+        max={3}
+        format={es.create.tokensValue}
+        onChange={(n) => {
+          onChange({ initial_tokens: n });
+        }}
+      />
+    </>
+  );
   return (
     <div className="flex flex-col gap-5">
       <Stepper
@@ -87,17 +125,6 @@ export function GameSettingsFields({ values, onChange, minTeams = 2 }: FieldsPro
           onChange({ target_cards: n });
         }}
       />
-      <Stepper
-        label={es.create.objection}
-        value={values.objection_window_s}
-        min={5}
-        max={60}
-        step={5}
-        format={es.common.seconds}
-        onChange={(n) => {
-          onChange({ objection_window_s: n });
-        }}
-      />
       <Segmented
         legend={es.create.audio}
         value={values.audio_source}
@@ -109,6 +136,30 @@ export function GameSettingsFields({ values, onChange, minTeams = 2 }: FieldsPro
           onChange({ audio_source });
         }}
       />
+      {collapseExtras ? (
+        <div className="flex flex-col gap-5">
+          <button
+            type="button"
+            className="btn btn-ghost !justify-between"
+            aria-expanded={moreOpen}
+            aria-controls="more-settings"
+            data-testid="more-settings"
+            onClick={() => {
+              setMoreOpen((o) => !o);
+            }}
+          >
+            {es.create.moreSettings}
+            {moreOpen ? <ChevronUp aria-hidden /> : <ChevronDown aria-hidden />}
+          </button>
+          {moreOpen ? (
+            <div id="more-settings" className="flex flex-col gap-5">
+              {extras}
+            </div>
+          ) : null}
+        </div>
+      ) : (
+        extras
+      )}
     </div>
   );
 }

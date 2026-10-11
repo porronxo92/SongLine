@@ -18,6 +18,8 @@ export const DEFAULT_SETTINGS: EditableSettings = {
   objection_window_s: 15,
   audio_source: 'spotify',
   packs: ['mix'],
+  hints_enabled: true,
+  initial_tokens: 1,
 };
 
 /** Ajustes del borrador de «Nueva sala», compartidos por los dos pasos. Cada cambio se guarda al instante. */
@@ -44,7 +46,7 @@ export default function Create() {
     <Screen title={es.create.title} back="/">
       <StepIndicator current={1} total={2} />
       <Card className="flex flex-col gap-2">
-        <GameSettingsFields values={settings} onChange={update} />
+        <GameSettingsFields values={settings} onChange={update} collapseExtras />
         <p className="flex items-center gap-2 text-sm text-muted-foreground" data-testid="audio-help">
           <Speaker size={16} aria-hidden className="flex-none text-accent" />
           {es.create.audioHelp}

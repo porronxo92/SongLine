@@ -8,11 +8,11 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, SerializeAsAny
 from pydantic.alias_generators import to_camel
 
 from app.game.models import Card, Phase, Room, Team
-from app.game.rules import card_count, rank_standings
+from app.game.rules import MAX_PLACE_CHANGES_PER_TURN, card_count, hint_seed, mask_text, rank_standings
 
 
 class CamelModel(BaseModel):
@@ -38,6 +38,7 @@ class SettingsView(CamelModel):
     target_cards: int
     initial_card_counts: bool
     initial_tokens: int
+    hints_enabled: bool
     objection_window_s: int
     objection_cost: str
     token_requires_correct_slot: bool
@@ -112,6 +113,21 @@ class ResultView(CamelModel):
     headline: str
 
 
+class HintUsedPublic(CamelModel):
+    kind: str
+
+
+class HintUsedOwn(HintUsedPublic):
+    """Only ever built for the active team."""
+
+    masked: str
+
+
+class HintsView(CamelModel):
+    deadline_ts: float | None
+    used: list[SerializeAsAny[HintUsedPublic]]
+
+
 class TurnView(CamelModel):
     team_slot: int
     card: MysteryCard | CardPublic
@@ -123,6 +139,9 @@ class TurnView(CamelModel):
     guess: GuessView | None = None
     audio_source: str
     started_playing: bool
+    place_changes_left: int = MAX_PLACE_CHANGES_PER_TURN
+    placed_auto: bool = False
+    hints: HintsView | None = None  # null when hints are off or the card is revealed
     result: ResultView | None = None  # only in REVEAL
     reveal_unlocks_at: float | None = None  # only in REVEAL: earliest `next_turn`
 
@@ -137,6 +156,7 @@ class PauseView(CamelModel):
 class AudioView(CamelModel):
     host_ready: bool
     playing: bool
+    paused: bool
     source: str
 
 
@@ -254,6 +274,17 @@ def _turn_view(room: Room, viewer_slot: int | None) -> TurnView | None:
             token=TokenView(**r.token.model_dump()),
             headline=r.headline,
         )
+    hints: HintsView | None = None
+    if room.settings.hints_enabled and not revealed:
+        own = viewer_slot is not None and viewer_slot == turn.team_slot
+        used: list[HintUsedPublic] = []
+        for kind in turn.hints_used:
+            if own:
+                text = turn.card.artist if kind == "artist" else turn.card.title
+                used.append(HintUsedOwn(kind=kind, masked=mask_text(text, hint_seed(turn.card.instance_id, kind))))
+            else:
+                used.append(HintUsedPublic(kind=kind))
+        hints = HintsView(deadline_ts=turn.hint_deadline_ts, used=used)
     return TurnView(
         team_slot=turn.team_slot,
         card=card,
@@ -267,6 +298,9 @@ def _turn_view(room: Room, viewer_slot: int | None) -> TurnView | None:
         guess=guess,
         audio_source=turn.audio_source,
         started_playing=turn.started_playing,
+        place_changes_left=max(0, MAX_PLACE_CHANGES_PER_TURN - turn.place_changes),
+        placed_auto=turn.placed_auto,
+        hints=hints,
         result=result,
         reveal_unlocks_at=(turn.reveal_at + 5.0) if (revealed and turn.reveal_at is not None) else None,
     )
@@ -295,6 +329,7 @@ def project(room: Room, viewer_slot: int | None) -> RoomView:
         audio=AudioView(
             host_ready=audio_ready(room) and room.teams[room.host_slot].connected,
             playing=room.audio.playing,
+            paused=bool(room.turn and room.turn.audio_paused),
             source=room.turn.audio_source if room.turn else s.audio_source,
         ),
         pause=pause,

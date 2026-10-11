@@ -140,6 +140,19 @@ class AudioFailed:
 
 
 @dataclass(frozen=True)
+class AudioControl:
+    sender: int | None
+    action: str  # "seek" | "pause" | "resume" | "restart"
+    delta_ms: int | None = None
+
+
+@dataclass(frozen=True)
+class UseHint:
+    sender: int | None
+    kind: str  # "artist" | "title"
+
+
+@dataclass(frozen=True)
 class PlayRequest:
     sender: int | None
 
@@ -162,6 +175,11 @@ class PlacePreview:
 class PlaceConfirm:
     sender: int | None
     index: int
+
+
+@dataclass(frozen=True)
+class PlaceCancel:
+    sender: int | None
 
 
 @dataclass(frozen=True)
@@ -232,10 +250,13 @@ Command = (
     | AudioUnlocked
     | AudioReport
     | AudioFailed
+    | AudioControl
+    | UseHint
     | PlayRequest
     | PlayResult
     | PlacePreview
     | PlaceConfirm
+    | PlaceCancel
     | GuessSubmit
     | VoiceConfirm
     | Objection

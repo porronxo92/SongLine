@@ -53,13 +53,14 @@ class Settings(BaseModel):
     mode: Literal["app", "voice"] = "voice"
     target_cards: int = Field(default=10, ge=3, le=30)
     initial_card_counts: Literal[True] = True  # D3
-    initial_tokens: int = 0
+    initial_tokens: int = Field(default=1, ge=0, le=3)  # S2: 1 by default so hints are usable from turn 1
+    hints_enabled: bool = True
     objection_window_s: int = Field(default=15, ge=5, le=60)
     objection_cost: Literal["always"] = "always"  # D2
     token_requires_correct_slot: Literal[True] = True  # D5
     placement_timeout_s: None = None  # D8
     disconnect_grace_s: int = 60
-    start_position_ms: int = 10_000  # D9
+    start_position_ms: int = 15_000  # D9 (updated: second 15)
     audio_source: Literal["spotify", "preview"] = "spotify"  # D7
     packs: list[str] = Field(default_factory=lambda: ["mix"], max_length=MAX_PACKS)
 
@@ -77,7 +78,18 @@ class Settings(BaseModel):
 
 
 # Settings the host may change from the lobby. Everything else is fixed by D1-D9.
-EDITABLE_SETTINGS = frozenset({"team_count", "mode", "target_cards", "objection_window_s", "audio_source", "packs"})
+EDITABLE_SETTINGS = frozenset(
+    {
+        "team_count",
+        "mode",
+        "target_cards",
+        "objection_window_s",
+        "audio_source",
+        "packs",
+        "hints_enabled",
+        "initial_tokens",
+    }
+)
 
 
 class AudioHost(BaseModel):
@@ -166,6 +178,9 @@ class TurnResult(BaseModel):
     headline: Headline
 
 
+HintKind = Literal["artist", "title"]
+
+
 class Turn(BaseModel):
     team_slot: int
     card: Card
@@ -185,6 +200,12 @@ class Turn(BaseModel):
     token_awarded: bool = False
     reveal_at: float | None = None
     result: TurnResult | None = None
+    hints_used: list[HintKind] = Field(default_factory=list)  # masked text is derived, never stored
+    hint_deadline_ts: float | None = None  # visible "limit to answer"; the timer adds a grace
+    audio_commands: int = 0  # audio_control commands accepted this turn (cap per turn)
+    audio_paused: bool = False  # last pause/resume intent of the active team
+    placed_auto: bool = False  # the server placed the card when the hint limit expired (final)
+    place_changes: int = 0  # place_cancel accepted this turn
 
 
 class TimerRef(BaseModel):

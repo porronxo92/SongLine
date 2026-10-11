@@ -8,6 +8,7 @@ const SDK_URL = 'https://sdk.scdn.co/spotify-player.js';
 interface SdkPlayerState {
   paused: boolean;
   position: number;
+  duration: number;
   loading: boolean;
 }
 interface SdkError {
@@ -19,6 +20,8 @@ interface SdkPlayer {
   activateElement(): Promise<void>;
   resume(): Promise<void>;
   pause(): Promise<void>;
+  seek(positionMs: number): Promise<void>;
+  getCurrentState(): Promise<SdkPlayerState | null>;
   addListener(event: 'ready' | 'not_ready', cb: (d: { device_id: string }) => void): void;
   addListener(
     event:
@@ -142,6 +145,25 @@ export class SdkAudioProvider implements AudioProvider {
 
   async pause(): Promise<void> {
     await this.player?.pause();
+  }
+
+  /** Lee solo `position` y `duration`. Nunca el resto del estado. */
+  async seekBy(deltaMs: number): Promise<void> {
+    const player = this.player;
+    if (!player) return;
+    const state = await player.getCurrentState();
+    if (!state) return;
+    const { position, duration } = state;
+    const target = Math.min(Math.max(0, position + deltaMs), Math.max(0, duration));
+    await player.seek(target);
+  }
+
+  async restart(): Promise<void> {
+    const player = this.player;
+    if (!player) return;
+    await player.seek(0);
+    const state = await player.getCurrentState();
+    if (state?.paused ?? true) await player.resume();
   }
 
   dispose(): void {

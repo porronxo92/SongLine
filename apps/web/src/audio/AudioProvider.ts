@@ -28,6 +28,10 @@ export interface AudioProvider {
   /** Reanuda dentro de un gesto («Toca para que suene»). */
   resume(): Promise<void>;
   pause(): Promise<void>;
+  /** Salta `deltaMs` desde la posición actual, limitado a [0, duración]. */
+  seekBy(deltaMs: number): Promise<void>;
+  /** Vuelve al principio de la canción y deja que suene. */
+  restart(): Promise<void>;
   /** El servidor ha ordenado reproducir; el proveedor puede reaccionar (solo el falso). */
   onPrepare?(): void;
   dispose(): void;

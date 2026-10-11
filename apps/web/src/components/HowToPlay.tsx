@@ -3,6 +3,8 @@ import {
   CircleHelp,
   Equal,
   Flag,
+  Lightbulb,
+  SkipBack,
   Mic,
   Music2,
   Smartphone,
@@ -22,7 +24,7 @@ import { Pick } from './Pick';
 import { Button } from './ui';
 
 /** Un icono por paso, en el mismo orden que `es.howto.steps`. */
-const STEP_ICONS: (LucideIcon | 'pick')[] = [Target, Play, Mic, Equal, 'pick', Zap, ThumbsUp, WifiOff, Flag];
+const STEP_ICONS: (LucideIcon | 'pick')[] = [Target, Play, Mic, Equal, 'pick', Lightbulb, SkipBack, Zap, ThumbsUp, WifiOff, Flag];
 
 /** Un icono por punto de «Antes de empezar», en el mismo orden que `es.howto.before.items`. */
 const BEFORE_ICONS: LucideIcon[] = [Users, Music2, Smartphone, Speaker, BatteryCharging];
@@ -30,7 +32,7 @@ const BEFORE_ICONS: LucideIcon[] = [Users, Music2, Smartphone, Speaker, BatteryC
 /** Reglas paso a paso. Foco atrapado, se cierra con Esc y con el botón. */
 export function HowToPlay({ onClose }: { onClose: () => void }) {
   return (
-    <Modal title={es.howto.title} labelledBy="howto-title" onClose={onClose} wide>
+    <Modal title={es.howto.title} labelledBy="howto-title" onClose={onClose} wide closeOnBackdrop>
       <section className="mb-6" data-testid="howto-before" aria-labelledby="howto-before-title">
         <h3 id="howto-before-title" className="howto-sec">
           {es.howto.before.title}

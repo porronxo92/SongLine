@@ -24,6 +24,8 @@ export interface RoomState {
   audioError: { code: AudioFailCode; retry: boolean } | null;
   deckLow: number | null;
   toast: { id: number; text: string } | null;
+  /** Seguimiento local del hueco de este equipo en el turno: sirve para ofrecer «Cambiar hueco». */
+  place: { card: string; confirmedByMe: boolean; changes: number; locked: boolean } | null;
 }
 
 export const initialRoomState: RoomState = {
@@ -41,6 +43,7 @@ export const initialRoomState: RoomState = {
   audioError: null,
   deckLow: null,
   toast: null,
+  place: null,
 };
 
 export const useRoom = create<RoomState>(() => ({ ...initialRoomState }));

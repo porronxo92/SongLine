@@ -17,7 +17,9 @@
 | D6 | **No** se comparte fuera del círculo privado | Uso privado, en modo desarrollo |
 | D7 | La preview de Deezer se usa **solo si Spotify falla** | Reserva automática por turno: si `play` falla 2 veces o el SDK del anfitrión no está listo, el servidor cambia ese turno a la preview por proxy, que suena también en el móvil del anfitrión. Opción manual del host: «Usar audio alternativo» |
 | D8 | Sin temporizador de colocación | `placement_timeout_s=null` y no se expone en la UI |
-| D9 | Las canciones empiezan en el **segundo 10** de forma automática, sin curar un inicio por canción | `start_position_ms=10000` global en Settings. Sin `start_ms` por canción. En la preview de Deezer (30 s) se empieza en 0 |
+| D9 | Las canciones empiezan en el **segundo 15** de forma automática (antes 10; actualizado en la ronda 2, ver nota abajo), sin curar un inicio por canción | `start_position_ms=15000` global en Settings. Sin `start_ms` por canción. En la preview de Deezer (30 s) se empieza en 0 |
+
+> **Ronda 2 (`docs/PLAN-MEJORAS.md`).** D9 pasa de 10 s a **15 s** (`start_position_ms=15000`; la preview de Deezer sigue empezando en 0). Supuesto S2 actualizado: `initial_tokens` por defecto **1** (rango 0 a 3, editable en el lobby), porque con 0 fichas nadie podría pedir una pista hasta ganar la primera. Nuevos ajustes de sala: `hints_enabled` (por defecto `true`) e `initial_tokens`. Nuevos mensajes: `audio_control` (mini reproductor del equipo del turno, retransmitido al anfitrión como `audio_command` sin datos de la canción) y `use_hint` (1 ficha, texto enmascarado solo para el equipo del turno, límite de 60 s para responder). Detalle en `docs/PROTOCOL.md`.
 
 **Riesgos nuevos de D1 y su mitigación:**
 - **Un único punto de fallo.** Si el móvil del anfitrión se queda sin batería o pierde la red, no hay audio para nadie. Se pausa la partida (`PAUSED` con motivo `audio_host_offline`) en lugar de saltar turnos, y se recomienda cargador y wifi.
@@ -39,7 +41,7 @@
 
 ### 0.2 Supuestos tomados (la opción más simple; todos configurables)
 - S1. La carta inicial **cuenta** para el objetivo, como en el Hitster original (10 cartas = inicial + 9). Se configura con `initial_card_counts`.
-- S2. Las fichas iniciales son 0 (`initial_tokens`).
+- S2. Las fichas iniciales son 1 por defecto (`initial_tokens`, 0 a 3; antes 0).
 - S3. Objeción con el modelo original: el objetor **elige otro hueco** en la línea del equipo activo. **La ficha se gasta siempre** (`objection_cost=always|on_fail`, por defecto `always`; tu propuesta, `on_fail`, queda como opción). Vale la primera objeción recibida y esta cierra la ventana. Si el activo falla y el objetor acierta, el objetor **roba** la carta y se inserta automáticamente en su posición correcta de su propia línea.
 - S4. La ventana de objeción dura 15 s y se salta si ningún otro equipo tiene ficha.
 - S5. Temporizador de colocación desactivado por defecto (`placement_timeout_s=null`). Revelación visible un mínimo de 5 s; luego el equipo activo pulsa «Siguiente» (auto a los 30 s).
@@ -164,13 +166,14 @@ class Settings(BaseModel):
     mode: Literal["app","voice"] = "voice"
     target_cards: int = 10
     initial_card_counts: bool = True
-    initial_tokens: int = 0
+    initial_tokens: int = 1                               # S2 (rango 0..3)
+    hints_enabled: bool = True
     objection_window_s: int = 15
     objection_cost: Literal["always"] = "always"          # D2
     token_requires_correct_slot: bool = True              # D5
     placement_timeout_s: None = None                      # D8
     disconnect_grace_s: int = 60
-    start_position_ms: int = 10_000                       # D9
+    start_position_ms: int = 15_000                       # D9
     audio_source: Literal["spotify","preview"] = "spotify" # D7: preview solo como reserva
 
 class AudioHost(BaseModel):          # D1: el móvil del anfitrión es la única salida de audio
@@ -457,7 +460,7 @@ interface AudioProvider {
 Flujo con `SdkAudioProvider`:
 - `new Spotify.Player({ name: "HitsterCasero · {equipo}", getOAuthToken: cb => fetchToken().then(cb), volume: 0.8 })` y `connect()`.
 - En el lobby, el `AudioGate` del anfitrión (gesto) llama a `player.activateElement()` y deja `audio.unlocked=true`.
-- El botón «Reproducir canción» está en el **móvil del equipo activo** y solo envía `play_request`. El servidor hace `PUT /me/player/play?device_id={anfitrión} {uris:[track], position_ms:10000}` (D9). Si en 1,5 s el SDK del anfitrión no informa `paused=false`, el servidor envía `audio_command{tap_required}` al anfitrión, que muestra «🔊 Toca para que suene» y llama a `player.resume()` dentro del gesto (caso previsto en iOS). Se valida en H0.
+- El botón «Reproducir canción» está en el **móvil del equipo activo** y solo envía `play_request`. El servidor hace `PUT /me/player/play?device_id={anfitrión} {uris:[track], position_ms:15000}` (D9). Si en 1,5 s el SDK del anfitrión no informa `paused=false`, el servidor envía `audio_command{tap_required}` al anfitrión, que muestra «🔊 Toca para que suene» y llama a `player.resume()` dentro del gesto (caso previsto en iOS). Se valida en H0.
 - `player_state_changed`: **solo se leen `paused`, `position` y `loading`.** El objeto no se registra en logs ni se guarda en el store; hay una regla de ESLint que prohíbe acceder a `track_window`.
 - «Repetir»: `play_request` otra vez (el servidor reinicia en `position_ms`).
 
@@ -621,7 +624,7 @@ uso: import_spotify.py songs.csv --market ES --out review/ [--only-pending] [--m
 
 | # | Hito | Alcance | Depende de | Criterios de aceptación | Estim. |
 |---|---|---|---|---|---|
-| **H0** | **PoC de audio en móviles reales** | App de Spotify en el dashboard (cuentas añadidas), túnel HTTPS, página mínima: login PKCE vía backend, SDK, `verify-premium`, botón que pide al servidor `PUT /play` de 5 URIs fijas, Media Session sobrescrita, modo `/station` y preview de Deezer por proxy. Matriz de §9 en 1 Android, 1 iPhone (Safari y PWA) y un PC | — | Documento `docs/poc-audio.md` con resultados por dispositivo (Android e iPhone **como móvil anfitrión**): orden «Reproducir» enviada **desde otro móvil** y el anfitrión suena en < 2 s, arranque en el segundo 10, ¿hace falta un toque en el anfitrión en iOS?, «Repetir», sin título ni artista en pantalla, notificación ni bloqueo, y 30 min seguidos sin perder el dispositivo. Reserva de Deezer funcionando. **Go/no-go:** qué plataformas se recomiendan como anfitrión | 3–4 d |
+| **H0** | **PoC de audio en móviles reales** | App de Spotify en el dashboard (cuentas añadidas), túnel HTTPS, página mínima: login PKCE vía backend, SDK, `verify-premium`, botón que pide al servidor `PUT /play` de 5 URIs fijas, Media Session sobrescrita, modo `/station` y preview de Deezer por proxy. Matriz de §9 en 1 Android, 1 iPhone (Safari y PWA) y un PC | — | Documento `docs/poc-audio.md` con resultados por dispositivo (Android e iPhone **como móvil anfitrión**): orden «Reproducir» enviada **desde otro móvil** y el anfitrión suena en < 2 s, arranque en el segundo 15, ¿hace falta un toque en el anfitrión en iOS?, «Repetir», sin título ni artista en pantalla, notificación ni bloqueo, y 30 min seguidos sin perder el dispositivo. Reserva de Deezer funcionando. **Go/no-go:** qué plataformas se recomiendan como anfitrión | 3–4 d |
 | H1 | Esqueleto y lobby | Monorepo, Compose, Alembic, `POST /session`, `POST/GET /rooms`, WS `hello`/`claim_slot`/`kick`/`update_settings`, reconexión con token, pantallas Inicio, Código, Hueco y Lobby | H0 (OAuth reutilizado) | 3 navegadores se unen, eligen hueco y reconectan tras recargar; el host expulsa y cambia equipos; el botón de empezar solo se activa con todos los huecos llenos y conectados | 4 d |
 | H2 | Motor de juego | `engine.py` puro con todos los estados, temporizadores con reloj inyectado, `projection.py`, snapshot y restauración, tests unitarios y de propiedades, y simulador de bots | H1 (modelos) | Cobertura del 95 % en `game/`; 1 000 partidas simuladas sin bloqueos; test antitrampas en verde | 5 d |
 | H3 | Interfaz de partida | `TimelineCarousel`, MysteryCard, TeamPanel, modales de los dos modos, objeción, revelación, resultados y revancha, cuenta atrás, PAUSED | H2 | E2E de Playwright de una partida completa a 3 equipos (FakeAudio) en ambos modos; carrusel usable con una mano en un móvil de 360 px | 6 d |
