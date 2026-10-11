@@ -38,9 +38,17 @@ const ACK_TIMEOUT_MS = 10000;
 const EPHEMERAL: ClientMessageType[] = ['place_preview', 'ping'];
 
 /** Único sitio que construye la URL del WS. Sin token: va en el primer mensaje `hello`. */
-export function buildWsUrl(code: string): string {
+/** Base del WebSocket. En producción (web en Vercel, servidor en Render) llega por `VITE_WS_URL`,
+ * p. ej. `wss://songline-api.onrender.com`; sin ella, el mismo host que sirve la web (dev y Compose). */
+export function wsBase(env: string | undefined = import.meta.env.VITE_WS_URL): string {
+  const fromEnv = (env ?? '').trim().replace(/\/+$/, '');
+  if (fromEnv) return fromEnv;
   const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-  return `${proto}://${location.host}/ws/rooms/${encodeURIComponent(code)}`;
+  return `${proto}://${location.host}`;
+}
+
+export function buildWsUrl(code: string): string {
+  return `${wsBase()}/ws/rooms/${encodeURIComponent(code)}`;
 }
 
 function uuid(): string {

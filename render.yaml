@@ -1,0 +1,34 @@
+# Blueprint de Render para el servidor de SongLine (FastAPI + WebSockets, un solo proceso).
+# Pasos en docs/DESPLIEGUE.md. Los valores secretos (sync: false) se rellenan en el panel de Render.
+services:
+  - type: web
+    name: songline-api
+    runtime: docker
+    dockerfilePath: ./infra/api.Dockerfile
+    dockerContext: .
+    region: frankfurt
+    plan: free
+    numInstances: 1 # las partidas viven en memoria: nunca más de una instancia
+    healthCheckPath: /api/healthz
+    autoDeploy: true
+    envVars:
+      - key: AUTH_MODE
+        value: spotify
+      - key: CATALOG_SOURCE
+        value: postgres
+      - key: PERSISTENCE
+        value: postgres
+      - key: FORWARDED_ALLOW_IPS
+        value: "*"
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DATABASE_URL # la cadena de Neon
+        sync: false
+      - key: SPOTIFY_CLIENT_ID
+        sync: false
+      - key: TOKEN_ENC_KEY # clave Fernet (ver docs/DESPLIEGUE.md)
+        sync: false
+      - key: PUBLIC_ORIGIN # https://<tu-proyecto>.vercel.app
+        sync: false
+      - key: SPOTIFY_REDIRECT_URI # https://<tu-proyecto>.vercel.app/api/auth/spotify/callback
+        sync: false
