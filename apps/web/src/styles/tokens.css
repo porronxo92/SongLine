@@ -1,44 +1,110 @@
-/* Tokens de diseño según design-system/hitstercasero/MASTER.md.
-   Fuente display para años y números: Fredoka (no Caveat; ver CLAUDE.md). */
+/* Tokens de SongLine (Neon Pop nocturno). Fuente: design-system/songline/MASTER.md. Solo modo oscuro. */
 
 :root {
-  --color-primary: #ec4899;
-  --color-on-primary: #000000;
-  --color-secondary: #8b5cf6;
-  --color-on-secondary: #000000;
-  --color-accent: #f59e0b;
-  --color-on-accent: #0f172a;
-  --color-background: #fdf2f8;
-  --color-foreground: #0f172a;
-  --color-card: #ffffff;
-  --color-card-foreground: #0f172a;
-  --color-muted: #fdf4f8;
-  --color-muted-foreground: #475569;
-  --color-border: #fce9f2;
-  --color-destructive: #dc2626;
-  --color-on-destructive: #ffffff;
-  --color-ring: #ec4899;
+  color-scheme: dark;
 
-  --radius-sm: 12px;
-  --radius-lg: 20px;
-  --radius-xl: 24px;
+  /* Fondos y superficies */
+  --color-bg: #0D0E15;            /* Midnight Vinyl */
+  --color-surface: #151726;       /* tarjetas, paneles */
+  --color-surface-2: #1D2033;     /* elevada: modales, tarjeta de carta */
+  --color-surface-3: #272B45;     /* hover, pistas de barras */
+  --color-overlay: rgba(6, 6, 12, 0.78);
+  --color-border: #2E3250;        /* decorativo, no sirve de límite de control */
+  --color-border-strong: #6C72A8; /* bordes de controles, 3:1 */
 
-  /* Sombra "clay": doble sombra suave (externa + luz interior). */
-  --shadow-clay:
-    0 8px 20px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(236, 72, 153, 0.12),
-    inset 0 -2px 0 rgba(15, 23, 42, 0.04);
+  /* Texto */
+  --color-fg: #F4F1FF;
+  --color-fg-2: #B4B0D0;
+  --color-fg-3: #8E8BB0;
+  --color-fg-disabled: #6E7096;
 
-  --font-body: 'Quicksand', system-ui, sans-serif;
-  --font-display: 'Fredoka', 'Quicksand', system-ui, sans-serif;
+  /* Marca y estados */
+  --color-primary: #7B2CBF;       /* Electric Purple: relleno de acción */
+  --color-primary-hover: #8A35D1;
+  --color-primary-pressed: #6A1FA8;
+  --color-primary-light: #B77CFF; /* Ultraviolet: texto/iconos sobre oscuro */
+  --color-on-primary: #FFFFFF;
+  --color-accent: #00F5D4;        /* Neon Cyan: línea del tiempo, aciertos */
+  --color-accent-pressed: #00C9AE;
+  --color-on-accent: #0D0E15;
+  --color-magenta: #FF007F;       /* Hot Pink: retos, borde y glow */
+  --color-magenta-light: #FF4DA6; /* texto sobre oscuro */
+  --color-danger: #D6006B;        /* relleno de botón peligro */
+  --color-danger-pressed: #B80059;
+  --color-on-danger: #FFFFFF;
+  --color-gold: #FFB703;          /* Retro Amber: fichas, ganador */
+  --color-gold-deep: #C98700;
+  --color-on-gold: #0D0E15;
+  --color-focus: #00F5D4;
+
+  /* Equipos (color + forma) */
+  --color-team-1: #FF6B4A;        /* círculo */
+  --color-team-2: #4D8DFF;        /* triángulo */
+  --color-team-3: #4ADE80;        /* cuadrado */
+  --color-team-4: #C084FC;        /* rombo */
+
+  /* Década (vinilo de la carta revelada) */
+  --decade-50: #FFD166; --decade-60: #FF9F1C; --decade-70: #FF6B4A; --decade-80: #FF007F;
+  --decade-90: #B77CFF; --decade-00: #4D8DFF; --decade-10: #00F5D4; --decade-20: #4ADE80;
+
+  /* Glow (sombras de color) */
+  --glow-primary: 0 0 0 1px rgba(183,124,255,.45), 0 0 18px rgba(123,44,191,.60), 0 0 48px rgba(123,44,191,.30);
+  --glow-accent: 0 0 0 1px rgba(0,245,212,.50), 0 0 14px rgba(0,245,212,.55), 0 0 40px rgba(0,245,212,.22);
+  --glow-magenta: 0 0 0 1px rgba(255,0,127,.50), 0 0 16px rgba(255,0,127,.55), 0 0 44px rgba(255,0,127,.25);
+  --glow-gold: 0 0 0 1px rgba(255,183,3,.55), 0 0 16px rgba(255,183,3,.55), 0 0 44px rgba(255,183,3,.22);
+  --glow-text-accent: 0 0 12px rgba(0,245,212,.65);
+  --glow-text-magenta: 0 0 12px rgba(255,0,127,.70);
+  --glow-text-gold: 0 0 14px rgba(255,183,3,.60);
+
+  /* Sombras de elevación (sobre fondo oscuro, más opacas) */
+  --shadow-sm: 0 2px 6px rgba(0,0,0,.45);
+  --shadow-md: 0 8px 20px rgba(0,0,0,.50), inset 0 1px 0 rgba(255,255,255,.06);
+  --shadow-lg: 0 20px 48px rgba(0,0,0,.60), inset 0 1px 0 rgba(255,255,255,.08);
+  --shadow-btn-press: inset 0 3px 8px rgba(0,0,0,.45);
+
+  /* Radios */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  /* Espacio (rejilla de 4) */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+  --touch-min: 48px;
+
+  /* Tipografía */
+  --font-display: 'Unbounded', 'Arial Black', 'Segoe UI', system-ui, sans-serif;
+  --font-ui: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Movimiento */
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --motion-press: 90ms;
+  --motion-fast: 160ms;
+  --motion-base: 240ms;
+  --motion-slow: 360ms;
+  --motion-flip: 700ms;
+  --motion-celebrate: 1200ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-press: 0ms; --motion-fast: 0ms; --motion-base: 0ms; --motion-slow: 0ms; --motion-flip: 0ms; --motion-celebrate: 0ms; }
 }
 
-html,
-body {
-  margin: 0;
-}
-
-body {
-  background: var(--color-background);
-  color: var(--color-foreground);
-  font-family: var(--font-body);
+/* Alias de compatibilidad con los nombres del diseño clay anterior.
+   Quitarlos cuando ya no se use ningún `bg-card`, `text-muted-foreground`, etc. */
+:root {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-fg);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-fg);
+  --color-muted: var(--color-surface-2);
+  --color-muted-foreground: var(--color-fg-2);
+  --color-destructive: var(--color-danger);
+  --color-ring: var(--color-focus);
+  --color-secondary: var(--color-primary-light);
+  --color-on-secondary: #0D0E15;
+  --color-on-destructive: var(--color-on-danger);
 }

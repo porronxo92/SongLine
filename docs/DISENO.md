@@ -43,7 +43,7 @@
 - S3. Objeción con el modelo original: el objetor **elige otro hueco** en la línea del equipo activo. **La ficha se gasta siempre** (`objection_cost=always|on_fail`, por defecto `always`; tu propuesta, `on_fail`, queda como opción). Vale la primera objeción recibida y esta cierra la ventana. Si el activo falla y el objetor acierta, el objetor **roba** la carta y se inserta automáticamente en su posición correcta de su propia línea.
 - S4. La ventana de objeción dura 15 s y se salta si ningún otro equipo tiene ficha.
 - S5. Temporizador de colocación desactivado por defecto (`placement_timeout_s=null`). Revelación visible un mínimo de 5 s; luego el equipo activo pulsa «Siguiente» (auto a los 30 s).
-- S6. Banco agotado: la partida termina. Gana quien tenga más cartas; en caso de empate, más fichas; si persiste, empate compartido.
+- S6. Banco agotado: la partida termina. El ranking final usa solo las cartas; empates comparten posición; las fichas no desempatan. Decisión del usuario. Ganan los equipos en posición 1.
 - S7. Desconexión del equipo activo: gracia de 60 s con la partida en pausa; si no vuelve, se salta el turno y la carta vuelve al fondo del mazo.
 - S8. Si el anfitrión se desconecta en el lobby más de 30 s, los controles pasan al siguiente hueco ocupado.
 - S9. Las cartas iniciales se reparten con una separación mínima de 5 años entre equipos, para que las referencias sean útiles.
@@ -432,7 +432,7 @@ sequenceDiagram
   B->>B: cifra y guarda, vinculado a session_token
   B-->>P: 302 /join/1234
 ```
-Scopes: `streaming user-read-private user-read-playback-state user-modify-playback-state`. ¿Por qué en el backend? Porque **el servidor necesita el token para ordenar la reproducción sin dar la URI al cliente**. PKCE se mantiene (no hace falta exponer el client_secret, y en dev se puede usar sin secret).
+Scopes: `streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state` (los tres primeros los exige el Web Playback SDK; sin `user-read-email` el SDK da 403 en `check_scope`). ¿Por qué en el backend? Porque **el servidor necesita el token para ordenar la reproducción sin dar la URI al cliente**. PKCE se mantiene (no hace falta exponer el client_secret, y en dev se puede usar sin secret).
 
 > **Con D1, todo §7 aplica solo al móvil del anfitrión.** Los demás móviles nunca cargan el SDK ni hacen login. Las menciones a «el móvil del activo» o a «modo Estación» en §7 se leen como «el móvil del anfitrión».
 

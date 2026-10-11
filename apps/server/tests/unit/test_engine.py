@@ -371,7 +371,7 @@ def test_target_reached_ends_game() -> None:
     assert room.turn is None and "room_gc" in room.timers
 
 
-def test_deck_exhausted_winner_by_cards_then_tokens_then_shared() -> None:
+def test_deck_exhausted_winner_by_cards_only_ties_shared() -> None:
     def finish(tokens: dict[int, int], lines: dict[int, list[int]]) -> Room:
         room, now = rigged(lines, 1995, tokens=tokens, deck_years=[])
         room = go(room, now, C.PlayRequest(0), C.PlaceConfirm(0, 0), C.VoiceConfirm(0))
@@ -380,10 +380,10 @@ def test_deck_exhausted_winner_by_cards_then_tokens_then_shared() -> None:
         room, _ = reduce(room, C.NextTurn(0), now + 6)
         return room
 
-    # team 0 misses (placed wrong) -> keeps 2 cards; team 1 has 2: tie on cards, tokens decide
+    # team 0 misses (placed wrong) -> keeps 2 cards; team 1 has 2: tie on cards, tokens do not break it
     room = finish({1: 2}, {0: [1980, 2000], 1: [1990, 1991]})
     assert room.phase == Phase.GAME_OVER and room.game_over_reason == "deck_exhausted"
-    assert room.winners == [1]
+    assert room.winners == [0, 1]
     room = finish({}, {0: [1980, 2000], 1: [1990, 1991]})
     assert room.winners == [0, 1]  # full tie is shared
     room = finish({}, {0: [1980, 2000], 1: [1990, 1991, 1992]})
@@ -568,3 +568,89 @@ def test_room_gc_timer_destroys() -> None:
     room, _ = reduce(room, C.NextTurn(0), now + 6)
     _, fx = reduce(room, fire(room, "room_gc"), now + 6 + 900)
     assert any(isinstance(e, C.DestroyRoom) for e in fx)
+
+
+# ------------------------------------------------------------------ host ends the game
+
+
+def _assert_ended(room: Room, fx: list[C.Effect]) -> None:
+    assert room.phase == Phase.GAME_OVER and room.game_over_reason == "host_ended"
+    assert room.turn is None and room.pause is None and room.paused_from is None
+    assert set(room.timers) == {"room_gc"} and not room.frozen
+    over = [e for e in fx if isinstance(e, C.Broadcast) and e.type == "game_over"]
+    assert len(over) == 1 and over[0].payload["reason"] == "host_ended"
+
+
+def test_end_game_countdown() -> None:
+    room, _ = reduce(setup_lobby(3), C.Start(0, make_songs(), 5), 0)
+    assert room.phase == Phase.COUNTDOWN
+    room, fx = reduce(room, C.EndGame(0), 10.0)
+    _assert_ended(room, fx)
+    assert any(isinstance(e, C.CancelTimer) and e.name == "countdown" for e in fx)
+
+
+def test_end_game_in_each_phase_discards_card_in_play() -> None:
+    room, now = rigged({0: [1980, 2000], 1: [1990]}, 1985, tokens={1: 1})
+    mystery_id = room.turn.card.instance_id  # type: ignore[union-attr]
+    snapshots = [("turn_ready", room)]
+    room = go(room, now, C.PlayRequest(0))
+    snapshots.append(("placing", room))
+    room = go(room, now, C.PlaceConfirm(0, 1))
+    snapshots.append(("guessing", room))
+    room = go(room, now, C.VoiceConfirm(0))
+    assert room.phase == Phase.OBJECTION
+    snapshots.append(("objection", room))
+    paused, _ = reduce(room, C.Disconnected(0), now)
+    assert paused.phase == Phase.PAUSED
+    snapshots.append(("paused", paused))
+    for name, snap in snapshots:
+        done, fx = reduce(snap, C.EndGame(0), now + 1)
+        _assert_ended(done, fx)
+        assert all(c.instance_id != mystery_id for t in done.teams for c in t.timeline), name
+        assert [len(t.timeline) for t in done.teams] == [2, 1], name
+
+
+def test_end_game_in_reveal_keeps_revealed_result() -> None:
+    room, now = rigged({0: [1980, 2000], 1: [1990]}, 1985)
+    room = go(room, now, C.PlayRequest(0), C.PlaceConfirm(0, 1), C.VoiceConfirm(0))
+    assert room.phase == Phase.REVEAL
+    room, fx = reduce(room, C.EndGame(0), now + 1)
+    _assert_ended(room, fx)
+    assert room.winners == [0]  # 3 cards vs 1
+
+
+def test_end_game_stops_playing_audio() -> None:
+    room, now = rigged({0: [1980], 1: [1990]}, 1985)
+    room = go(room, now, C.PlayRequest(0))
+    room.audio.playing = True
+    _, fx = reduce(room, C.EndGame(0), now + 1)
+    assert any(isinstance(e, C.SpotifyPause) for e in fx)
+    assert any(isinstance(e, C.SendTo) and e.payload == {"action": "stop"} for e in fx)
+
+
+def test_end_game_rejections() -> None:
+    room, now = rigged({0: [1980], 1: [1990]}, 1985)
+    assert err(room, C.EndGame(1)) == "not_host"
+    assert err(room, C.EndGame(None)) == "not_host"
+    assert err(setup_lobby(2), C.EndGame(0)) == "wrong_phase"
+    over, _ = reduce(room, C.EndGame(0), now)
+    assert err(over, C.EndGame(0)) == "wrong_phase"
+
+
+def test_end_game_winners_by_cards_only_tokens_do_not_break_ties() -> None:
+    def ended(lines: dict[int, list[int]], tokens: dict[int, int]) -> Room:
+        room, now = rigged(lines, 1985, tokens=tokens)
+        room, _ = reduce(room, C.EndGame(0), now)
+        return room
+
+    assert ended({0: [1980], 1: [1990, 1991]}, {}).winners == [1]
+    assert ended({0: [1980, 1981], 1: [1990, 1991]}, {1: 1}).winners == [0, 1]
+    assert ended({0: [1980, 1981], 1: [1990, 1991]}, {}).winners == [0, 1]
+
+
+def test_rematch_after_end_game() -> None:
+    room, now = rigged({0: [1980], 1: [1990]}, 1985)
+    room, _ = reduce(room, C.EndGame(0), now)
+    assert err(room, C.Rematch(1)) == "not_host"
+    room, _ = reduce(room, C.Rematch(0), now + 1)
+    assert room.phase == Phase.LOBBY and room.game_over_reason is None and not room.timers

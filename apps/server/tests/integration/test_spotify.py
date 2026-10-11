@@ -42,7 +42,7 @@ def test_login_callback_token_flow_over_http(make_app: MakeApp, clock: Clock) ->
     )
     with respx.mock(assert_all_called=False) as mock, TestClient(app) as c:
         token_route = mock.post(TOKEN_URL).respond(
-            200, json={"access_token": "ACCESS1", "refresh_token": "REFRESH1", "expires_in": 3600}
+            200, json={"access_token": "ACCESS1", "refresh_token": "REFRESH1", "expires_in": 3600, "scope": "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state"}
         )
         t = str(c.post("/api/session").json()["session_token"])
         r = c.post(
@@ -165,3 +165,26 @@ async def test_fake_backend_logs_only_instance_id(caplog) -> None:  # type: igno
     with caplog.at_level(logging.INFO):
         out = await FakeAudioBackend().play("s", "d", "SECRET_TRACK", 10_000, "inst-123")
     assert out.ok and "inst-123" in caplog.text and "SECRET_TRACK" not in caplog.text
+
+
+def test_callback_rejects_token_without_streaming_scope(make_app: MakeApp) -> None:
+    """Regresion: sin `streaming` el SDK fallaba despues con 403 'Token does not satisfy scope'."""
+    app, svc = make_app(
+        auth_mode="spotify", token_enc_key="", spotify_client_id="CID", spotify_redirect_uri="https://x/cb"
+    )
+    with respx.mock(assert_all_called=False) as mock, TestClient(app) as c:
+        mock.post(TOKEN_URL).respond(
+            200,
+            json={
+                "access_token": "A",
+                "refresh_token": "R",
+                "expires_in": 3600,
+                "scope": "streaming user-read-private user-read-playback-state",  # falta user-read-email
+            },
+        )
+        t = str(c.post("/api/session").json()["session_token"])
+        r = c.post("/api/auth/spotify/start", json={"return_to": "/"}, headers={"Authorization": f"Bearer {t}"})
+        state = parse_qs(urlparse(r.json()["url"]).query)["state"][0]
+        cb = c.get("/api/auth/spotify/callback", params={"code": "abc", "state": state}, follow_redirects=False)
+        assert cb.status_code == 400 and cb.json()["detail"] == "missing_scope"
+        assert svc.auth.has_session(hash_token(t)) is False

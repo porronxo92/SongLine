@@ -25,7 +25,7 @@ from app.game import commands as C  # noqa: E402
 from app.game.commands import GameError  # noqa: E402
 from app.game.engine import reduce  # noqa: E402
 from app.game.models import Phase, Room, Song, new_room  # noqa: E402
-from app.game.projection import view_json  # noqa: E402
+from app.game.projection import standings, view_json  # noqa: E402
 from app.game.rules import is_sorted  # noqa: E402
 
 MAX_STEPS = 6000
@@ -53,17 +53,58 @@ def total_cards(room: Room) -> int:
     return n
 
 
+def check_result(room: Room) -> None:
+    turn = room.turn
+    assert turn is not None and turn.result is not None
+    r = turn.result
+    assert r.placement.ok == r.placed_ok
+    assert r.placement.index == turn.placed_index
+    assert r.song_year == turn.card.year
+    assert (r.placement.valid_from <= r.placement.index <= r.placement.valid_to) == r.placement.ok
+    assert r.token.awarded == turn.token_awarded
+    if r.objection is not None:
+        assert r.objection.ok == r.objection_ok and r.objection.slot == r.objection_slot
+        assert r.objection.token_spent
+        assert (r.objection.valid_from <= r.objection.index <= r.objection.valid_to) == r.objection.ok
+    else:
+        assert r.objection_slot is None
+    expected = {
+        ("kept", False): "kept",
+        ("kept", True): "kept_objection_failed",
+        ("stolen", True): "stolen",
+        ("discarded", False): "discarded",
+        ("discarded", True): "discarded_objection_failed",
+    }[(r.outcome, r.objection is not None)]
+    assert r.headline == expected
+
+
+def check_ranking(room: Room) -> None:
+    """Final ranking: by cards only, competition ranks (1, 1, 3), winners = rank 1."""
+    rows = standings(room)
+    claimed = [t for t in room.teams if t.claimed]
+    assert [r.slot for r in rows] == [r.slot for r in sorted(rows, key=lambda r: (r.rank, r.slot))]
+    assert {r.slot for r in rows} == {t.slot for t in claimed}
+    for r in rows:
+        better = sum(1 for o in rows if o.cards > r.cards)
+        assert r.rank == better + 1, f"rank {r.rank} != {better + 1} for slot {r.slot}"
+        assert all(o.rank == r.rank for o in rows if o.cards == r.cards), "tied teams differ in rank"
+    assert sorted(room.winners) == [r.slot for r in rows if r.rank == 1], "winners != rank 1"
+
+
 def check_invariants(room: Room, expected_total: int) -> None:
     for t in room.teams:
         assert is_sorted(t.timeline), f"timeline of {t.slot} not sorted"
         assert t.tokens >= 0
     if room.phase not in (Phase.LOBBY,):
         assert total_cards(room) == expected_total, "cards not conserved"
+    if room.turn is not None and room.turn.result is not None:
+        check_result(room)
     ids = [c.instance_id for t in room.teams for c in t.timeline] + [c.instance_id for c in room.deck]
     ids += [c.instance_id for c in room.discard]
     assert len(ids) == len(set(ids)), "duplicate card"
     if room.phase == Phase.GAME_OVER:
         assert room.winners, "no winners"
+        check_ranking(room)
 
 
 def setup_lobby(
@@ -126,8 +167,10 @@ def play_game(
     songs: tuple[Song, ...] | None = None,
     target: int | None = None,
     on_step: Callable[[Room], None] | None = None,
+    end_p: float = 0.0,
 ) -> tuple[Room, GameStats]:
     rng = random.Random(seed)
+    end_rng = random.Random(seed + 7919)  # separate stream: other seeds keep their games
     tc = team_count or rng.randint(2, 4)
     md = mode or rng.choice(["voice", "app"])
     tg = target or rng.choice([3, 5, 10])
@@ -156,6 +199,9 @@ def play_game(
             raise AssertionError(f"game {seed} did not finish (phase={room.phase})")
         ph = room.phase
         turn = room.turn
+        if end_p and end_rng.random() < end_p:
+            step(C.EndGame(room.host_slot))  # the host ends the game in any in-game phase
+            continue
         if ph == Phase.PAUSED:
             stats.pauses += 1
             assert room.pause is not None
@@ -257,6 +303,10 @@ def assert_no_leak(room: Room) -> None:
         return
     if room.phase == Phase.PAUSED and turn.result is not None:
         return
+    for viewer in [None, *range(len(room.teams))]:
+        t = view_json(room, viewer).get("turn")
+        assert t is None or t.get("result") is None, "result leaked before REVEAL"
+        assert "songYear" not in json.dumps(t), "songYear leaked before REVEAL"
     c = turn.card
     for viewer in [None, *range(len(room.teams))]:
         view = view_json(room, viewer)
@@ -272,12 +322,13 @@ def main() -> int:
     ap.add_argument("n", type=int, nargs="?", default=300)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--leaks", action="store_true", help="check the anti-cheat projection at every step")
+    ap.add_argument("--end-p", type=float, default=0.0, help="per-step chance that the host ends the game")
     args = ap.parse_args()
     t0 = time.time()
     reasons: dict[str | None, int] = {}
     steps = pauses = skipped = objections = 0
     for i in range(args.n):
-        _, st = play_game(args.seed + i, check_leaks=args.leaks)
+        _, st = play_game(args.seed + i, check_leaks=args.leaks, end_p=args.end_p)
         reasons[st.reason] = reasons.get(st.reason, 0) + 1
         steps += st.steps
         pauses += st.pauses

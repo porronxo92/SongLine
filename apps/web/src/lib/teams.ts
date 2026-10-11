@@ -11,10 +11,10 @@ export interface TeamColor {
 
 /** Cuatro colores con forma propia (● ▲ ■ ◆): el color nunca es la única señal. */
 export const TEAM_COLORS: readonly TeamColor[] = [
-  { hex: '#E63946', shape: 'circle', name: es.identity.colors[0] },
-  { hex: '#2563EB', shape: 'triangle', name: es.identity.colors[1] },
-  { hex: '#16A34A', shape: 'square', name: es.identity.colors[2] },
-  { hex: '#7C3AED', shape: 'diamond', name: es.identity.colors[3] },
+  { hex: '#FF6B4A', shape: 'circle', name: es.identity.colors[0] },
+  { hex: '#4D8DFF', shape: 'triangle', name: es.identity.colors[1] },
+  { hex: '#4ADE80', shape: 'square', name: es.identity.colors[2] },
+  { hex: '#C084FC', shape: 'diamond', name: es.identity.colors[3] },
 ];
 
 const SHAPES: Shape[] = ['circle', 'triangle', 'square', 'diamond'];
@@ -32,7 +32,7 @@ export function colorFor(team: Pick<TeamView, 'slot' | 'color'>): TeamColor {
   if (found) return found;
   const fallback = TEAM_COLORS[team.slot % 4] ?? TEAM_COLORS[0];
   return {
-    hex: safe ?? fallback?.hex ?? '#E63946',
+    hex: safe ?? fallback?.hex ?? '#FF6B4A',
     shape: SHAPES[team.slot % 4] ?? 'circle',
     name: '',
   };

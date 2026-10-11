@@ -1,0 +1,8 @@
+[
+  {"slug": "mix", "name": "Mix variado", "description": "Éxitos de todas las épocas y estilos, en español e inglés.", "icon": "disc-3", "sort": 10},
+  {"slug": "rock-poprock", "name": "Rock y pop-rock", "description": "Guitarras, estribillos grandes y clásicos de estadio.", "icon": "guitar", "sort": 20},
+  {"slug": "indie-rock", "name": "Indie y rock alternativo", "description": "Del garaje a los festivales: indie, alternativo y britpop.", "icon": "audio-lines", "sort": 30},
+  {"slug": "clasicos-espana", "name": "Clásicos españoles", "description": "Los temas que suenan en toda boda y verbena de España.", "icon": "mic-vocal", "sort": 40},
+  {"slug": "reggaeton", "name": "Reguetón y urbano", "description": "Perreo, trap y música urbana latina.", "icon": "flame", "sort": 50},
+  {"slug": "disney", "name": "Disney y animación", "description": "Canciones de películas de animación, de 1937 a hoy.", "icon": "castle", "sort": 60}
+]

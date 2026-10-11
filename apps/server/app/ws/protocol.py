@@ -58,7 +58,7 @@ class KickMsg(BaseModel):
 
 
 class UpdateSettingsMsg(BaseModel):
-    """Partial<Settings>. Editable keys: team_count, mode, target_cards, objection_window_s, audio_source."""
+    """Partial<Settings>. Editable keys: team_count, mode, target_cards, objection_window_s, audio_source, packs."""
 
     model_config = ConfigDict(extra="allow")
 
@@ -102,6 +102,7 @@ CLIENT_MESSAGES: dict[str, type[BaseModel]] = {
     "accept_guess": Empty,
     "next_turn": Empty,
     "rematch": Empty,
+    "end_game": Empty,
     "ping": PingMsg,
 }
 
@@ -196,11 +197,12 @@ class Standing(BaseModel):
     name: str | None
     cards: int
     tokens: int
+    rank: int
 
 
 class GameOverPayload(BaseModel):
     winners: list[int]
-    reason: Literal["target", "deck_exhausted"]
+    reason: Literal["target", "deck_exhausted", "host_ended"]
     standings: list[Standing]
 
 

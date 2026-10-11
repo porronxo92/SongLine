@@ -14,6 +14,7 @@ export function settingsOf(view: RoomView): EditableSettings {
     target_cards: s.targetCards,
     objection_window_s: s.objectionWindowS,
     audio_source: s.audioSource,
+    packs: s.packs,
   };
 }
 
@@ -23,7 +24,7 @@ export function HostControls({ view }: { view: RoomView }) {
   const kickable = view.teams.filter((t) => t.claimed && !t.isHost);
   return (
     <Card className="flex flex-col gap-5">
-      <h2 className="font-display text-xl font-semibold">{es.lobby.settings}</h2>
+      <h2 className="h2">{es.lobby.settings}</h2>
       <SettingsFields
         values={settingsOf(view)}
         minTeams={Math.max(2, occupied)}
@@ -38,7 +39,7 @@ export function HostControls({ view }: { view: RoomView }) {
               <span className="truncate font-bold">{teamName(t)}</span>
               <button
                 type="button"
-                className="btn btn-soft !px-3"
+                className="btn btn-secondary btn-icon"
                 aria-label={es.lobby.kick(teamName(t))}
                 onClick={() => {
                   void act('kick', { slot: t.slot });

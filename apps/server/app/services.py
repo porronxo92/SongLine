@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 
 import httpx
 
+from app.catalog.packs import PackDef, load_pack_defs
 from app.catalog.repo import CsvSongRepository, PostgresSongRepository, SongRepository
 from app.config import AppConfig
 from app.game.models import Song
@@ -47,6 +48,11 @@ class Services:
     signer: SessionSigner
     ws_per_ip: dict[str, int] = field(default_factory=dict)
     songs: list[Song] = field(default_factory=list)
+    packs: list[PackDef] = field(default_factory=list)
+
+    @property
+    def pack_slugs(self) -> frozenset[str]:
+        return frozenset(p.slug for p in self.packs)
 
     @property
     def fake(self) -> bool:
@@ -73,7 +79,7 @@ def build_services(
     http = http or httpx.AsyncClient(timeout=10.0)
     if repo is None:
         repo = (
-            CsvSongRepository(config.catalog_csv_path)
+            CsvSongRepository(config.catalog_csv_path, config.packs_dir)
             if config.catalog_source == "csv"
             else PostgresSongRepository(config.database_url)
         )
@@ -101,4 +107,5 @@ def build_services(
         code_limiter=RateLimiter(config.rate_code_attempts_per_min),
         auth_limiter=RateLimiter(config.rate_auth_start_per_min),
         signer=SessionSigner(config.session_secret),
+        packs=load_pack_defs(config.packs_json),
     )

@@ -1,8 +1,10 @@
-import { Crown, Volume2, VolumeX, Wifi, WifiOff } from 'lucide-react';
+import { Check, Crown, VolumeX, Wifi, WifiOff } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HostControls } from '../components/HostControls';
+import { HowToPlayButton } from '../components/HowToPlay';
 import { IdentityForm } from '../components/IdentityForm';
+import { PackSummary } from '../components/PackPicker';
 import { Button, Card, Screen, TeamShape } from '../components/ui';
 import { es } from '../i18n/es';
 import { getVibrateEnabled, setVibrateEnabled } from '../lib/session';
@@ -40,12 +42,7 @@ export function ChooseSlot({ view }: { view: RoomView }) {
                   role="radio"
                   aria-checked={slot === t.slot}
                   disabled={t.claimed}
-                  className="btn !justify-between"
-                  style={{
-                    background: '#fff',
-                    color: 'var(--color-foreground)',
-                    borderColor: slot === t.slot ? 'var(--color-foreground)' : 'var(--color-border)',
-                  }}
+                  className="choice !min-h-[56px] !flex-row !items-center !justify-between"
                   onClick={() => {
                     setSlot(t.slot);
                   }}
@@ -85,9 +82,10 @@ export function Lobby({ view }: { view: RoomView }) {
   return (
     <Screen
       title={es.lobby.title}
+      actions={<HowToPlayButton />}
       footer={
         <Button
-          variant="soft"
+          variant="secondary"
           onClick={() => {
             leaveRoom(true);
             navigate('/');
@@ -98,12 +96,16 @@ export function Lobby({ view }: { view: RoomView }) {
       }
     >
       <Card className="text-center">
-        <p className="text-sm font-bold text-muted-foreground">{es.lobby.codeLabel}</p>
-        <p className="year text-6xl tracking-[0.2em]" data-testid="room-code">
+        <p className="overline">{es.lobby.codeLabel}</p>
+        <p
+          className="year py-1 text-[40px] leading-tight text-accent"
+          style={{ letterSpacing: '0.12em', textShadow: 'var(--glow-text-accent)' }}
+          data-testid="room-code"
+        >
           {view.code}
         </p>
-        <p className="text-sm text-muted-foreground">{es.lobby.shareHint}</p>
-        <p className="mt-2 text-sm font-semibold">
+        <p className="help">{es.lobby.shareHint}</p>
+        <p className="mt-2 text-sm font-semibold text-muted-foreground">
           {es.lobby.modeLine(
             view.settings.mode === 'app' ? es.lobby.modeApp : es.lobby.modeVoice,
             view.settings.targetCards,
@@ -112,39 +114,39 @@ export function Lobby({ view }: { view: RoomView }) {
       </Card>
 
       <Card className="flex flex-col gap-3">
-        <h2 className="font-display text-xl font-semibold">{es.lobby.slots}</h2>
+        <h2 className="h2">{es.lobby.slots}</h2>
         <ul className="flex flex-col gap-2">
           {teams.map((t) => {
             const c = colorFor(t);
             return (
               <li
                 key={t.slot}
-                className="flex min-h-[52px] items-center gap-3 rounded-sm border-2 border-border px-3"
+                className={t.claimed ? 'row-item' : 'row-item empty'}
                 data-testid={`lobby-slot-${String(t.slot)}`}
               >
                 {t.claimed ? (
                   <TeamShape shape={c.shape} color={c.hex} size={26} />
                 ) : (
-                  <span className="h-[26px] w-[26px] rounded-full border-2 border-dashed border-muted-foreground" aria-hidden />
+                  <span className="h-[26px] w-[26px] rounded-full border-2 border-dashed border-border-strong" aria-hidden />
                 )}
                 <span className="flex-1 truncate font-bold">
                   {t.claimed ? teamName(t) : es.lobby.empty}
                   {t.slot === view.you.slot ? ` (${es.lobby.youAre.toLowerCase()})` : ''}
                 </span>
                 {t.isHost ? (
-                  <span className="chip">
+                  <span className="chip !px-2" title={es.lobby.hostBadge}>
                     <Crown size={14} aria-hidden />
-                    {es.lobby.hostBadge}
+                    <span className="sr-only-live">{es.lobby.hostBadge}</span>
                   </span>
                 ) : null}
                 {t.claimed ? (
                   t.connected ? (
-                    <span className="flex items-center gap-1 text-sm font-semibold text-green-800">
+                    <span className="flex items-center gap-1 text-sm font-semibold text-accent">
                       <Wifi size={16} aria-hidden />
                       {es.lobby.connected}
                     </span>
                   ) : (
-                    <span className="flex items-center gap-1 text-sm font-semibold text-destructive">
+                    <span className="flex items-center gap-1 text-sm font-semibold text-magenta-light">
                       <WifiOff size={16} aria-hidden />
                       {es.lobby.offline}
                     </span>
@@ -161,23 +163,29 @@ export function Lobby({ view }: { view: RoomView }) {
           data-ready={view.audio.hostReady}
         >
           {view.audio.hostReady ? (
-            <Volume2 size={18} aria-hidden className="text-green-700" />
+            <Check size={18} aria-hidden className="text-accent" />
           ) : (
-            <VolumeX size={18} aria-hidden className="text-destructive" />
+            <VolumeX size={18} aria-hidden className="text-magenta-light" />
           )}
           {view.audio.hostReady ? es.lobby.audioOk : es.lobby.audioWait}
         </p>
         {view.settings.audioSource === 'spotify' ? (
-          <p className="rounded-sm bg-amber-100 p-3 text-sm font-semibold text-amber-950">{es.lobby.spotifyWarn}</p>
+          <p className="notice text-sm">{es.lobby.spotifyWarn}</p>
         ) : null}
       </Card>
 
-      {isHost ? <HostControls view={view} /> : null}
+      {isHost ? (
+        <HostControls view={view} />
+      ) : (
+        <Card className="flex flex-col gap-2">
+          <PackSummary slugs={view.settings.packs} />
+        </Card>
+      )}
 
       <label className="flex min-h-[48px] items-center gap-3 font-semibold">
         <input
           type="checkbox"
-          className="h-6 w-6 accent-secondary"
+          className="h-6 w-6 accent-[#00F5D4]"
           checked={vibrate}
           onChange={(e) => {
             setVibrate(e.target.checked);

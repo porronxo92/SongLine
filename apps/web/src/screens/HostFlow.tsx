@@ -1,4 +1,4 @@
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Music2, Speaker, UserCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ApiError, api } from '../api/client';
@@ -12,7 +12,10 @@ import { joinRoom } from '../store/controller';
 import { DEFAULT_SETTINGS, type CreateDraft } from './Create';
 
 function useDraft(): CreateDraft {
-  const [draft] = useState<CreateDraft>(() => loadDraft<CreateDraft>() ?? { settings: DEFAULT_SETTINGS });
+  // Los borradores guardados antes de los packs no traen `packs`: se rellenan con los valores por defecto.
+  const [draft] = useState<CreateDraft>(() => ({
+    settings: { ...DEFAULT_SETTINGS, ...loadDraft<CreateDraft>()?.settings },
+  }));
   return draft;
 }
 
@@ -42,14 +45,24 @@ export function HostLogin() {
     <Screen title={es.hostLogin.title} back="/crear">
       {needLogin ? (
         <Card className="flex flex-col gap-4">
-          <div className="flex items-start gap-3 rounded-sm bg-amber-100 p-3 text-amber-950" role="note">
-            <AlertTriangle aria-hidden className="mt-0.5 shrink-0" />
-            <p className="font-semibold">{es.hostLogin.premiumBanner}</p>
+          <div className="notice" role="note">
+            <AlertTriangle aria-hidden />
+            <p>{es.hostLogin.premiumBanner}</p>
           </div>
-          <p>{es.hostLogin.onlyHost}</p>
+          <section className="info-box" aria-labelledby="spotify-how">
+            <h2 id="spotify-how">{es.hostLogin.how.title}</h2>
+            <ul>
+              {[UserCheck, Music2, Speaker].map((Icon, i) => (
+                <li key={i}>
+                  <Icon size={18} aria-hidden />
+                  <span>{es.hostLogin.how.items[i]}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
           <Button
             xl
-            variant="violet"
+            variant="accent"
             busy={busy}
             onClick={() => {
               setBusy(true);

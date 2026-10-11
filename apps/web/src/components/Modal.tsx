@@ -9,11 +9,16 @@ export function Modal({
   children,
   onClose,
   labelledBy = 'modal-title',
+  icon,
+  wide,
 }: {
   title: string;
   children: ReactNode;
   onClose?: () => void;
   labelledBy?: string;
+  /** Icono lucide opcional sobre el título. */
+  icon?: ReactNode;
+  wide?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -53,19 +58,17 @@ export function Modal({
   }, [onClose]);
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 backdrop-blur-sm sm:items-center"
-      style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}
-    >
+    <div className="scrim" style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}>
       <div
         ref={ref}
         role="dialog"
         aria-modal="true"
         aria-labelledby={labelledBy}
         tabIndex={-1}
-        className="clay max-h-[90dvh] w-full max-w-md overflow-y-auto p-6"
+        className={wide ? 'modal wide' : 'modal'}
       >
-        <h2 id={labelledBy} className="mb-3 font-display text-2xl font-semibold">
+        {icon ? <div className="mb-3">{icon}</div> : null}
+        <h2 id={labelledBy} className="mb-3 text-[22px] font-bold leading-tight">
           {title}
         </h2>
         {children}

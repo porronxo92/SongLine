@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { getStoredRoom } from './lib/session';
 import Create from './screens/Create';
+import CreateGenres from './screens/CreateGenres';
 import Home from './screens/Home';
 import { HostAudio, HostIdentity, HostLogin } from './screens/HostFlow';
 import Join from './screens/Join';
@@ -29,6 +30,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/crear" element={<Create />} />
+        <Route path="/crear/generos" element={<CreateGenres />} />
         <Route path="/anfitrion/login" element={<HostLogin />} />
         <Route path="/anfitrion/audio" element={<HostAudio />} />
         <Route path="/anfitrion/equipo" element={<HostIdentity />} />

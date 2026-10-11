@@ -88,7 +88,7 @@ export function AudioGate({
   if (stage.name === 'error') {
     return (
       <Card className="flex flex-col gap-4 text-center">
-        <h2 className="font-display text-2xl font-semibold">{es.audioGate.blockedTitle}</h2>
+        <h2 className="h2">{es.audioGate.blockedTitle}</h2>
         <p role="alert">{stage.text}</p>
         <Button
           onClick={() => {
@@ -98,12 +98,12 @@ export function AudioGate({
           {es.common.retry}
         </Button>
         {stage.allowRelogin && onRelogin ? (
-          <Button variant="violet" onClick={onRelogin}>
+          <Button variant="accent" onClick={onRelogin}>
             {es.audioGate.relogin}
           </Button>
         ) : null}
         {stage.allowFallback && onFallback ? (
-          <Button variant="soft" onClick={onFallback}>
+          <Button variant="secondary" onClick={onFallback}>
             {es.audioGate.useFallback}
           </Button>
         ) : null}
@@ -113,8 +113,8 @@ export function AudioGate({
 
   return (
     <Card className="flex flex-col items-center gap-5 text-center">
-      <Volume2 size={56} className="text-secondary" aria-hidden />
-      <h2 className="font-display text-3xl font-semibold">{es.audioGate.title}</h2>
+      <Volume2 size={56} className="text-primary-light" aria-hidden />
+      <h2 className="text-[26px] font-extrabold leading-tight">{es.audioGate.title}</h2>
       <p>{es.audioGate.body}</p>
       {stage.name === 'preparing' ? <Spinner label={es.audioGate.preparing} /> : null}
       {stage.name === 'checking' ? <Spinner label={es.audioGate.checking} /> : null}
@@ -134,13 +134,13 @@ export function TapToPlay() {
   return (
     <button
       type="button"
-      className="fixed inset-0 z-[70] flex flex-col items-center justify-center gap-4 bg-secondary text-black"
+      className="fixed inset-0 z-[70] flex flex-col items-center justify-center gap-4 border-0 bg-[#0D0E15] text-accent"
       onClick={() => {
         void audioHost.tapToPlay();
       }}
     >
       <Volume2 size={96} aria-hidden />
-      <span className="font-display text-4xl font-semibold">{es.game.tapToPlay}</span>
+      <span className="year text-3xl" style={{ textShadow: 'var(--glow-text-accent)' }}>{es.game.tapToPlay}</span>
     </button>
   );
 }

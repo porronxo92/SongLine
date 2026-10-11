@@ -86,7 +86,11 @@ def build_command(
         assert isinstance(m, P.KickMsg)
         return C.Kick(sender, m.slot)
     if t == "update_settings":
-        return C.UpdateSettings(sender, m.model_dump())
+        changes = m.model_dump()
+        packs = changes.get("packs")
+        if isinstance(packs, list) and not all(isinstance(p, str) and p in svc.pack_slugs for p in packs):
+            raise GameError("invalid_settings", "Pack desconocido")
+        return C.UpdateSettings(sender, changes)
     if t == "start_game":
         return C.Start(sender, tuple(svc.songs), secrets.randbits(62))
     if t == "play_request":
@@ -120,6 +124,8 @@ def build_command(
         return C.NextTurn(sender)
     if t == "rematch":
         return C.Rematch(sender)
+    if t == "end_game":
+        return C.EndGame(sender)
     raise P.ProtocolError("unknown_type", t)
 
 

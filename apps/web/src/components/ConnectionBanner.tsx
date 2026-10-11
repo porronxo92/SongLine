@@ -6,15 +6,11 @@ export function ConnectionBanner() {
   const status = useRoom((s) => s.status);
   if (status === 'open' || status === 'idle') return null;
   return (
-    <div
-      role="status"
-      className="sticky top-0 z-40 flex items-center justify-center gap-2 bg-foreground px-4 py-2 text-sm font-bold text-white"
-      style={{ paddingTop: 'max(8px, env(safe-area-inset-top))' }}
-    >
+    <div role="status" className="conn-banner" style={{ paddingTop: 'max(8px, env(safe-area-inset-top))' }}>
       {status === 'connecting' ? (
-        <Loader2 size={16} className="animate-spin" aria-hidden />
+        <Loader2 size={16} className="animate-spin text-accent" aria-hidden />
       ) : (
-        <WifiOff size={16} aria-hidden />
+        <WifiOff size={16} className="pause-icon text-magenta-light" aria-hidden />
       )}
       {status === 'connecting' ? es.connection.connecting : es.connection.reconnecting}
     </div>

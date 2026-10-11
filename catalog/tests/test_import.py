@@ -199,25 +199,25 @@ def _decision(c=None, **kw):
 
 
 def test_status_all_three_agree():
-    assert imp.year_status("verified", _decision(), 1995, 1995)[0] == "verified"
-    assert imp.year_status("verified", _decision(), 1995, None)[0] == "verified"
+    assert imp.year_status("verified", _decision(), 1995, 1995, strict=True)[0] == "verified"
+    assert imp.year_status("verified", _decision(), 1995, None, strict=True)[0] == "verified"
 
 
 def test_status_musicbrainz_only_with_remaster_is_verified():
     d = _decision(cand(name="Wonderwall - Remastered", date="2014-01-01", album_type="compilation"))
-    assert imp.year_status("verified", d, 1995, 1995)[0] == "verified"
-    assert imp.year_status("verified", d, 1995, None)[0] == "disputed"
+    assert imp.year_status("verified", d, 1995, 1995, strict=True)[0] == "verified"
+    assert imp.year_status("verified", d, 1995, None, strict=True)[0] == "disputed"
 
 
 def test_status_musicbrainz_disagrees_or_curated_disputed():
-    assert imp.year_status("verified", _decision(), 1995, 1996)[0] == "disputed"
-    assert imp.year_status("disputed", _decision(), 1995, 1995)[0] == "disputed"
-    assert imp.year_status("verified", imp.decide([]), 1995, None)[0] == "disputed"
+    assert imp.year_status("verified", _decision(), 1995, 1996, strict=True)[0] == "disputed"
+    assert imp.year_status("disputed", _decision(), 1995, 1995, strict=True)[0] == "disputed"
+    assert imp.year_status("verified", imp.decide([]), 1995, None, strict=True)[0] == "disputed"
 
 
 def test_status_live_is_never_verified():
     d = _decision(cand(name="Wonderwall - Live"))
-    assert imp.year_status("verified", d, 1995, 1995)[0] == "disputed"
+    assert imp.year_status("verified", d, 1995, 1995, strict=True)[0] == "disputed"
 
 
 # ---------------------------------------------------------------- HTTP simulado
@@ -352,7 +352,7 @@ def test_process_write_csv_never_changes_year(tmp_path):
     sp = FakeSpotify({"Wonderwall": [cand(name="Wonderwall - Remastered", date="2014-01-01",
                                           album_type="compilation", isrc="ISRC1")]})
     mb = FakeMB({"ISRC1": "1995-10-02"})
-    results = imp.process_rows(rows, sp, mb, only_pending=True)
+    results = imp.process_rows(rows, sp, mb, only_pending=True, strict=True)
     assert results[2].skipped and sp.calls == [("Wonderwall", "Oasis"), ("Nada", "Nadie")]
     assert results[0].status == "verified"      # MB coincide y Spotify es posterior con remaster
     assert results[1].status == "disputed"      # sin coincidencia
@@ -388,6 +388,7 @@ def test_reports_dudosas_top3_and_mismatch(tmp_path):
 
 
 def test_main_requires_credentials(monkeypatch, tmp_path, capsys):
+    monkeypatch.setattr(imp, "load_dotenv", lambda path: None)  # no depender del .env real
     monkeypatch.delenv("SPOTIFY_CLIENT_ID", raising=False)
     monkeypatch.delenv("SPOTIFY_CLIENT_SECRET", raising=False)
     assert imp.main([str(tmp_path / "x.csv")]) == 2
@@ -463,3 +464,65 @@ def test_songs_no_duplicates_and_notes(songs):
         if r["Estado"] == "disputed":
             assert r["Nota"].strip(), f"{r['ID']} disputed sin Nota"
         assert r["SpotifyTrackId"] == "" and r["ISRC"] == ""
+
+
+def test_build_db_updates_no_toca_el_anio_y_exige_track_id_para_habilitar():
+    ok = imp.Candidate(track_id="T1", name="Hotel California", artists=("Eagles",), album_name="Hotel California",
+                   album_type="album", release_date="1976-12-08", isrc="USEE17600001")
+    best = imp.Scored(candidate=ok, score=0.95, flags=())
+    row = {"ID": "S016", "Cancion": "Hotel California", "Artista": "Eagles", "Anio": "1976"}
+    verified = imp.RowResult(row=row, decision=imp.Decision(best, 0.95, False, ()), status="verified")
+    no_match = imp.RowResult(row={**row, "ID": "S099"}, decision=imp.Decision(None, 0.0, True, ("no_match",)), status="disputed")
+    skipped = imp.RowResult(row={**row, "ID": "S100"}, skipped=True)
+    ups = imp.build_db_updates([verified, no_match, skipped])
+    assert [u["csv_id"] for u in ups] == ["S016", "S099"]
+    assert ups[0]["enabled"] is True and ups[0]["track_id"] == "T1" and ups[0]["album_date"] == "1976-12-08"
+    assert ups[1]["enabled"] is False and ups[1]["track_id"] is None
+    assert all("year" not in u for u in ups)
+
+
+def test_status_relajado_ignora_desajustes_de_anio_si_la_coincidencia_es_clara():
+    d = _decision()  # coincidencia clara, sin flags
+    # Spotify (album recopilatorio) y MusicBrainz discrepan del CSV: con la regla relajada no bloquea
+    assert imp.year_status("verified", d, 1973, 1995)[0] == "verified"
+    assert imp.year_status("verified", d, 1973, 1995, strict=True)[0] == "disputed"
+
+
+def test_status_relajado_sigue_excluyendo_directos_curados_y_sin_coincidencia():
+    live = _decision(cand(name="Wonderwall - Live", album="Live at Knebworth"))
+    assert imp.year_status("verified", live, 1995, None)[0] == "disputed"
+    assert imp.year_status("disputed", _decision(), 1995, None)[0] == "disputed"
+    assert imp.year_status("verified", imp.decide([]), 1995, None)[0] == "disputed"
+
+
+class _LimitedSpotify:
+    """Responde N busquedas y luego lanza RateLimitError, como Spotify con su bloqueo."""
+
+    def __init__(self, ok: int) -> None:
+        self.ok, self.calls = ok, 0
+
+    def search_candidates(self, title, artist):
+        self.calls += 1
+        if self.calls > self.ok:
+            raise imp.RateLimitError("Retry-After de 74294s; abortando")
+        return [cand(name=title, artists=(artist,))]
+
+
+def test_rate_limit_conserva_lo_procesado_y_no_trunca_el_csv():
+    rows = make_rows()
+    sp = _LimitedSpotify(ok=1)
+    results: list = []
+    with pytest.raises(imp.RateLimitError):
+        imp.process_rows(rows, sp, None, results=results)
+    assert len(results) == 1 and not results[0].skipped   # lo procesado antes del corte se conserva
+    out = imp.apply_results(rows, results)
+    assert len(out) == len(rows)                           # las filas sin procesar no se pierden
+    assert [r["Anio"] for r in out] == [r["Anio"] for r in rows]
+    assert out[1] == rows[1]                               # y quedan sin tocar
+
+
+def test_skip_ids_no_vuelve_a_buscar_lo_resuelto():
+    rows = make_rows()
+    sp = _LimitedSpotify(ok=99)
+    res = imp.process_rows(rows, sp, None, skip_ids=frozenset({rows[0]["ID"]}))
+    assert res[0].skipped and sp.calls == len(rows) - 1

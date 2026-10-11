@@ -1,8 +1,10 @@
 import clsx from 'clsx';
-import { Coins, Wifi, WifiOff } from 'lucide-react';
+import { Wifi, WifiOff } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { es } from '../i18n/es';
 import { colorFor, teamName } from '../lib/teams';
 import type { TeamView } from '../protocol/types';
+import { Pick } from './Pick';
 import { TeamShape } from './ui';
 
 export function TeamPanel({
@@ -18,41 +20,65 @@ export function TeamPanel({
 }) {
   const c = colorFor(team);
   const pct = Math.min(100, Math.round((team.cardCount / Math.max(1, target)) * 100));
+  const hasTokens = team.tokens > 0;
+
+  // El número baja con un pequeño rebote cuando se gasta una ficha.
+  const prev = useRef(team.tokens);
+  const [bump, setBump] = useState(false);
+  useEffect(() => {
+    if (team.tokens < prev.current) {
+      setBump(true);
+      const id = setTimeout(() => {
+        setBump(false);
+      }, 300);
+      prev.current = team.tokens;
+      return () => {
+        clearTimeout(id);
+      };
+    }
+    prev.current = team.tokens;
+    return undefined;
+  }, [team.tokens]);
+
   return (
     <div
-      className={clsx('clay min-w-0 flex-1 p-2.5', active && 'ring-4 ring-accent')}
+      className={clsx('tp', active && 'active')}
+      style={{ '--tc': c.hex } as React.CSSProperties}
       aria-current={active ? 'true' : undefined}
       data-testid={`team-${String(team.slot)}`}
     >
+      {active ? <span className="turn-tag">{es.team.turn}</span> : null}
       <div className="flex items-center gap-1.5">
         <TeamShape shape={c.shape} color={c.hex} size={18} />
-        <span className="truncate text-sm font-bold">
+        <span className="min-w-0 flex-1 truncate text-sm font-bold">
           {teamName(team)}
           {you ? ` (${es.lobby.youAre.toLowerCase()})` : ''}
         </span>
-        <span className="ml-auto" title={team.connected ? es.team.online : es.team.offline}>
+        <span title={team.connected ? es.team.online : es.team.offline}>
           {team.connected ? (
-            <Wifi size={14} aria-hidden className="text-green-700" />
+            <Wifi size={16} aria-hidden className="text-accent" />
           ) : (
-            <WifiOff size={14} aria-hidden className="text-destructive" />
+            <WifiOff size={16} aria-hidden className="text-magenta-light" />
           )}
           <span className="sr-only-live">{team.connected ? es.team.online : es.team.offline}</span>
         </span>
       </div>
-      <div className="mt-1.5 flex items-center justify-between gap-2">
-        <span className="year text-base" aria-label={es.team.progress(team.cardCount, target)}>
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <span className="year min-w-[3.2rem] text-[18px] leading-none" aria-label={es.team.progress(team.cardCount, target)}>
           {team.cardCount}/{target}
         </span>
-        <span className="flex items-center gap-1 text-sm font-bold" aria-label={es.team.tokens(team.tokens)}>
-          <Coins size={16} aria-hidden className="text-amber-600" />
-          {team.tokens}
+        <span
+          className="flex items-center gap-1 text-sm font-bold text-gold"
+          aria-label={es.team.tokens(team.tokens)}
+        >
+          <Pick width={16} spent={!hasTokens} />
+          <span className={clsx('inline-block', bump && 'tok-bump')}>
+            {team.tokens}
+          </span>
         </span>
       </div>
-      <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-border" aria-hidden>
-        <div
-          className="h-full rounded-full bg-primary transition-[width] duration-300"
-          style={{ width: `${String(pct)}%` }}
-        />
+      <div className="bar" aria-hidden>
+        <i style={{ width: `${String(pct)}%` }} />
       </div>
     </div>
   );

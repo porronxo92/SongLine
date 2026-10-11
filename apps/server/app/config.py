@@ -4,19 +4,40 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Literal
-from urllib.parse import urlparse
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
+def normalize_database_url(url: str) -> str:
+    """Accepts a provider URL (Neon: `postgresql://...?sslmode=require&channel_binding=require`).
+
+    Switches the driver to asyncpg and turns `sslmode` into asyncpg's `ssl`; drops `channel_binding`,
+    which asyncpg does not take as a connect argument.
+    """
+    parts = urlparse(url)
+    scheme = parts.scheme
+    if scheme in ("postgres", "postgresql"):
+        scheme = "postgresql+asyncpg"
+    query = dict(parse_qsl(parts.query))
+    sslmode = query.pop("sslmode", None)
+    query.pop("channel_binding", None)
+    if sslmode and sslmode != "disable" and "ssl" not in query:
+        query["ssl"] = "require"
+    return urlunparse(parts._replace(scheme=scheme, query=urlencode(query)))
+
+
 class AppConfig(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore", case_sensitive=False)
+    model_config = SettingsConfigDict(env_file=REPO_ROOT / ".env", extra="ignore", case_sensitive=False)
 
     auth_mode: Literal["spotify", "fake"] = "spotify"
     catalog_source: Literal["postgres", "csv"] = "postgres"
     catalog_csv_path: Path = REPO_ROOT / "catalog" / "songs.csv"
+    catalog_packs_dir: Path | None = None  # default: <catalog_csv_path dir>/packs
+    catalog_packs_json: Path | None = None  # default: <catalog_csv_path dir>/packs.json
     persistence: Literal["postgres", "none"] = "postgres"
     database_url: str = "postgresql+asyncpg://hitster:hitster@localhost:5432/hitster"
     spotify_client_id: str = ""
@@ -33,6 +54,19 @@ class AppConfig(BaseSettings):
     rate_room_create_per_min: int = 5
     rate_code_attempts_per_min: int = 20
     room_idle_ttl_s: int = 2 * 3600
+
+    @property
+    def packs_dir(self) -> Path:
+        return self.catalog_packs_dir or self.catalog_csv_path.parent / "packs"
+
+    @property
+    def packs_json(self) -> Path:
+        return self.catalog_packs_json or self.catalog_csv_path.parent / "packs.json"
+
+    @field_validator("database_url")
+    @classmethod
+    def _normalize_database_url(cls, v: str) -> str:
+        return normalize_database_url(v)
 
 
 LOCAL_HOSTS = frozenset({"localhost", "127.0.0.1"})

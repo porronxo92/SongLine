@@ -280,3 +280,34 @@ def test_host_offline_pauses_for_all_and_resumes(make_app: MakeApp, clock: Clock
         assert rt.room.phase == "paused"
         host.ok("device_ready", device_id="fake2", provider="sdk")  # fake mode unlocks too
         wait_for(lambda: rt.room.phase == "turn_ready")
+
+
+def test_end_game_over_ws_host_only_and_no_leak(make_app: MakeApp, clock: Clock) -> None:
+    app, svc = make_app()
+    with TestClient(app) as client, ExitStack() as stack:
+        code, players = setup_three(client, stack)
+        # En el lobby no se puede terminar: wrong_phase, tambien para el anfitrion.
+        assert players[0].result(players[0].send("end_game"))["payload"]["code"] == "wrong_phase"
+        rt = start(code, players, svc)
+        active = rt.room.turn.team_slot  # type: ignore[union-attr]
+        secret = rt.room.turn.card  # type: ignore[union-attr]
+        players[active].ok("play_request")
+        # Un equipo que no es anfitrion no puede terminar.
+        r = players[1].result(players[1].send("end_game"))
+        assert r["type"] == "error" and r["payload"]["code"] == "not_host"
+        assert rt.room.phase != "game_over"
+        # El anfitrion termina a mitad de turno.
+        players[0].ok("end_game")
+        v = players[1].state(lambda v: v["phase"] == "game_over")
+        assert v["phase"] == "game_over"
+        go = players[2].recv(lambda m: m["type"] == "game_over")["payload"]
+        assert go["reason"] == "host_ended"
+        # La carta en curso no se revela a nadie.
+        blob = str(players[1].seen) + str(players[2].seen)
+        for secret_text in (secret.title, secret.artist, secret.track_id):
+            assert secret_text not in blob
+        # Ya terminada: no se puede volver a terminar.
+        assert players[0].result(players[0].send("end_game"))["payload"]["code"] == "wrong_phase"
+        # La revancha sigue funcionando.
+        players[0].ok("rematch")
+        wait_for(lambda: rt.room.phase == "lobby")

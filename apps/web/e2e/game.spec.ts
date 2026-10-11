@@ -16,6 +16,7 @@ test('tres móviles juegan una partida en modo voz hasta el final', async ({ bro
     }
     await expect(host.getByRole('group', { name: 'Cartas para ganar' }).locator('output')).toHaveText('3');
     await host.getByRole('radio', { name: /Voz alta/ }).click();
+    await host.getByRole('button', { name: 'Elegir géneros' }).click();
     await host.getByRole('button', { name: 'Continuar' }).click();
 
     // Modo fake: se salta el login y llega el AudioGate.
@@ -85,6 +86,11 @@ test('tres móviles juegan una partida en modo voz hasta el final', async ({ bro
 
     expect(finished, 'la partida debe llegar a GAME_OVER').toBe(true);
     await expect(host.getByTestId('winner')).toContainText('Gana');
+    const rows = host.getByTestId('rank-row');
+    await expect(rows).toHaveCount(3);
+    await expect(rows.first()).toContainText('1.º');
+    await expect(rows.first()).toHaveAttribute('data-rank', '1');
+    await expect(host.getByTestId('podium')).toBeVisible();
     await expect(host.getByRole('button', { name: 'Revancha' })).toBeVisible();
     await expect(p2.getByRole('heading', { name: 'Fin de la partida' })).toBeVisible();
   } finally {

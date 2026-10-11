@@ -62,7 +62,7 @@ export function GuessModal() {
           {es.common.send}
         </Button>
         <Button
-          variant="soft"
+          variant="secondary"
           disabled={busy}
           onClick={() => {
             send('', '');
@@ -116,12 +116,7 @@ function Toggle({
             type="button"
             role="radio"
             aria-checked={value === v}
-            className="btn !min-w-[72px]"
-            style={{
-              background: value === v ? (v ? 'var(--color-accent)' : 'var(--color-secondary)') : '#fff',
-              borderColor: value === v ? 'rgba(0,0,0,0.25)' : 'var(--color-border)',
-              color: value === v ? '#000' : 'var(--color-foreground)',
-            }}
+            className={`btn !min-w-[72px] ${value === v ? (v ? 'btn-accent' : 'btn-primary') : 'btn-secondary'}`}
             onClick={() => {
               onChange(v);
             }}
@@ -135,15 +130,24 @@ function Toggle({
 }
 
 /** Modo voz alta, tras revelar: reclamación por honor. Se puede corregir hasta pulsar «Siguiente». */
-export function HonorClaim({ initialTitle, initialArtist }: { initialTitle: boolean; initialArtist: boolean }) {
+export function HonorClaim({
+  initialTitle,
+  initialArtist,
+  onClaim,
+}: {
+  initialTitle: boolean;
+  initialArtist: boolean;
+  onClaim?: () => void;
+}) {
   const [titleOk, setTitleOk] = useState(initialTitle);
   const [artistOk, setArtistOk] = useState(initialArtist);
   const send = (t: boolean, a: boolean) => {
+    onClaim?.();
     void act('honor_claim', { title_ok: t, artist_ok: a });
   };
   return (
     <Card className="flex flex-col gap-3">
-      <h2 className="font-display text-xl font-semibold">{es.game.honorTitle}</h2>
+      <h2 className="h2">{es.game.honorTitle}</h2>
       <Toggle
         label={es.game.honorTitleOk}
         value={titleOk}
@@ -181,13 +185,13 @@ export function CountdownRing({
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} aria-hidden>
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--color-border)" strokeWidth={6} />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--color-surface-3)" strokeWidth={6} />
         <circle
           cx={size / 2}
           cy={size / 2}
           r={r}
           fill="none"
-          stroke="var(--color-primary)"
+          stroke="var(--color-accent)"
           strokeWidth={6}
           strokeLinecap="round"
           strokeDasharray={circ}
@@ -196,7 +200,7 @@ export function CountdownRing({
           style={{ transition: 'stroke-dashoffset 250ms linear' }}
         />
       </svg>
-      <span className="year absolute inset-0 flex items-center justify-center text-xl">{s}</span>
+      <span className="year absolute inset-0 flex items-center justify-center text-lg">{s}</span>
     </div>
   );
 }
@@ -213,11 +217,11 @@ export function ObjectionBanner({
   body?: string;
 }) {
   return (
-    <Card className="flex items-center gap-4" >
+    <Card className="flex items-center gap-4">
       <CountdownRing deadlineTs={deadlineTs} totalS={totalS} />
       <div role="status">
-        <p className="font-display text-xl font-semibold">{title}</p>
-        {body ? <p className="text-sm text-muted-foreground">{body}</p> : null}
+        <p className="h2">{title}</p>
+        {body ? <p className="mt-1 text-sm text-muted-foreground">{body}</p> : null}
       </div>
     </Card>
   );

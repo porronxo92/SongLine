@@ -1,6 +1,6 @@
-# HitsterCasero
+# SongLine
 
-PWA multijugador casera tipo Hitster. El diseño completo y las decisiones cerradas (D1–D9) están en `docs/DISENO.md`. **§0.0 de ese documento prevalece sobre el resto.**
+PWA multijugador casera tipo Hitster (nombre interno anterior: HitsterCasero). El diseño completo y las decisiones cerradas (D1–D9) están en `docs/DISENO.md`. **§0.0 de ese documento prevalece sobre el resto.**
 
 ## Reglas que no se negocian
 - El servidor es autoritativo. El cliente **nunca** recibe título, artista, año, `track_id`, URI ni `song_id` de la carta en curso antes de `REVEAL` (`apps/server/app/game/projection.py` es el único sitio que decide qué se envía).
@@ -14,7 +14,8 @@ PWA multijugador casera tipo Hitster. El diseño completo y las decisiones cerra
 - Infra: Docker Compose (caddy, api, postgres).
 
 ## Diseño visual
-- Fuente de verdad: `design-system/hitstercasero/MASTER.md` (generado con la skill `ui-ux-pro-max`). Ajustes del orquestador: ignorar el patrón de landing con testimonios; los años y números de las cartas usan una fuente display gruesa y legible (no Caveat); los iconos son SVG (Lucide), nunca emojis.
+- Fuente de verdad: `design-system/songline/MASTER.md` (tokens y componentes) y `docs/DISENO-VISUAL.md` (dirección de arte A-E). Estilo Neon Pop nocturno, solo modo oscuro. Sustituye al sistema anterior (`design-system/hitstercasero/`, obsoleto).
+- Tipografía: Unbounded (logo, años, titulares, contadores) y Outfit (interfaz). Iconos SVG de lucide-react, nunca emojis. Cada equipo lleva forma además de color.
 - Textos de la UI en español, pasados por la skill `stop-slop`: frases directas, sin relleno ni rayas largas.
 
 ## Convenciones

@@ -153,7 +153,41 @@ def test_game_over_view_has_standings(viewer: int | None) -> None:
     j = view_json(room, viewer)
     assert j["phase"] == "game_over" and j["winners"] == [0] and j["turn"] is None
     assert j["standings"][0]["slot"] == 0 and j["gameOverReason"] == "target"
+    assert j["standings"][0]["rank"] == 1 and [r["rank"] for r in j["standings"]] == sorted(r["rank"] for r in j["standings"])
+    assert set(j["standings"][0]) == {"slot", "name", "cards", "tokens", "rank"}
 
 
 def test_make_card_helper_ids_unique() -> None:
     assert len({make_card(i, 1990).instance_id for i in range(100)}) == 100
+
+
+def test_end_game_does_not_leak_card_in_play() -> None:
+    for build in (
+        lambda r, n: r,
+        lambda r, n: go(r, n, C.PlayRequest(0), C.PlaceConfirm(0, 2)),
+        lambda r, n: go(r, n, C.PlayRequest(0), C.PlaceConfirm(0, 2), C.VoiceConfirm(0)),
+    ):
+        room, now = base()
+        room = build(room, now)
+        done, fx = reduce(room, C.EndGame(0), now)
+        assert done.phase == Phase.GAME_OVER
+        assert_clean(done)
+        for e in fx:
+            if isinstance(e, C.Broadcast):
+                assert "ZZSecret" not in json.dumps(e.payload)
+        assert view_json(done, 1)["gameOverReason"] == "host_ended"
+
+
+def test_structured_result_never_before_reveal() -> None:
+    room, now = base()
+    for cmd in (C.PlayRequest(0), C.PlaceConfirm(0, 2), C.VoiceConfirm(0)):
+        room = go(room, now, cmd)
+        for v in VIEWERS:
+            t = view_json(room, v)["turn"]
+            assert t["result"] is None
+            assert "songYear" not in json.dumps(t) and "placement" not in json.dumps(t)
+    paused, _ = reduce(room, C.Disconnected(0), now)
+    for v in VIEWERS:
+        assert view_json(paused, v)["turn"]["result"] is None
+    room = go(room, now, C.ObjectionPass(1))
+    assert view_json(room, 2)["turn"]["result"]["songYear"] == 1966

@@ -22,7 +22,7 @@ export function IdentityForm({
   const taken = takenColors.map((c) => c.toLowerCase());
   const firstFree = TEAM_COLORS.find((c) => !taken.includes(c.hex.toLowerCase()));
   const [name, setName] = useState(initialName);
-  const [color, setColor] = useState(initialColor ?? firstFree?.hex ?? TEAM_COLORS[0]?.hex ?? '#E63946');
+  const [color, setColor] = useState(initialColor ?? firstFree?.hex ?? TEAM_COLORS[0]?.hex ?? '#FF6B4A');
   const valid = name.trim().length > 0;
 
   return (
@@ -64,17 +64,11 @@ export function IdentityForm({
                 onClick={() => {
                   setColor(c.hex);
                 }}
-                className="btn !justify-start"
-                style={{
-                  background: '#fff',
-                  borderColor: on ? 'var(--color-foreground)' : 'var(--color-border)',
-                  color: 'var(--color-foreground)',
-                  minHeight: 64,
-                }}
+                className="choice !min-h-[64px] !flex-row !items-center !justify-start !gap-3"
               >
                 <TeamShape shape={c.shape} color={c.hex} size={28} />
                 <span>{c.name}</span>
-                {isTaken ? <span className="text-xs">{es.identity.taken}</span> : null}
+                {isTaken ? <small>{es.identity.taken}</small> : null}
               </button>
             );
           })}

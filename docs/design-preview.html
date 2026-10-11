@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SongLine · maqueta visual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: dark;
+
+  /* Fondos y superficies */
+  --color-bg: #0D0E15;            /* Midnight Vinyl */
+  --color-surface: #151726;       /* tarjetas, paneles */
+  --color-surface-2: #1D2033;     /* elevada: modales, tarjeta de carta */
+  --color-surface-3: #272B45;     /* hover, pistas de barras */
+  --color-overlay: rgba(6, 6, 12, 0.78);
+  --color-border: #2E3250;        /* decorativo, no sirve de límite de control */
+  --color-border-strong: #6C72A8; /* bordes de controles, 3:1 */
+
+  /* Texto */
+  --color-fg: #F4F1FF;
+  --color-fg-2: #B4B0D0;
+  --color-fg-3: #8E8BB0;
+  --color-fg-disabled: #6E7096;
+
+  /* Marca y estados */
+  --color-primary: #7B2CBF;       /* Electric Purple: relleno de acción */
+  --color-primary-hover: #8A35D1;
+  --color-primary-pressed: #6A1FA8;
+  --color-primary-light: #B77CFF; /* Ultraviolet: texto/iconos sobre oscuro */
+  --color-on-primary: #FFFFFF;
+  --color-accent: #00F5D4;        /* Neon Cyan: línea del tiempo, aciertos */
+  --color-accent-pressed: #00C9AE;
+  --color-on-accent: #0D0E15;
+  --color-magenta: #FF007F;       /* Hot Pink: retos, borde y glow */
+  --color-magenta-light: #FF4DA6; /* texto sobre oscuro */
+  --color-danger: #D6006B;        /* relleno de botón peligro */
+  --color-danger-pressed: #B80059;
+  --color-on-danger: #FFFFFF;
+  --color-gold: #FFB703;          /* Retro Amber: fichas, ganador */
+  --color-gold-deep: #C98700;
+  --color-on-gold: #0D0E15;
+  --color-focus: #00F5D4;
+
+  /* Equipos (color + forma) */
+  --color-team-1: #FF6B4A;        /* círculo */
+  --color-team-2: #4D8DFF;        /* triángulo */
+  --color-team-3: #4ADE80;        /* cuadrado */
+  --color-team-4: #C084FC;        /* rombo */
+
+  /* Década (vinilo de la carta revelada) */
+  --decade-50: #FFD166; --decade-60: #FF9F1C; --decade-70: #FF6B4A; --decade-80: #FF007F;
+  --decade-90: #B77CFF; --decade-00: #4D8DFF; --decade-10: #00F5D4; --decade-20: #4ADE80;
+
+  /* Glow (sombras de color) */
+  --glow-primary: 0 0 0 1px rgba(183,124,255,.45), 0 0 18px rgba(123,44,191,.60), 0 0 48px rgba(123,44,191,.30);
+  --glow-accent: 0 0 0 1px rgba(0,245,212,.50), 0 0 14px rgba(0,245,212,.55), 0 0 40px rgba(0,245,212,.22);
+  --glow-magenta: 0 0 0 1px rgba(255,0,127,.50), 0 0 16px rgba(255,0,127,.55), 0 0 44px rgba(255,0,127,.25);
+  --glow-gold: 0 0 0 1px rgba(255,183,3,.55), 0 0 16px rgba(255,183,3,.55), 0 0 44px rgba(255,183,3,.22);
+  --glow-text-accent: 0 0 12px rgba(0,245,212,.65);
+  --glow-text-magenta: 0 0 12px rgba(255,0,127,.70);
+  --glow-text-gold: 0 0 14px rgba(255,183,3,.60);
+
+  /* Sombras de elevación (sobre fondo oscuro, más opacas) */
+  --shadow-sm: 0 2px 6px rgba(0,0,0,.45);
+  --shadow-md: 0 8px 20px rgba(0,0,0,.50), inset 0 1px 0 rgba(255,255,255,.06);
+  --shadow-lg: 0 20px 48px rgba(0,0,0,.60), inset 0 1px 0 rgba(255,255,255,.08);
+  --shadow-btn-press: inset 0 3px 8px rgba(0,0,0,.45);
+
+  /* Radios */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  /* Espacio (rejilla de 4) */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+  --touch-min: 48px;
+
+  /* Tipografía */
+  --font-display: 'Unbounded', 'Arial Black', 'Segoe UI', system-ui, sans-serif;
+  --font-ui: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Movimiento */
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --motion-press: 90ms;
+  --motion-fast: 160ms;
+  --motion-base: 240ms;
+  --motion-slow: 360ms;
+  --motion-flip: 700ms;
+  --motion-celebrate: 1200ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-press: 0ms; --motion-fast: 0ms; --motion-base: 0ms; --motion-slow: 0ms; --motion-flip: 0ms; --motion-celebrate: 0ms; }
+}
+
+*{box-sizing:border-box}
+html{background:#05050A}
+body{margin:0;font-family:var(--font-ui);font-size:16px;line-height:1.5;color:var(--color-fg);background:#05050A;-webkit-font-smoothing:antialiased}
+.phone{width:390px;max-width:100%;margin:0 auto;background:var(--color-bg);min-height:100vh;position:relative;overflow:hidden;
+  background-image:radial-gradient(120% 40% at 50% 0%,rgba(123,44,191,.35),transparent 70%)}
+.ic{width:24px;height:24px;flex:none}
+section{padding:40px 20px 8px;position:relative}
+h1,h2,h3,p{margin:0}
+.sec-h{font-family:var(--font-display);font-weight:700;font-size:22px;line-height:1.2;letter-spacing:-.01em;margin-bottom:6px}
+.sec-n{display:block;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent);margin-bottom:6px}
+.help{font-size:14px;line-height:1.45;color:var(--color-fg-3);margin-bottom:16px}
+.label{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--color-fg-3)}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+.sw{border-radius:16px;padding:12px;min-height:84px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid rgba(255,255,255,.08)}
+.sw b{font-size:14px;font-weight:700;line-height:1.2}.sw span{font-size:12px;font-weight:500;font-family:ui-monospace,Consolas,monospace}
+
+.t-year{font-family:var(--font-display);font-weight:800;font-size:56px;line-height:1;letter-spacing:-.02em;color:var(--color-fg)}
+.t-card-year{font-family:var(--font-display);font-weight:800;font-size:24px;line-height:1;letter-spacing:-.01em}
+.t-title{font-weight:700;font-size:24px;line-height:1.2}
+.t-artist{font-weight:500;font-size:16px;line-height:1.3;color:var(--color-fg-2)}
+.t-counter{font-family:var(--font-display);font-weight:700;font-size:18px;line-height:1}
+.spec{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 0;border-bottom:1px solid var(--color-border)}
+.spec small{font-size:12px;color:var(--color-fg-3);text-align:right;font-family:ui-monospace,Consolas,monospace;flex:none}
+
+.btn{appearance:none;border:0;cursor:pointer;font-family:var(--font-ui);font-weight:700;font-size:16px;letter-spacing:.02em;min-height:var(--touch-min);padding:0 24px;border-radius:var(--radius-md);display:inline-flex;align-items:center;justify-content:center;gap:8px;color:var(--color-fg);background:transparent;
+  transition:transform var(--motion-press) var(--ease-out),box-shadow var(--motion-fast) var(--ease-out),background-color var(--motion-fast) var(--ease-out);position:relative}
+.btn:active{transform:translateY(2px) scale(.98)}
+.btn:focus-visible,.focus-demo{outline:3px solid var(--color-focus);outline-offset:3px}
+.btn-primary{background:linear-gradient(180deg,#8A35D1,#7B2CBF);color:var(--color-on-primary);box-shadow:var(--glow-primary),inset 0 1px 0 rgba(255,255,255,.25)}
+.btn-primary:active{background:var(--color-primary-pressed);box-shadow:0 0 12px rgba(123,44,191,.5),var(--shadow-btn-press)}
+.btn-secondary{background:var(--color-surface-2);border:2px solid var(--color-border-strong);color:var(--color-fg)}
+.btn-secondary:hover{border-color:var(--color-accent);color:var(--color-accent)}
+.btn-accent{background:var(--color-accent);color:var(--color-on-accent);box-shadow:var(--glow-accent)}
+.btn-danger{background:var(--color-danger);color:var(--color-on-danger);box-shadow:var(--glow-magenta),inset 0 1px 0 rgba(255,255,255,.2)}
+.btn-ghost{color:var(--color-primary-light)}
+.btn[disabled]{background:var(--color-surface-2);color:var(--color-fg-disabled);box-shadow:none;border:2px dashed var(--color-border);cursor:not-allowed}
+.btn-lg{min-height:56px;font-size:18px;width:100%}
+.btn-icon{padding:0;width:var(--touch-min);flex:none}
+.btn-hover-demo{background:linear-gradient(180deg,#9A45E0,#8A35D1)}
+
+.hero{padding:28px 20px 40px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid var(--color-border)}
+.hero::after{content:"";position:absolute;left:-20%;right:-20%;bottom:-2px;height:120px;background:
+ repeating-linear-gradient(90deg,rgba(0,245,212,.22) 0 1px,transparent 1px 36px),
+ repeating-linear-gradient(0deg,rgba(0,245,212,.22) 0 1px,transparent 1px 22px);
+ transform:perspective(160px) rotateX(58deg);transform-origin:50% 100%;mask-image:linear-gradient(0deg,#000,transparent);-webkit-mask-image:linear-gradient(0deg,#000,transparent);pointer-events:none}
+.hero .mark{width:112px;height:112px;margin:0 auto 12px;filter:drop-shadow(0 0 24px rgba(123,44,191,.7))}
+.hero .tag{font-size:16px;color:var(--color-fg-2);margin:12px auto 24px;max-width:290px}
+.hero .stack{display:grid;gap:12px;position:relative;z-index:1}
+
+.pack{position:relative;text-align:left;background:var(--color-surface);border:2px solid var(--color-border);border-radius:var(--radius-md);padding:12px;min-height:96px;display:flex;flex-direction:column;gap:6px;cursor:pointer;color:var(--color-fg);font-family:var(--font-ui);
+  transition:border-color var(--motion-fast) var(--ease-out),box-shadow var(--motion-fast) var(--ease-out),transform var(--motion-press) var(--ease-out)}
+.pack:active{transform:scale(.97)}
+.pack .ic{width:28px;height:28px;color:var(--color-primary-light)}
+.pack b{font-size:16px;font-weight:700;line-height:1.1}.pack>span:last-child{font-size:12px;color:var(--color-fg-3);font-weight:500}
+.pack .tick{position:absolute;right:10px;top:10px;width:24px;height:24px;border-radius:50%;border:2px solid var(--color-border-strong);display:grid;place-items:center;color:transparent}
+.pack .tick .ic{width:16px;height:16px;color:inherit}
+.pack.on{border-color:var(--color-accent);background:linear-gradient(160deg,rgba(0,245,212,.14),var(--color-surface) 60%);box-shadow:var(--glow-accent)}
+.pack.on>.ic{color:var(--color-accent)}
+.pack.on .tick{background:var(--color-accent);border-color:var(--color-accent);color:var(--color-on-accent)}
+
+.vinyl{display:block}
+.mystery{--w:104px;--h:140px;width:var(--w);height:var(--h);border-radius:var(--radius-md);border:2px solid transparent;position:relative;display:grid;place-items:center;
+  background:radial-gradient(90% 70% at 50% 40%,#2a1650,var(--color-surface) 75%) padding-box,linear-gradient(135deg,#7B2CBF,#FF007F 55%,#00F5D4) border-box;
+  box-shadow:var(--glow-primary);animation:pulse 2400ms var(--ease-in-out) infinite alternate}
+.mystery .vinyl{animation:spin 6s linear infinite}
+.mystery .q{position:absolute;font-family:var(--font-display);font-weight:800;font-size:calc(var(--w)*.3);color:#fff;text-shadow:var(--glow-text-magenta);line-height:1}
+.mystery.lg{--w:200px;--h:270px;border-radius:var(--radius-lg);border-width:3px}
+@keyframes pulse{from{box-shadow:0 0 0 1px rgba(183,124,255,.35),0 0 14px rgba(123,44,191,.45),0 0 30px rgba(123,44,191,.2)}to{box-shadow:0 0 0 1px rgba(255,0,127,.5),0 0 22px rgba(255,0,127,.55),0 0 56px rgba(123,44,191,.4)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ycard{--dc:var(--decade-80);width:104px;height:148px;border-radius:var(--radius-md);border:2px solid var(--dc);position:relative;overflow:hidden;padding:8px;display:flex;flex-direction:column;justify-content:space-between;text-align:center;
+  background:var(--color-surface-2);box-shadow:0 0 14px color-mix(in srgb,var(--dc) 40%,transparent),var(--shadow-md);flex:none}
+.ycard::before{content:"";position:absolute;width:120px;height:120px;right:-42px;bottom:-42px;border-radius:50%;
+  background:repeating-radial-gradient(circle,color-mix(in srgb,var(--dc) 38%,transparent) 0 2px,color-mix(in srgb,var(--dc) 14%,transparent) 2px 6px);
+  -webkit-mask-image:radial-gradient(circle,transparent 0 12px,#000 13px);mask-image:radial-gradient(circle,transparent 0 12px,#000 13px)}
+.ycard>*{position:relative}
+.ycard .y{font-family:var(--font-display);font-weight:800;font-size:24px;line-height:1;letter-spacing:-.01em;color:var(--color-fg);text-shadow:0 0 12px color-mix(in srgb,var(--dc) 70%,transparent)}
+.ycard .t{font-size:12px;font-weight:600;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ycard .a{font-size:12px;font-weight:500;line-height:1.2;color:var(--color-fg-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ycard.hit{animation:anchor 520ms var(--ease-spring)}
+.ycard.big{width:200px;height:270px;padding:16px;border-width:3px;border-radius:var(--radius-lg)}
+.ycard.big::before{width:230px;height:230px;right:-80px;bottom:-80px}
+.ycard.big .y{font-size:56px}.ycard.big .t{font-size:24px;font-weight:700;-webkit-line-clamp:3}.ycard.big .a{font-size:16px;white-space:normal}
+.ycard .dec{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dc)}
+@keyframes anchor{0%{transform:scale(.8)}55%{transform:scale(1.08)}100%{transform:scale(1)}}
+.flip{perspective:900px;width:200px;height:270px;margin:0 auto;cursor:pointer}
+.flip-in{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform var(--motion-flip) var(--ease-in-out)}
+.flip.on .flip-in{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.flip .back{transform:rotateY(180deg)}
+
+.tl{position:relative;height:232px;margin:0 -20px;overflow:hidden}
+.tl::before{content:"";position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;background:linear-gradient(90deg,transparent,var(--color-accent) 14%,var(--color-accent) 86%,transparent);box-shadow:0 0 14px rgba(0,245,212,.7),0 0 36px rgba(0,245,212,.3);border-radius:2px}
+.tl-scroll{position:absolute;inset:0;display:flex;align-items:center;overflow-x:auto;scroll-snap-type:x mandatory;padding-inline:calc(50% - 56px);scrollbar-width:none;overscroll-behavior-x:contain}
+.tl-scroll::-webkit-scrollbar{display:none}
+.tl-gap{flex:0 0 112px;scroll-snap-align:center;display:grid;place-items:center}
+.tl-item{flex:0 0 112px;display:grid;place-items:center}
+.slot{width:100px;height:140px;border-radius:var(--radius-md);border:2px dashed var(--color-border-strong);display:grid;place-items:center;color:var(--color-fg-3);background:rgba(13,14,21,.85);
+  transition:transform var(--motion-base) var(--ease-out),border-color var(--motion-fast),box-shadow var(--motion-base) var(--ease-out)}
+.slot .ic{width:20px;height:20px}
+.tl-gap.sel .slot{border:2px solid var(--color-accent);box-shadow:var(--glow-accent);transform:scale(1.1);color:var(--color-accent)}
+.tl-mystery{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+.tl-nav{display:flex;align-items:center;gap:12px;margin-top:4px}
+.tl-label{flex:1;text-align:center;min-height:48px}
+.tl-label b{display:block;font-size:20px;font-weight:600;line-height:1.2}.tl-label span{font-size:14px;color:var(--color-fg-3)}
+
+.pick{width:44px;height:52px;flex:none;filter:drop-shadow(0 0 8px rgba(255,183,3,.6))}
+.pick.spent{filter:none;opacity:.7}
+.pick-row{display:flex;gap:10px;align-items:center}
+.pick-count{font-family:var(--font-display);font-weight:700;font-size:18px;color:var(--color-gold);text-shadow:var(--glow-text-gold)}
+.spend{position:relative;height:96px;border:1px dashed var(--color-border-strong);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:space-between;padding:0 20px;overflow:hidden}
+.spend .fly{animation:spend 1400ms var(--ease-out) infinite;display:block}
+.spark{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--color-magenta);left:62%;top:50%;opacity:0;animation:spark 1400ms var(--ease-out) infinite;box-shadow:0 0 8px var(--color-magenta)}
+@keyframes spend{0%{transform:translateX(0) scale(1);opacity:1}14%{transform:translateX(0) scale(1.25) rotate(-8deg)}45%{transform:translateX(150px) scale(.9) rotate(18deg);opacity:1}55%{transform:translateX(165px) scale(.5) rotate(40deg);opacity:0}100%{transform:translateX(165px) scale(.5);opacity:0}}
+@keyframes spark{0%,48%{opacity:0;transform:translate(0,0)}52%{opacity:1}75%,100%{opacity:0;transform:translate(var(--x),var(--y))}}
+
+.duel{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:16px;position:relative;overflow:hidden}
+.duel-head{text-align:center;margin-bottom:12px}
+.duel-slot{display:inline-block;font-family:var(--font-display);font-weight:800;font-size:16px;color:var(--color-fg);position:relative;margin-top:6px}
+.glitch::before,.glitch::after{content:attr(data-t);position:absolute;left:0;top:0;width:100%;overflow:hidden}
+.glitch::before{color:var(--color-magenta);animation:gl1 1600ms steps(1) infinite;mix-blend-mode:screen}
+.glitch::after{color:var(--color-accent);animation:gl2 1600ms steps(1) infinite;mix-blend-mode:screen}
+@keyframes gl1{0%,86%,100%{transform:translate(0);clip-path:inset(0 0 100% 0)}88%{transform:translate(-3px,1px);clip-path:inset(10% 0 55% 0)}92%{transform:translate(2px,-1px);clip-path:inset(60% 0 8% 0)}}
+@keyframes gl2{0%,84%,100%{transform:translate(0);clip-path:inset(0 0 100% 0)}86%{transform:translate(3px,-1px);clip-path:inset(45% 0 20% 0)}90%{transform:translate(-2px,1px);clip-path:inset(5% 0 70% 0)}}
+.duel-teams{display:grid;grid-template-columns:1fr 52px 1fr;align-items:center;gap:4px}
+.fighter{background:var(--color-surface-2);border:2px solid var(--tc);border-radius:var(--radius-md);padding:12px 6px;text-align:center;display:grid;gap:6px;justify-items:center;box-shadow:0 0 16px color-mix(in srgb,var(--tc) 35%,transparent)}
+.fighter b{font-size:14px;line-height:1.1}.fighter small{font-size:12px;color:var(--color-fg-2);line-height:1.2}
+.vs{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;margin:auto;font-family:var(--font-display);font-weight:800;font-size:14px;background:var(--color-bg);border:2px solid var(--color-magenta);color:var(--color-magenta-light);box-shadow:var(--glow-magenta);animation:vs 900ms var(--ease-in-out) infinite alternate}
+@keyframes vs{to{transform:scale(1.12) rotate(-4deg)}}
+.tension{margin:16px 0 4px;display:grid;grid-template-columns:1fr 1fr;gap:6px;height:12px}
+.tension i{display:block;background:var(--tc);transform-origin:var(--o);animation:tense 700ms var(--ease-in-out) infinite alternate;box-shadow:0 0 12px color-mix(in srgb,var(--tc) 60%,transparent)}
+.tension i:first-child{--o:left center;border-radius:6px 0 0 6px}.tension i:last-child{--o:right center;border-radius:0 6px 6px 0;animation-delay:-350ms}
+@keyframes tense{from{transform:scaleX(.55)}to{transform:scaleX(1)}}
+.duel .note{text-align:center;font-size:14px;color:var(--color-fg-3);margin-top:8px}
+.fighter.win{box-shadow:var(--glow-gold);border-color:var(--color-gold)}
+.fighter.lose{opacity:.6;filter:saturate(.4)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
+.badge-gold{background:rgba(255,183,3,.16);color:var(--color-gold);border:1px solid rgba(255,183,3,.5)}
+.badge-mag{background:rgba(255,0,127,.14);color:var(--color-magenta-light);border:1px solid rgba(255,0,127,.5)}
+.badge .ic{width:14px;height:14px}
+
+.tp{background:var(--color-surface);border:2px solid var(--color-border);border-radius:var(--radius-md);padding:10px;min-width:0;position:relative}
+.tp.active{border-color:var(--tc);box-shadow:0 0 0 1px var(--tc),0 0 20px color-mix(in srgb,var(--tc) 50%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 12%,var(--color-surface)),var(--color-surface))}
+.tp .top{display:flex;align-items:center;gap:6px}
+.tp .top .ic{width:16px;height:16px;color:var(--color-accent)}
+.tp .nm{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;line-height:1.2}
+.tp .mid{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.bar{height:8px;border-radius:4px;background:var(--color-surface-3);overflow:hidden;margin-top:8px}
+.bar>i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--color-primary),var(--color-accent));box-shadow:0 0 10px rgba(0,245,212,.6)}
+.tp .tok{display:flex;align-items:center;gap:4px;font-weight:700;font-size:14px;color:var(--color-gold)}
+.turn-tag{position:absolute;right:8px;top:-10px;background:var(--tc);color:var(--color-on-accent);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px}
+
+.win{position:relative;overflow:hidden;border-radius:var(--radius-lg);padding:28px 16px 20px;text-align:center;background:radial-gradient(90% 50% at 50% 0%,rgba(255,183,3,.25),transparent 70%),var(--color-surface);border:1px solid rgba(255,183,3,.35)}
+.win h3{font-family:var(--font-display);font-weight:800;font-size:26px;line-height:1.1;letter-spacing:-.02em;margin:8px 0 4px;color:var(--color-gold);text-shadow:var(--glow-text-gold)}
+.conf{position:absolute;top:-16px;width:8px;height:14px;border-radius:2px;animation:fall 3200ms linear infinite;opacity:.95}
+@keyframes fall{to{transform:translateY(420px) rotate(540deg);opacity:0}}
+.podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:8px;align-items:end;margin:20px 0 12px}
+.pod{border-radius:12px 12px 0 0;display:grid;justify-items:center;align-content:start;gap:4px;padding:10px 4px 8px;background:var(--color-surface-2);border:1px solid var(--color-border);border-bottom:0}
+.pod b{font-size:14px;line-height:1.1}.pod small{font-size:12px;color:var(--color-fg-2)}
+.pod .rk{font-family:var(--font-display);font-weight:800;font-size:20px}
+.pod.p1{height:172px;border-color:var(--color-gold);background:linear-gradient(180deg,rgba(255,183,3,.2),var(--color-surface-2));box-shadow:var(--glow-gold)}
+.pod.p2{height:140px}.pod.p3{height:120px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{background:var(--color-surface-2);border-radius:12px;padding:10px 4px}
+.stat b{display:block;font-family:var(--font-display);font-weight:700;font-size:20px;color:var(--color-accent)}.stat span{font-size:12px;color:var(--color-fg-2)}
+.ended{border-radius:var(--radius-lg);padding:24px 16px;text-align:center;background:var(--color-surface);border:1px solid var(--color-border-strong);border-top:3px solid var(--color-primary-light)}
+.ended h3{font-family:var(--font-display);font-weight:800;font-size:22px;line-height:1.15;margin:8px 0 4px}
+
+.logo-box{background:var(--color-surface);border-radius:var(--radius-md);padding:20px;display:grid;gap:20px;justify-items:center;border:1px solid var(--color-border)}
+footer{padding:40px 20px;text-align:center;font-size:12px;color:var(--color-fg-3)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}.conf{display:none}}
+</style>
+</head>
+<body>
+<main class="phone">
+
+<div class="hero" aria-label="Pantalla de inicio">
+  <div class="mark"><svg width="112" height="112" role="img" aria-label="SongLine" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img">
+<defs>
+<linearGradient id="u3-disc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2CBF"/><stop offset="1" stop-color="#FF007F"/></linearGradient>
+<linearGradient id="u3-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B1530"/><stop offset="1" stop-color="#0D0E15"/></linearGradient>
+</defs>
+<rect x="6" y="6" width="500" height="500" rx="112" fill="url(#u3-bg)" stroke="#7B2CBF" stroke-opacity=".7" stroke-width="4"/>
+<g fill="none" stroke="#00F5D4" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"><path d="M58 256H118"/><path d="M414 226V286M438 190V322M462 232V280"/></g>
+<circle cx="58" cy="256" r="18" fill="#00F5D4"/>
+<circle cx="256" cy="256" r="128" fill="url(#u3-disc)"/>
+<g fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="5"><circle cx="256" cy="256" r="100"/><circle cx="256" cy="256" r="72"/></g>
+<path d="M160 192A108 108 0 0 1 224 148" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"/>
+<circle cx="256" cy="256" r="34" fill="#0D0E15"/><circle cx="256" cy="256" r="13" fill="#00F5D4"/>
+</svg></div>
+  <svg width="220" style="display:block;margin:0 auto;height:auto" role="img" aria-label="SongLine" xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 586.1 108" role="img">
+<!-- Texto convertido a trazos desde Unbounded 800 (Google Fonts, SIL OFL). No necesita la fuente instalada. -->
+<path fill="#F4F1FF" d="M3.6 50.4H27.2Q27.6 53 29.8 55Q31.9 56.9 35.6 58Q39.3 59 44.3 59Q51.2 59 55.1 57.4Q58.9 55.8 58.9 52.5Q58.9 50.2 56.7 48.8Q54.5 47.3 48 46.8L34.8 45.7Q18.6 44.5 11.4 38.6Q4.1 32.8 4.1 22.9Q4.1 14.8 8.8 9.3Q13.5 3.9 21.9 1.1Q30.3 -1.7 41.7 -1.7Q52.7 -1.7 61.2 1.4Q69.8 4.5 74.8 10.1Q79.9 15.8 80.4 23.3H56.8Q56.4 21.1 54.6 19.4Q52.7 17.8 49.3 16.9Q45.9 16 41.2 16Q35 16 31.4 17.5Q27.7 19 27.7 22Q27.7 24.2 29.9 25.6Q32 27 37.8 27.5L52.3 28.7Q63.1 29.5 69.8 32Q76.4 34.6 79.4 38.9Q82.4 43.3 82.4 49.9Q82.4 57.9 77.6 64Q72.8 70 64.2 73.3Q55.5 76.7 43.9 76.7Q32 76.7 23 73.4Q14 70.1 8.9 64.2Q3.8 58.2 3.6 50.4Z M123.7 76.7Q112.6 76.7 104.2 72.9Q95.8 69.1 91.1 62.2Q86.4 55.4 86.4 46.4Q86.4 37.2 91.1 30.3Q95.8 23.5 104.2 19.8Q112.6 16 123.8 16Q134.9 16 143.3 19.8Q151.7 23.5 156.3 30.3Q161 37.2 161 46.4Q161 55.4 156.3 62.2Q151.7 69.1 143.3 72.9Q134.9 76.7 123.7 76.7ZM123.8 59.9Q128.3 59.9 131.5 58.3Q134.6 56.7 136.2 53.6Q137.9 50.6 137.9 46.4Q137.9 42.1 136.2 39Q134.6 36 131.5 34.4Q128.3 32.8 123.8 32.8Q119.3 32.8 116.1 34.4Q112.9 36 111.2 39Q109.6 42.1 109.6 46.3Q109.6 50.6 111.2 53.6Q112.9 56.7 116.1 58.3Q119.3 59.9 123.8 59.9Z M164.3 17.7H187.2L191.1 41.4V75H168.2V37.9ZM211.5 16Q219.9 16 225.7 19.3Q231.5 22.6 234.7 28.6Q237.8 34.7 237.8 42.8V75H214.8V46.1Q214.8 40.5 211.9 37.5Q208.9 34.5 203.5 34.5Q199.7 34.5 196.9 36.1Q194.1 37.7 192.6 40.6Q191.1 43.5 191.1 47.6L184.2 44Q185.5 34.7 189.4 28.5Q193.4 22.3 199.1 19.1Q204.8 16 211.5 16Z M294.8 60.5V50.9L295.6 48.3V33.2L294.8 31.1V17.7H317.8V59.7Q317.8 70.2 312.8 77.7Q307.8 85.2 298.8 89.2Q289.7 93.2 277.4 93.2Q269.3 93.2 262.5 91.2Q255.6 89.1 248.7 85V68.1Q254.9 72.6 261.9 74.8Q268.8 76.9 275.9 76.9Q285.1 76.9 290 73.1Q294.8 69.3 294.8 60.5ZM271.2 68.4Q263.1 68.4 256.8 65.2Q250.4 61.9 246.8 56Q243.1 50.1 243.1 42.2Q243.1 34.3 246.8 28.4Q250.4 22.5 256.8 19.2Q263.1 16 271.2 16Q277.4 16 282.4 17.8Q287.4 19.7 291.3 22.8Q295.2 25.9 297.8 29.4Q300.4 33 301.8 36.5Q303.1 39.9 303.1 42.5Q303.1 46 301 50.5Q298.9 54.9 294.9 59Q290.8 63.1 284.9 65.8Q278.9 68.4 271.2 68.4ZM279.2 53.1Q284.6 53.1 288.8 50.3Q292.9 47.6 295.6 42.2Q292.8 36.7 288.6 34Q284.5 31.3 279.2 31.3Q275.2 31.3 272.2 32.6Q269.3 33.9 267.7 36.3Q266.1 38.8 266.1 42.2Q266.1 45.5 267.6 48Q269.2 50.4 272.1 51.8Q275.1 53.1 279.2 53.1Z"/><path fill="#00F5D4" d="M350.6 0V64.7L340.1 54.3H396V75H327.3V0Z M401.2 16.6 412.7 19 424.1 16.6V75H401.2ZM412.7 12.8Q406.9 12.8 403.3 9.9Q399.7 7 399.7 2.1Q399.7 -2.9 403.3 -5.8Q406.9 -8.7 412.7 -8.7Q418.7 -8.7 422.2 -5.8Q425.8 -2.9 425.8 2.1Q425.8 7 422.2 9.9Q418.7 12.8 412.7 12.8Z M429.9 17.7H452.8L456.7 41.4V75H433.8V37.9ZM477.1 16Q485.5 16 491.3 19.3Q497.1 22.6 500.2 28.6Q503.4 34.7 503.4 42.8V75H480.4V46.1Q480.4 40.5 477.4 37.5Q474.5 34.5 469.1 34.5Q465.3 34.5 462.5 36.1Q459.7 37.7 458.2 40.6Q456.7 43.5 456.7 47.6L449.8 44Q451.1 34.7 455 28.5Q459 22.3 464.7 19.1Q470.4 16 477.1 16Z M545.4 76.7Q534.8 76.7 526.5 72.9Q518.2 69.1 513.4 62.2Q508.6 55.3 508.6 46.1Q508.6 37.1 513.2 30.3Q517.9 23.5 526 19.8Q534 16 544 16Q554.5 16 561.9 20.4Q569.3 24.9 573.2 33.1Q577.2 41.4 577.2 52.6H527.3V39.5H564L557.3 44Q556.9 40.1 555.3 37.3Q553.7 34.6 551 33.2Q548.4 31.8 544.8 31.8Q540.7 31.8 537.8 33.4Q534.9 35 533.3 37.8Q531.8 40.7 531.8 44.3Q531.8 49.4 534 52.9Q536.3 56.4 540.9 58.2Q545.5 60.1 552.3 60.1Q558.5 60.1 564.6 58.6Q570.7 57.1 575.7 54.2V68.4Q569.6 72.4 562 74.6Q554.5 76.7 545.4 76.7Z"/>
+</svg>
+  <p class="tag">Escucha, adivina y ordena la historia de la música. ¿Qué año suena?</p>
+  <div class="stack">
+    <button class="btn btn-primary btn-lg" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Crear sala</button>
+    <button class="btn btn-secondary btn-lg" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Unirse a una sala</button>
+    <button class="btn btn-ghost" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>Cómo se juega</button>
+  </div>
+</div>
+
+<section>
+  <span class="sec-n">01</span><h2 class="sec-h">Paleta</h2>
+  <p class="help">Midnight Vinyl de fondo, Electric Purple para actuar, Neon Cyan para la línea y los aciertos.</p>
+  <div class="grid2">
+    <div class="sw" style="background:#0D0E15;color:#F4F1FF;border-color:#2E3250"><b>Midnight Vinyl</b><span>#0D0E15</span></div>
+    <div class="sw" style="background:#7B2CBF;color:#fff"><b>Electric Purple</b><span>#7B2CBF</span></div>
+    <div class="sw" style="background:#00F5D4;color:#0D0E15"><b>Neon Cyan</b><span>#00F5D4</span></div>
+    <div class="sw" style="background:#FF007F;color:#0D0E15"><b>Hot Pink</b><span>#FF007F</span></div>
+    <div class="sw" style="background:#FFB703;color:#0D0E15"><b>Retro Amber</b><span>#FFB703</span></div>
+    <div class="sw" style="background:#B77CFF;color:#0D0E15"><b>Ultraviolet</b><span>#B77CFF</span></div>
+    <div class="sw" style="background:#151726;color:#F4F1FF;border-color:#2E3250"><b>Vinyl Surface</b><span>#151726</span></div>
+    <div class="sw" style="background:#1D2033;color:#F4F1FF;border-color:#2E3250"><b>Raised Groove</b><span>#1D2033</span></div>
+  </div>
+  <p class="label" style="margin:20px 0 8px">Equipos, color y forma</p>
+  <div class="row" style="gap:8px">
+    <span class="badge" style="border:2px solid #FF6B4A;color:#FF6B4A;padding:8px 10px;font-size:12px"><svg viewBox="0 0 24 24" width="16" height="16" fill="#FF6B4A" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10"/></svg>Rojo</span>
+    <span class="badge" style="border:2px solid #4D8DFF;color:#4D8DFF;padding:8px 10px;font-size:12px"><svg viewBox="0 0 24 24" width="16" height="16" fill="#4D8DFF" aria-hidden="true" style="flex:none"><polygon points="12,2 22.5,21 1.5,21"/></svg>Azul</span>
+    <span class="badge" style="border:2px solid #4ADE80;color:#4ADE80;padding:8px 10px;font-size:12px"><svg viewBox="0 0 24 24" width="16" height="16" fill="#4ADE80" aria-hidden="true" style="flex:none"><rect x="2.5" y="2.5" width="19" height="19" rx="2"/></svg>Verde</span>
+    <span class="badge" style="border:2px solid #C084FC;color:#C084FC;padding:8px 10px;font-size:12px"><svg viewBox="0 0 24 24" width="16" height="16" fill="#C084FC" aria-hidden="true" style="flex:none"><polygon points="12,1 23,12 12,23 1,12"/></svg>Morado</span>
+  </div>
+</section>
+
+<section>
+  <span class="sec-n">02</span><h2 class="sec-h">Tipografía</h2>
+  <p class="help">Unbounded para logo, años y contadores. Outfit para todo lo demás.</p>
+  <div class="spec"><span class="t-year">1987</span><small>Año hero<br>Unbounded 800<br>56 / 1</small></div>
+  <div class="spec"><span class="t-card-year">1987</span><small>Año de carta<br>Unbounded 800<br>24 / 1</small></div>
+  <div class="spec"><span class="t-title">Bohemian Rhapsody</span><small>Canción<br>Outfit 700<br>24 / 1.2</small></div>
+  <div class="spec"><span class="t-artist">Queen · ¿Qué año suena?</span><small>Artista<br>Outfit 500<br>16 / 1.3</small></div>
+  <div class="spec"><span class="t-counter">6/10</span><small>Contador<br>Unbounded 700<br>18 / 1</small></div>
+  <div class="spec"><span style="font-size:14px;font-weight:700">Los Piñata Ñandú</span><small>Equipo<br>Outfit 700<br>14 / 1.2</small></div>
+  <div class="spec"><span class="label">Etiqueta</span><small>Outfit 600<br>12 · +0,12em</small></div>
+  <div class="spec"><span class="help" style="margin:0">Texto de ayuda.</span><small>Outfit 400<br>14 / 1.45</small></div>
+</section>
+
+<section>
+  <span class="sec-n">03</span><h2 class="sec-h">Logotipo</h2>
+  <p class="help">Un vinilo sobre la línea del tiempo. A la derecha, la onda de la canción.</p>
+  <div class="logo-box">
+    <svg width="300" style="max-width:100%;height:auto" role="img" aria-label="SongLine" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 742.1 128" role="img">
+<defs>
+<linearGradient id="u4-disc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2CBF"/><stop offset="1" stop-color="#FF007F"/></linearGradient>
+<linearGradient id="u4-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B1530"/><stop offset="1" stop-color="#0D0E15"/></linearGradient>
+</defs>
+<g transform="scale(.25)"><rect x="6" y="6" width="500" height="500" rx="112" fill="url(#u4-bg)" stroke="#7B2CBF" stroke-opacity=".7" stroke-width="4"/><g fill="none" stroke="#00F5D4" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"><path d="M58 256H118"/><path d="M414 226V286M438 190V322M462 232V280"/></g>
+<circle cx="58" cy="256" r="18" fill="#00F5D4"/>
+<circle cx="256" cy="256" r="128" fill="url(#u4-disc)"/>
+<g fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="5"><circle cx="256" cy="256" r="100"/><circle cx="256" cy="256" r="72"/></g>
+<path d="M160 192A108 108 0 0 1 224 148" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"/>
+<circle cx="256" cy="256" r="34" fill="#0D0E15"/><circle cx="256" cy="256" r="13" fill="#00F5D4"/></g>
+<path fill="#F4F1FF" d="M163.6 76.9H187.2Q187.6 79.5 189.8 81.5Q191.9 83.4 195.6 84.5Q199.3 85.5 204.3 85.5Q211.2 85.5 215.1 83.9Q218.9 82.3 218.9 79Q218.9 76.7 216.7 75.2Q214.5 73.8 208 73.3L194.8 72.2Q178.6 71 171.3 65.2Q164.1 59.3 164.1 49.4Q164.1 41.3 168.8 35.8Q173.5 30.4 181.9 27.6Q190.3 24.8 201.7 24.8Q212.7 24.8 221.2 27.9Q229.8 31 234.9 36.6Q239.9 42.3 240.4 49.8H216.8Q216.4 47.6 214.6 45.9Q212.7 44.3 209.3 43.4Q205.9 42.5 201.2 42.5Q195 42.5 191.3 44Q187.7 45.5 187.7 48.5Q187.7 50.7 189.8 52.1Q192 53.5 197.8 54L212.3 55.2Q223.1 56 229.8 58.5Q236.4 61.1 239.4 65.4Q242.4 69.8 242.4 76.4Q242.4 84.4 237.6 90.5Q232.8 96.5 224.2 99.8Q215.5 103.2 203.9 103.2Q192 103.2 183 99.9Q174 96.6 168.9 90.7Q163.8 84.7 163.6 76.9Z M283.7 103.2Q272.6 103.2 264.2 99.4Q255.8 95.6 251.1 88.8Q246.4 81.9 246.4 72.9Q246.4 63.7 251.1 56.8Q255.8 50 264.2 46.2Q272.6 42.5 283.8 42.5Q294.9 42.5 303.3 46.2Q311.7 50 316.4 56.8Q321 63.7 321 72.9Q321 81.9 316.4 88.8Q311.7 95.6 303.3 99.4Q294.9 103.2 283.7 103.2ZM283.8 86.4Q288.3 86.4 291.5 84.8Q294.6 83.2 296.2 80.2Q297.9 77.1 297.9 72.9Q297.9 68.6 296.2 65.5Q294.6 62.5 291.5 60.9Q288.3 59.3 283.8 59.3Q279.3 59.3 276.1 60.9Q272.9 62.5 271.2 65.5Q269.6 68.6 269.6 72.8Q269.6 77.1 271.2 80.2Q272.9 83.2 276.1 84.8Q279.3 86.4 283.8 86.4Z M324.3 44.2H347.2L351.1 67.9V101.5H328.2V64.4ZM371.5 42.5Q379.9 42.5 385.7 45.8Q391.5 49.1 394.6 55.1Q397.8 61.2 397.8 69.3V101.5H374.8V72.6Q374.8 67 371.9 64Q368.9 61 363.5 61Q359.7 61 356.9 62.6Q354.1 64.2 352.6 67.1Q351.1 70 351.1 74.1L344.2 70.5Q345.5 61.2 349.5 55Q353.4 48.8 359.1 45.6Q364.8 42.5 371.5 42.5Z M454.8 87V77.4L455.6 74.8V59.7L454.8 57.6V44.2H477.8V86.2Q477.8 96.7 472.8 104.2Q467.8 111.7 458.8 115.7Q449.7 119.7 437.4 119.7Q429.3 119.7 422.5 117.7Q415.6 115.6 408.7 111.5V94.6Q414.9 99.1 421.9 101.2Q428.8 103.4 435.9 103.4Q445.1 103.4 450 99.6Q454.8 95.8 454.8 87ZM431.2 94.9Q423.1 94.9 416.8 91.7Q410.4 88.4 406.8 82.5Q403.1 76.6 403.1 68.7Q403.1 60.8 406.8 54.9Q410.4 49 416.8 45.8Q423.1 42.5 431.2 42.5Q437.4 42.5 442.4 44.3Q447.4 46.2 451.3 49.3Q455.2 52.4 457.8 56Q460.4 59.5 461.8 63Q463.1 66.4 463.1 69Q463.1 72.5 461 77Q458.9 81.4 454.9 85.5Q450.8 89.6 444.9 92.2Q438.9 94.9 431.2 94.9ZM439.2 79.6Q444.6 79.6 448.8 76.8Q452.9 74.1 455.6 68.7Q452.8 63.2 448.6 60.5Q444.5 57.8 439.2 57.8Q435.2 57.8 432.2 59.1Q429.3 60.4 427.7 62.8Q426.1 65.3 426.1 68.7Q426.1 72 427.6 74.5Q429.2 76.9 432.1 78.2Q435.1 79.6 439.2 79.6Z"/><path fill="#00F5D4" d="M510.6 26.5V91.2L500.1 80.8H556V101.5H487.3V26.5Z M561.2 43.1 572.7 45.5 584.1 43.1V101.5H561.2ZM572.7 39.3Q566.9 39.3 563.3 36.4Q559.7 33.5 559.7 28.6Q559.7 23.6 563.3 20.7Q566.9 17.8 572.7 17.8Q578.7 17.8 582.2 20.7Q585.8 23.6 585.8 28.6Q585.8 33.5 582.2 36.4Q578.7 39.3 572.7 39.3Z M589.9 44.2H612.8L616.7 67.9V101.5H593.8V64.4ZM637.1 42.5Q645.5 42.5 651.3 45.8Q657.1 49.1 660.2 55.1Q663.4 61.2 663.4 69.3V101.5H640.4V72.6Q640.4 67 637.5 64Q634.5 61 629.1 61Q625.3 61 622.5 62.6Q619.7 64.2 618.2 67.1Q616.7 70 616.7 74.1L609.8 70.5Q611.1 61.2 615 55Q619 48.8 624.7 45.6Q630.4 42.5 637.1 42.5Z M705.4 103.2Q694.8 103.2 686.5 99.4Q678.2 95.6 673.4 88.7Q668.6 81.8 668.6 72.6Q668.6 63.6 673.2 56.8Q677.9 50 686 46.2Q694 42.5 704 42.5Q714.5 42.5 721.9 47Q729.3 51.4 733.2 59.7Q737.2 67.9 737.2 79.1H687.3V66H724L717.3 70.5Q716.9 66.6 715.3 63.8Q713.7 61.1 711 59.7Q708.4 58.3 704.8 58.3Q700.7 58.3 697.8 59.9Q694.9 61.5 693.3 64.3Q691.8 67.2 691.8 70.8Q691.8 75.9 694 79.4Q696.3 82.9 700.9 84.8Q705.5 86.6 712.3 86.6Q718.5 86.6 724.6 85.1Q730.7 83.6 735.7 80.7V94.9Q729.6 98.9 722 101.1Q714.5 103.2 705.4 103.2Z"/>
+</svg>
+    <div class="row" style="gap:20px;justify-content:center"><svg width="64" height="64" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img">
+<defs>
+<linearGradient id="u0-disc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2CBF"/><stop offset="1" stop-color="#FF007F"/></linearGradient>
+<linearGradient id="u0-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B1530"/><stop offset="1" stop-color="#0D0E15"/></linearGradient>
+</defs>
+<rect x="6" y="6" width="500" height="500" rx="112" fill="url(#u0-bg)" stroke="#7B2CBF" stroke-opacity=".7" stroke-width="4"/>
+<g fill="none" stroke="#00F5D4" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"><path d="M58 256H118"/><path d="M414 226V286M438 190V322M462 232V280"/></g>
+<circle cx="58" cy="256" r="18" fill="#00F5D4"/>
+<circle cx="256" cy="256" r="128" fill="url(#u0-disc)"/>
+<g fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="5"><circle cx="256" cy="256" r="100"/><circle cx="256" cy="256" r="72"/></g>
+<path d="M160 192A108 108 0 0 1 224 148" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"/>
+<circle cx="256" cy="256" r="34" fill="#0D0E15"/><circle cx="256" cy="256" r="13" fill="#00F5D4"/>
+</svg><svg width="40" height="40" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img">
+<defs>
+<linearGradient id="u1-disc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2CBF"/><stop offset="1" stop-color="#FF007F"/></linearGradient>
+<linearGradient id="u1-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B1530"/><stop offset="1" stop-color="#0D0E15"/></linearGradient>
+</defs>
+<rect x="6" y="6" width="500" height="500" rx="112" fill="url(#u1-bg)" stroke="#7B2CBF" stroke-opacity=".7" stroke-width="4"/>
+<g fill="none" stroke="#00F5D4" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"><path d="M58 256H118"/><path d="M414 226V286M438 190V322M462 232V280"/></g>
+<circle cx="58" cy="256" r="18" fill="#00F5D4"/>
+<circle cx="256" cy="256" r="128" fill="url(#u1-disc)"/>
+<g fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="5"><circle cx="256" cy="256" r="100"/><circle cx="256" cy="256" r="72"/></g>
+<path d="M160 192A108 108 0 0 1 224 148" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"/>
+<circle cx="256" cy="256" r="34" fill="#0D0E15"/><circle cx="256" cy="256" r="13" fill="#00F5D4"/>
+</svg><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img">
+<defs>
+<linearGradient id="u2-disc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2CBF"/><stop offset="1" stop-color="#FF007F"/></linearGradient>
+<linearGradient id="u2-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B1530"/><stop offset="1" stop-color="#0D0E15"/></linearGradient>
+</defs>
+<rect x="6" y="6" width="500" height="500" rx="112" fill="url(#u2-bg)" stroke="#7B2CBF" stroke-opacity=".7" stroke-width="4"/>
+<g fill="none" stroke="#00F5D4" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"><path d="M58 256H118"/><path d="M414 226V286M438 190V322M462 232V280"/></g>
+<circle cx="58" cy="256" r="18" fill="#00F5D4"/>
+<circle cx="256" cy="256" r="128" fill="url(#u2-disc)"/>
+<g fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="5"><circle cx="256" cy="256" r="100"/><circle cx="256" cy="256" r="72"/></g>
+<path d="M160 192A108 108 0 0 1 224 148" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"/>
+<circle cx="256" cy="256" r="34" fill="#0D0E15"/><circle cx="256" cy="256" r="13" fill="#00F5D4"/>
+</svg></div>
+    <svg width="220" style="display:block;margin:0 auto;height:auto" role="img" aria-label="SongLine" xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 586.1 108" role="img">
+<!-- Texto convertido a trazos desde Unbounded 800 (Google Fonts, SIL OFL). No necesita la fuente instalada. -->
+<path fill="#F4F1FF" d="M3.6 50.4H27.2Q27.6 53 29.8 55Q31.9 56.9 35.6 58Q39.3 59 44.3 59Q51.2 59 55.1 57.4Q58.9 55.8 58.9 52.5Q58.9 50.2 56.7 48.8Q54.5 47.3 48 46.8L34.8 45.7Q18.6 44.5 11.4 38.6Q4.1 32.8 4.1 22.9Q4.1 14.8 8.8 9.3Q13.5 3.9 21.9 1.1Q30.3 -1.7 41.7 -1.7Q52.7 -1.7 61.2 1.4Q69.8 4.5 74.8 10.1Q79.9 15.8 80.4 23.3H56.8Q56.4 21.1 54.6 19.4Q52.7 17.8 49.3 16.9Q45.9 16 41.2 16Q35 16 31.4 17.5Q27.7 19 27.7 22Q27.7 24.2 29.9 25.6Q32 27 37.8 27.5L52.3 28.7Q63.1 29.5 69.8 32Q76.4 34.6 79.4 38.9Q82.4 43.3 82.4 49.9Q82.4 57.9 77.6 64Q72.8 70 64.2 73.3Q55.5 76.7 43.9 76.7Q32 76.7 23 73.4Q14 70.1 8.9 64.2Q3.8 58.2 3.6 50.4Z M123.7 76.7Q112.6 76.7 104.2 72.9Q95.8 69.1 91.1 62.2Q86.4 55.4 86.4 46.4Q86.4 37.2 91.1 30.3Q95.8 23.5 104.2 19.8Q112.6 16 123.8 16Q134.9 16 143.3 19.8Q151.7 23.5 156.3 30.3Q161 37.2 161 46.4Q161 55.4 156.3 62.2Q151.7 69.1 143.3 72.9Q134.9 76.7 123.7 76.7ZM123.8 59.9Q128.3 59.9 131.5 58.3Q134.6 56.7 136.2 53.6Q137.9 50.6 137.9 46.4Q137.9 42.1 136.2 39Q134.6 36 131.5 34.4Q128.3 32.8 123.8 32.8Q119.3 32.8 116.1 34.4Q112.9 36 111.2 39Q109.6 42.1 109.6 46.3Q109.6 50.6 111.2 53.6Q112.9 56.7 116.1 58.3Q119.3 59.9 123.8 59.9Z M164.3 17.7H187.2L191.1 41.4V75H168.2V37.9ZM211.5 16Q219.9 16 225.7 19.3Q231.5 22.6 234.7 28.6Q237.8 34.7 237.8 42.8V75H214.8V46.1Q214.8 40.5 211.9 37.5Q208.9 34.5 203.5 34.5Q199.7 34.5 196.9 36.1Q194.1 37.7 192.6 40.6Q191.1 43.5 191.1 47.6L184.2 44Q185.5 34.7 189.4 28.5Q193.4 22.3 199.1 19.1Q204.8 16 211.5 16Z M294.8 60.5V50.9L295.6 48.3V33.2L294.8 31.1V17.7H317.8V59.7Q317.8 70.2 312.8 77.7Q307.8 85.2 298.8 89.2Q289.7 93.2 277.4 93.2Q269.3 93.2 262.5 91.2Q255.6 89.1 248.7 85V68.1Q254.9 72.6 261.9 74.8Q268.8 76.9 275.9 76.9Q285.1 76.9 290 73.1Q294.8 69.3 294.8 60.5ZM271.2 68.4Q263.1 68.4 256.8 65.2Q250.4 61.9 246.8 56Q243.1 50.1 243.1 42.2Q243.1 34.3 246.8 28.4Q250.4 22.5 256.8 19.2Q263.1 16 271.2 16Q277.4 16 282.4 17.8Q287.4 19.7 291.3 22.8Q295.2 25.9 297.8 29.4Q300.4 33 301.8 36.5Q303.1 39.9 303.1 42.5Q303.1 46 301 50.5Q298.9 54.9 294.9 59Q290.8 63.1 284.9 65.8Q278.9 68.4 271.2 68.4ZM279.2 53.1Q284.6 53.1 288.8 50.3Q292.9 47.6 295.6 42.2Q292.8 36.7 288.6 34Q284.5 31.3 279.2 31.3Q275.2 31.3 272.2 32.6Q269.3 33.9 267.7 36.3Q266.1 38.8 266.1 42.2Q266.1 45.5 267.6 48Q269.2 50.4 272.1 51.8Q275.1 53.1 279.2 53.1Z"/><path fill="#00F5D4" d="M350.6 0V64.7L340.1 54.3H396V75H327.3V0Z M401.2 16.6 412.7 19 424.1 16.6V75H401.2ZM412.7 12.8Q406.9 12.8 403.3 9.9Q399.7 7 399.7 2.1Q399.7 -2.9 403.3 -5.8Q406.9 -8.7 412.7 -8.7Q418.7 -8.7 422.2 -5.8Q425.8 -2.9 425.8 2.1Q425.8 7 422.2 9.9Q418.7 12.8 412.7 12.8Z M429.9 17.7H452.8L456.7 41.4V75H433.8V37.9ZM477.1 16Q485.5 16 491.3 19.3Q497.1 22.6 500.2 28.6Q503.4 34.7 503.4 42.8V75H480.4V46.1Q480.4 40.5 477.4 37.5Q474.5 34.5 469.1 34.5Q465.3 34.5 462.5 36.1Q459.7 37.7 458.2 40.6Q456.7 43.5 456.7 47.6L449.8 44Q451.1 34.7 455 28.5Q459 22.3 464.7 19.1Q470.4 16 477.1 16Z M545.4 76.7Q534.8 76.7 526.5 72.9Q518.2 69.1 513.4 62.2Q508.6 55.3 508.6 46.1Q508.6 37.1 513.2 30.3Q517.9 23.5 526 19.8Q534 16 544 16Q554.5 16 561.9 20.4Q569.3 24.9 573.2 33.1Q577.2 41.4 577.2 52.6H527.3V39.5H564L557.3 44Q556.9 40.1 555.3 37.3Q553.7 34.6 551 33.2Q548.4 31.8 544.8 31.8Q540.7 31.8 537.8 33.4Q534.9 35 533.3 37.8Q531.8 40.7 531.8 44.3Q531.8 49.4 534 52.9Q536.3 56.4 540.9 58.2Q545.5 60.1 552.3 60.1Q558.5 60.1 564.6 58.6Q570.7 57.1 575.7 54.2V68.4Q569.6 72.4 562 74.6Q554.5 76.7 545.4 76.7Z"/>
+</svg>
+  </div>
+</section>
+
+<section>
+  <span class="sec-n">04</span><h2 class="sec-h">Botones</h2>
+  <p class="help">Altura mínima 48 px. El foco usa un anillo cian de 3 px con 3 px de separación.</p>
+  <div style="display:grid;gap:14px">
+    <button class="btn btn-primary" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg>Primario</button>
+    <button class="btn btn-secondary" type="button">Secundario</button>
+    <button class="btn btn-danger" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>Terminar partida</button>
+    <button class="btn" type="button" disabled>Deshabilitado</button>
+    <button class="btn btn-primary btn-hover-demo" type="button">Hover</button>
+    <button class="btn btn-primary focus-demo" type="button">Foco visible</button>
+    <div class="row"><button class="btn btn-secondary btn-icon" type="button" aria-label="Hueco anterior"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><button class="btn btn-secondary btn-icon" type="button" aria-label="Hueco siguiente"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button><button class="btn btn-accent" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Dar por bueno</button></div>
+  </div>
+</section>
+
+<section>
+  <span class="sec-n">05</span><h2 class="sec-h">Packs de géneros</h2>
+  <p class="help">Selección múltiple. El pack marcado lleva borde cian, brillo y casilla rellena.</p>
+  <div class="grid2">
+    <button class="pack on" type="button" aria-pressed="true"><span class="tick"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg><b>Pop</b><span>240 canciones</span></button>
+    <button class="pack on" type="button" aria-pressed="true"><span class="tick"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11.9 12.1 4.514-4.514"/><path d="M20.1 2.3a1 1 0 0 0-1.4 0l-1.114 1.114A2 2 0 0 0 17 4.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 17.828 7h1.344a2 2 0 0 0 1.414-.586L21.7 5.3a1 1 0 0 0 0-1.4z"/><path d="m6 16 2 2"/><path d="M8.2 9.9C8.7 8.8 9.8 8 11 8c2.8 0 5 2.2 5 5 0 1.2-.8 2.3-1.9 2.8l-.9.4A2 2 0 0 0 12 18a4 4 0 0 1-4 4c-3.3 0-6-2.7-6-6a4 4 0 0 1 4-4 2 2 0 0 0 1.8-1.2z"/><circle cx="11.5" cy="12.5" r=".5" fill="currentColor"/></svg><b>Rock</b><span>186 canciones</span></button>
+    <button class="pack" type="button" aria-pressed="false"><span class="tick"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M6 12c0-1.7.7-3.2 1.8-4.2"/><circle cx="12" cy="12" r="2"/><path d="M18 12c0 1.7-.7 3.2-1.8 4.2"/></svg><b>Disco y funk</b><span>94 canciones</span></button>
+    <button class="pack" type="button" aria-pressed="false"><span class="tick"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 7.601-5.994 8.19a1 1 0 0 0 .1 1.298l.817.818a1 1 0 0 0 1.314.087L15.09 12"/><path d="M16.5 21.174C15.5 20.5 14.372 20 13 20c-2.058 0-3.928 2.356-6 2-2.072-.356-2.775-3.369-1.5-4.5"/><circle cx="16" cy="7" r="5"/></svg><b>Hip hop</b><span>120 canciones</span></button>
+    <button class="pack" type="button" aria-pressed="false"><span class="tick"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg><b>Electrónica</b><span>88 canciones</span></button>
+    <button class="pack" type="button" aria-pressed="false"><span class="tick"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg><b>Latino</b><span>132 canciones</span></button>
+  </div>
+</section>
+
+<section>
+  <span class="sec-n">06</span><h2 class="sec-h">Mystery Disc y revelación</h2>
+  <p class="help">Toca la carta grande para voltearla. No hay portada: la carta revelada usa un vinilo con el color de la década.</p>
+  <div class="row" style="justify-content:space-between;align-items:flex-end;margin-bottom:24px">
+    <div><p class="label" style="margin-bottom:8px">Oculta</p><div class="mystery" role="img" aria-label="Carta misteriosa"><svg class="vinyl" width="78" height="78" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="u8" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2CBF"/><stop offset="1" stop-color="#FF007F"/></linearGradient></defs><circle cx="50" cy="50" r="48" fill="#0D0E15" stroke="#B77CFF" stroke-opacity=".5" stroke-width="1.5"/><g fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="1"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="34"/><circle cx="50" cy="50" r="28"/></g><circle cx="50" cy="50" r="19" fill="url(#u8)"/><path d="M26 30A30 30 0 0 1 46 20" stroke="#fff" stroke-opacity=".35" stroke-width="3" fill="none" stroke-linecap="round"/></svg><span class="q">?</span></div></div>
+    <div><p class="label" style="margin-bottom:8px">Revelada</p><div class="ycard" style="--dc:var(--decade-80)"><span class="y">1985</span><span class="t">Take On Me</span><span class="a">a-ha</span></div></div>
+  </div>
+  <div class="flip" id="flip" role="button" tabindex="0" aria-label="Voltear carta de ejemplo">
+    <div class="flip-in">
+      <div class="face front"><div class="mystery lg" role="img" aria-label="Carta misteriosa"><svg class="vinyl" width="150" height="150" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="u7" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2CBF"/><stop offset="1" stop-color="#FF007F"/></linearGradient></defs><circle cx="50" cy="50" r="48" fill="#0D0E15" stroke="#B77CFF" stroke-opacity=".5" stroke-width="1.5"/><g fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="1"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="34"/><circle cx="50" cy="50" r="28"/></g><circle cx="50" cy="50" r="19" fill="url(#u7)"/><path d="M26 30A30 30 0 0 1 46 20" stroke="#fff" stroke-opacity=".35" stroke-width="3" fill="none" stroke-linecap="round"/></svg><span class="q">?</span></div></div>
+      <div class="face back"><div class="ycard big" style="--dc:var(--decade-90)"><span class="dec">Años 90</span><span class="y">1994</span><span class="t">Creep</span><span class="a">Radiohead</span></div></div>
+    </div>
+  </div>
+  <p class="label" style="margin:24px 0 8px">Color por década</p>
+  <div class="row" style="gap:8px">
+    <span class="badge" style="border:1px solid var(--decade-50);color:var(--decade-50)">50</span><span class="badge" style="border:1px solid var(--decade-60);color:var(--decade-60)">60</span><span class="badge" style="border:1px solid var(--decade-70);color:var(--decade-70)">70</span><span class="badge" style="border:1px solid var(--decade-80);color:var(--decade-80)">80</span><span class="badge" style="border:1px solid var(--decade-90);color:var(--decade-90)">90</span><span class="badge" style="border:1px solid var(--decade-00);color:var(--decade-00)">00</span><span class="badge" style="border:1px solid var(--decade-10);color:var(--decade-10)">10</span><span class="badge" style="border:1px solid var(--decade-20);color:var(--decade-20)">20</span>
+  </div>
+</section>
+
+<section>
+  <span class="sec-n">07</span><h2 class="sec-h">Línea del tiempo</h2>
+  <p class="help">Desliza o usa las flechas. La carta misteriosa queda fija y el hueco bajo ella se enciende.</p>
+  <div class="tl" id="tl">
+    <div class="tl-scroll" id="tls">
+      <div class="tl-gap" data-l="Antes de 1978"><div class="slot"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></div></div>
+      <div class="tl-item"><div class="ycard" style="--dc:var(--decade-70)"><span class="y">1978</span><span class="t">Stayin' Alive</span><span class="a">Bee Gees</span></div></div>
+      <div class="tl-gap" data-l="Entre 1978 y 1991"><div class="slot"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></div></div>
+      <div class="tl-item"><div class="ycard hit" style="--dc:var(--decade-90)"><span class="y">1991</span><span class="t">Smells Like Teen Spirit</span><span class="a">Nirvana</span></div></div>
+      <div class="tl-gap" data-l="Entre 1991 y 2003"><div class="slot"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></div></div>
+      <div class="tl-item"><div class="ycard" style="--dc:var(--decade-00)"><span class="y">2003</span><span class="t">Hey Ya!</span><span class="a">Outkast</span></div></div>
+      <div class="tl-gap" data-l="Después de 2003"><div class="slot"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></div></div>
+    </div>
+    <div class="tl-mystery"><div class="mystery" role="img" aria-label="Carta misteriosa"><svg class="vinyl" width="78" height="78" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="u9" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2CBF"/><stop offset="1" stop-color="#FF007F"/></linearGradient></defs><circle cx="50" cy="50" r="48" fill="#0D0E15" stroke="#B77CFF" stroke-opacity=".5" stroke-width="1.5"/><g fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="1"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="34"/><circle cx="50" cy="50" r="28"/></g><circle cx="50" cy="50" r="19" fill="url(#u9)"/><path d="M26 30A30 30 0 0 1 46 20" stroke="#fff" stroke-opacity=".35" stroke-width="3" fill="none" stroke-linecap="round"/></svg><span class="q">?</span></div></div>
+  </div>
+  <div class="tl-nav">
+    <button class="btn btn-secondary btn-icon" id="tlp" type="button" aria-label="Hueco anterior"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+    <p class="tl-label" role="status" aria-live="polite"><b id="tll">Entre 1978 y 1991</b><span id="tln">Hueco 2 de 4</span></p>
+    <button class="btn btn-secondary btn-icon" id="tln2" type="button" aria-label="Hueco siguiente"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+  </div>
+  <button class="btn btn-primary btn-lg" style="margin-top:16px" type="button">Anclar aquí</button>
+  <p class="label" style="margin:24px 0 8px">Hueco bloqueado (objeción)</p>
+  <div class="row" style="gap:16px;flex-wrap:nowrap"><div class="slot" style="border:2px solid var(--color-magenta);color:var(--color-magenta-light);box-shadow:var(--glow-magenta);flex:none"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p class="help" style="margin:0;flex:1">Ese hueco ya lo eligió el equipo. Borde magenta y candado. No se puede seleccionar para objetar.</p></div>
+</section>
+
+<section>
+  <span class="sec-n">08</span><h2 class="sec-h">Fichas de reto</h2>
+  <p class="help">Púas de guitarra ámbar. Disponible, gastada y el gesto de gastar, en bucle.</p>
+  <div class="pick-row" style="margin-bottom:16px">
+    <svg viewBox="0 0 40 48" width="44" height="52" class="pick" aria-hidden="true"><defs><linearGradient id="u15" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD166"/><stop offset="1" stop-color="#FFB703"/></linearGradient></defs><path d="M20 46S3 30 3 16C3 7 10 2 20 2s17 5 17 14c0 14-17 30-17 30Z" fill="url(#u15)" stroke="#C98700" stroke-width="2"/><path d="M11 14c2-4 6-6 10-6" stroke="#fff" stroke-opacity=".6" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M17 31V19l8-2v10" stroke="#0D0E15" stroke-opacity=".75" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="31" r="2.4" fill="#0D0E15" fill-opacity=".75"/><circle cx="23" cy="27" r="2.4" fill="#0D0E15" fill-opacity=".75"/></svg><svg viewBox="0 0 40 48" width="44" height="52" class="pick" aria-hidden="true"><defs><linearGradient id="u16" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD166"/><stop offset="1" stop-color="#FFB703"/></linearGradient></defs><path d="M20 46S3 30 3 16C3 7 10 2 20 2s17 5 17 14c0 14-17 30-17 30Z" fill="url(#u16)" stroke="#C98700" stroke-width="2"/><path d="M11 14c2-4 6-6 10-6" stroke="#fff" stroke-opacity=".6" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M17 31V19l8-2v10" stroke="#0D0E15" stroke-opacity=".75" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="31" r="2.4" fill="#0D0E15" fill-opacity=".75"/><circle cx="23" cy="27" r="2.4" fill="#0D0E15" fill-opacity=".75"/></svg><svg viewBox="0 0 40 48" width="44" height="52" class="pick spent" aria-hidden="true"><path d="M20 46S3 30 3 16C3 7 10 2 20 2s17 5 17 14c0 14-17 30-17 30Z" fill="none" stroke="#6C72A8" stroke-width="2.5" stroke-dasharray="4 4"/></svg><span class="pick-count" style="margin-left:8px">2</span><span class="help" style="margin:0 0 0 2px">disponibles</span>
+  </div>
+  <div class="spend" aria-label="Animación de gastar ficha">
+    <span class="fly"><svg viewBox="0 0 40 48" width="44" height="52" class="pick" aria-hidden="true"><defs><linearGradient id="u17" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD166"/><stop offset="1" stop-color="#FFB703"/></linearGradient></defs><path d="M20 46S3 30 3 16C3 7 10 2 20 2s17 5 17 14c0 14-17 30-17 30Z" fill="url(#u17)" stroke="#C98700" stroke-width="2"/><path d="M11 14c2-4 6-6 10-6" stroke="#fff" stroke-opacity=".6" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M17 31V19l8-2v10" stroke="#0D0E15" stroke-opacity=".75" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="31" r="2.4" fill="#0D0E15" fill-opacity=".75"/><circle cx="23" cy="27" r="2.4" fill="#0D0E15" fill-opacity=".75"/></svg></span>
+    <span class="badge badge-mag"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/></svg>Reto</span>
+    <i class="spark" style="--x:-34px;--y:-30px"></i><i class="spark" style="--x:34px;--y:-34px;left:64%"></i><i class="spark" style="--x:-28px;--y:30px;left:66%"></i><i class="spark" style="--x:38px;--y:26px;left:68%"></i>
+  </div>
+</section>
+
+<section>
+  <span class="sec-n">09</span><h2 class="sec-h">Duelo</h2>
+  <p class="help">Dos equipos chocan por el mismo hueco. Arriba, la tensión. Abajo, el resultado.</p>
+  <div class="duel">
+    <div class="duel-head"><span class="badge badge-mag"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Objeción</span><br><span class="duel-slot glitch" data-t="Entre 1978 y 1991">Entre 1978 y 1991</span></div>
+    <div class="duel-teams">
+      <div class="fighter" style="--tc:#FF6B4A"><svg viewBox="0 0 24 24" width="26" height="26" fill="#FF6B4A" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10"/></svg><b>Los Rojos</b><small>Hueco original</small></div>
+      <div class="vs">VS</div>
+      <div class="fighter" style="--tc:#4D8DFF"><svg viewBox="0 0 24 24" width="26" height="26" fill="#4D8DFF" aria-hidden="true" style="flex:none"><polygon points="12,2 22.5,21 1.5,21"/></svg><b>Los Azules</b><small>Objetan</small></div>
+    </div>
+    <div class="tension"><i style="--tc:#FF6B4A"></i><i style="--tc:#4D8DFF"></i></div>
+    <p class="note">Comprobando el año…</p>
+  </div>
+  <div class="duel" style="margin-top:16px">
+    <div class="duel-head"><span class="badge badge-gold"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>Objeción correcta</span><br><span class="duel-slot">1985 · Take On Me</span></div>
+    <div class="duel-teams">
+      <div class="fighter lose" style="--tc:#FF6B4A"><svg viewBox="0 0 24 24" width="26" height="26" fill="#FF6B4A" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10"/></svg><b>Los Rojos</b><small>Fallan</small></div>
+      <div class="vs" style="animation:none">VS</div>
+      <div class="fighter win" style="--tc:#4D8DFF"><svg viewBox="0 0 24 24" width="26" height="26" fill="#4D8DFF" aria-hidden="true" style="flex:none"><polygon points="12,2 22.5,21 1.5,21"/></svg><b>Los Azules</b><small>Se llevan la carta</small></div>
+    </div>
+    <p class="note" style="color:var(--color-gold);font-weight:600">Los Azules se llevan la carta. Los Rojos gastan una ficha.</p>
+  </div>
+</section>
+
+<section>
+  <span class="sec-n">10</span><h2 class="sec-h">TeamPanel</h2>
+  <p class="help">Contador, barra de progreso, fichas y conexión. El turno activo lleva halo del color del equipo.</p>
+  <div class="grid2" style="gap:18px 10px;padding-top:8px">
+    <div class="tp active" style="--tc:#FF6B4A"><span class="turn-tag">Turno</span><div class="top"><svg viewBox="0 0 24 24" width="18" height="18" fill="#FF6B4A" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10"/></svg><span class="nm">Los Rojos</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></svg></div><div class="mid"><span class="t-counter">6/10</span><span class="tok"><svg viewBox="0 0 40 48" width="16" height="19" class="mini-pick" aria-hidden="true"><defs><linearGradient id="u11" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD166"/><stop offset="1" stop-color="#FFB703"/></linearGradient></defs><path d="M20 46S3 30 3 16C3 7 10 2 20 2s17 5 17 14c0 14-17 30-17 30Z" fill="url(#u11)" stroke="#C98700" stroke-width="2"/><path d="M11 14c2-4 6-6 10-6" stroke="#fff" stroke-opacity=".6" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M17 31V19l8-2v10" stroke="#0D0E15" stroke-opacity=".75" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="31" r="2.4" fill="#0D0E15" fill-opacity=".75"/><circle cx="23" cy="27" r="2.4" fill="#0D0E15" fill-opacity=".75"/></svg>2</span></div><div class="bar" aria-hidden="true"><i style="width:60%"></i></div></div>
+    <div class="tp" style="--tc:#4D8DFF"><div class="top"><svg viewBox="0 0 24 24" width="18" height="18" fill="#4D8DFF" aria-hidden="true" style="flex:none"><polygon points="12,2 22.5,21 1.5,21"/></svg><span class="nm">Los Azules</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></svg></div><div class="mid"><span class="t-counter">4/10</span><span class="tok"><svg viewBox="0 0 40 48" width="16" height="19" class="mini-pick" aria-hidden="true"><defs><linearGradient id="u12" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD166"/><stop offset="1" stop-color="#FFB703"/></linearGradient></defs><path d="M20 46S3 30 3 16C3 7 10 2 20 2s17 5 17 14c0 14-17 30-17 30Z" fill="url(#u12)" stroke="#C98700" stroke-width="2"/><path d="M11 14c2-4 6-6 10-6" stroke="#fff" stroke-opacity=".6" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M17 31V19l8-2v10" stroke="#0D0E15" stroke-opacity=".75" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="31" r="2.4" fill="#0D0E15" fill-opacity=".75"/><circle cx="23" cy="27" r="2.4" fill="#0D0E15" fill-opacity=".75"/></svg>1</span></div><div class="bar" aria-hidden="true"><i style="width:40%"></i></div></div>
+    <div class="tp" style="--tc:#4ADE80"><div class="top"><svg viewBox="0 0 24 24" width="18" height="18" fill="#4ADE80" aria-hidden="true" style="flex:none"><rect x="2.5" y="2.5" width="19" height="19" rx="2"/></svg><span class="nm">Verdes</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></svg></div><div class="mid"><span class="t-counter">9/10</span><span class="tok"><svg viewBox="0 0 40 48" width="16" height="19" class="mini-pick" aria-hidden="true"><defs><linearGradient id="u13" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD166"/><stop offset="1" stop-color="#FFB703"/></linearGradient></defs><path d="M20 46S3 30 3 16C3 7 10 2 20 2s17 5 17 14c0 14-17 30-17 30Z" fill="url(#u13)" stroke="#C98700" stroke-width="2"/><path d="M11 14c2-4 6-6 10-6" stroke="#fff" stroke-opacity=".6" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M17 31V19l8-2v10" stroke="#0D0E15" stroke-opacity=".75" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="31" r="2.4" fill="#0D0E15" fill-opacity=".75"/><circle cx="23" cy="27" r="2.4" fill="#0D0E15" fill-opacity=".75"/></svg>0</span></div><div class="bar" aria-hidden="true"><i style="width:90%"></i></div></div>
+    <div class="tp" style="--tc:#C084FC"><div class="top"><svg viewBox="0 0 24 24" width="18" height="18" fill="#C084FC" aria-hidden="true" style="flex:none"><polygon points="12,1 23,12 12,23 1,12"/></svg><span class="nm">Moradas</span><span style="display:flex"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h.01"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/><path d="M19 12.859a10 10 0 0 0-2.007-1.523"/><path d="M2 8.82a15 15 0 0 1 4.177-2.643"/><path d="M22 8.82a15 15 0 0 0-11.288-3.764"/><path d="m2 2 20 20"/></svg></span></div><div class="mid"><span class="t-counter">2/10</span><span class="tok"><svg viewBox="0 0 40 48" width="16" height="19" class="mini-pick" aria-hidden="true"><defs><linearGradient id="u14" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD166"/><stop offset="1" stop-color="#FFB703"/></linearGradient></defs><path d="M20 46S3 30 3 16C3 7 10 2 20 2s17 5 17 14c0 14-17 30-17 30Z" fill="url(#u14)" stroke="#C98700" stroke-width="2"/><path d="M11 14c2-4 6-6 10-6" stroke="#fff" stroke-opacity=".6" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M17 31V19l8-2v10" stroke="#0D0E15" stroke-opacity=".75" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="31" r="2.4" fill="#0D0E15" fill-opacity=".75"/><circle cx="23" cy="27" r="2.4" fill="#0D0E15" fill-opacity=".75"/></svg>2</span></div><div class="bar" aria-hidden="true"><i style="width:20%"></i></div></div>
+  </div>
+</section>
+
+<section>
+  <span class="sec-n">11</span><h2 class="sec-h">Victoria</h2>
+  <p class="help">Confeti de la paleta, podio y estadísticas. Debajo, la partida terminada por el anfitrión, sin confeti.</p>
+  <div class="win">
+    <i class="conf" aria-hidden="true" style="left:11%;background:#00F5D4;animation-delay:-0ms;animation-duration:2600ms;border-radius:50%;width:9px;height:9px;"></i><i class="conf" aria-hidden="true" style="left:48%;background:#FF007F;animation-delay:-173ms;animation-duration:2689ms;"></i><i class="conf" aria-hidden="true" style="left:85%;background:#FFB703;animation-delay:-346ms;animation-duration:2778ms;"></i><i class="conf" aria-hidden="true" style="left:22%;background:#B77CFF;animation-delay:-519ms;animation-duration:2867ms;border-radius:50%;width:9px;height:9px;"></i><i class="conf" aria-hidden="true" style="left:59%;background:#FF6B4A;animation-delay:-692ms;animation-duration:2956ms;"></i><i class="conf" aria-hidden="true" style="left:96%;background:#4D8DFF;animation-delay:-865ms;animation-duration:3045ms;"></i><i class="conf" aria-hidden="true" style="left:33%;background:#4ADE80;animation-delay:-1038ms;animation-duration:3134ms;border-radius:50%;width:9px;height:9px;"></i><i class="conf" aria-hidden="true" style="left:70%;background:#00F5D4;animation-delay:-1211ms;animation-duration:3223ms;"></i><i class="conf" aria-hidden="true" style="left:7%;background:#FF007F;animation-delay:-1384ms;animation-duration:3312ms;"></i><i class="conf" aria-hidden="true" style="left:44%;background:#FFB703;animation-delay:-1557ms;animation-duration:3401ms;border-radius:50%;width:9px;height:9px;"></i><i class="conf" aria-hidden="true" style="left:81%;background:#B77CFF;animation-delay:-1730ms;animation-duration:3490ms;"></i><i class="conf" aria-hidden="true" style="left:18%;background:#FF6B4A;animation-delay:-1903ms;animation-duration:3579ms;"></i><i class="conf" aria-hidden="true" style="left:55%;background:#4D8DFF;animation-delay:-2076ms;animation-duration:3668ms;border-radius:50%;width:9px;height:9px;"></i><i class="conf" aria-hidden="true" style="left:92%;background:#4ADE80;animation-delay:-2249ms;animation-duration:3757ms;"></i><i class="conf" aria-hidden="true" style="left:29%;background:#00F5D4;animation-delay:-2422ms;animation-duration:3846ms;"></i><i class="conf" aria-hidden="true" style="left:66%;background:#FF007F;animation-delay:-2595ms;animation-duration:3935ms;border-radius:50%;width:9px;height:9px;"></i><i class="conf" aria-hidden="true" style="left:3%;background:#FFB703;animation-delay:-2768ms;animation-duration:2624ms;"></i><i class="conf" aria-hidden="true" style="left:40%;background:#B77CFF;animation-delay:-2941ms;animation-duration:2713ms;"></i><i class="conf" aria-hidden="true" style="left:77%;background:#FF6B4A;animation-delay:-3114ms;animation-duration:2802ms;border-radius:50%;width:9px;height:9px;"></i><i class="conf" aria-hidden="true" style="left:14%;background:#4D8DFF;animation-delay:-87ms;animation-duration:2891ms;"></i><i class="conf" aria-hidden="true" style="left:51%;background:#4ADE80;animation-delay:-260ms;animation-duration:2980ms;"></i><i class="conf" aria-hidden="true" style="left:88%;background:#00F5D4;animation-delay:-433ms;animation-duration:3069ms;border-radius:50%;width:9px;height:9px;"></i><i class="conf" aria-hidden="true" style="left:25%;background:#FF007F;animation-delay:-606ms;animation-duration:3158ms;"></i><i class="conf" aria-hidden="true" style="left:62%;background:#FFB703;animation-delay:-779ms;animation-duration:3247ms;"></i><i class="conf" aria-hidden="true" style="left:99%;background:#B77CFF;animation-delay:-952ms;animation-duration:3336ms;border-radius:50%;width:9px;height:9px;"></i><i class="conf" aria-hidden="true" style="left:36%;background:#FF6B4A;animation-delay:-1125ms;animation-duration:3425ms;"></i>
+    <div style="color:var(--color-gold);display:grid;place-items:center;filter:drop-shadow(0 0 14px rgba(255,183,3,.6))"><svg class="ic" style="width:64px;height:64px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
+    <p class="label" style="color:var(--color-fg-2);margin-top:10px">Fin de la partida</p>
+    <h3>Gana Los Rojos</h3>
+    <p style="font-size:14px;color:var(--color-fg-2)">Han llegado al objetivo.</p>
+    <div class="podium">
+      <div class="pod p2"><span class="rk" style="color:var(--color-fg-2)">2</span><svg viewBox="0 0 24 24" width="22" height="22" fill="#4D8DFF" aria-hidden="true" style="flex:none"><polygon points="12,2 22.5,21 1.5,21"/></svg><b>Los Azules</b><small>8 cartas</small></div>
+      <div class="pod p1"><span class="rk" style="color:var(--color-gold)">1</span><svg viewBox="0 0 24 24" width="26" height="26" fill="#FF6B4A" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10"/></svg><b>Los Rojos</b><small>10 cartas</small></div>
+      <div class="pod p3"><span class="rk" style="color:var(--color-fg-3)">3</span><svg viewBox="0 0 24 24" width="22" height="22" fill="#4ADE80" aria-hidden="true" style="flex:none"><rect x="2.5" y="2.5" width="19" height="19" rx="2"/></svg><b>Verdes</b><small>6 cartas</small></div>
+    </div>
+    <div class="stats"><div class="stat"><b>24</b><span>canciones</span></div><div class="stat"><b>83%</b><span>aciertos</span></div><div class="stat"><b>3</b><span>retos</span></div></div>
+    <button class="btn btn-primary btn-lg" style="margin-top:16px" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Revancha</button>
+  </div>
+  <div class="ended" style="margin-top:16px">
+    <div style="color:var(--color-primary-light);display:grid;place-items:center"><svg class="ic" style="width:64px;height:64px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg></div>
+    <h3>Partida terminada</h3>
+    <p style="font-size:14px;color:var(--color-fg-2)">El anfitrión ha terminado la partida.</p>
+    <p style="font-size:16px;margin-top:12px">Va en cabeza <b style="color:var(--color-gold)">Los Rojos</b> con 7 cartas.</p>
+  </div>
+</section>
+
+<footer>SongLine · maqueta del sistema visual</footer>
+</main>
+<script>
+(function(){
+ var f=document.getElementById('flip');
+ function t(){f.classList.toggle('on')}
+ f.addEventListener('click',t);f.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}});
+ var s=document.getElementById('tls'),gaps=[].slice.call(s.querySelectorAll('.tl-gap')),L=document.getElementById('tll'),N=document.getElementById('tln');
+ function upd(){var c=s.scrollLeft+s.clientWidth/2,best=0,bd=1e9;gaps.forEach(function(g,i){var d=Math.abs(g.offsetLeft+g.offsetWidth/2-c);if(d<bd){bd=d;best=i}});
+  gaps.forEach(function(g,i){g.classList.toggle('sel',i===best)});L.textContent=gaps[best].dataset.l;N.textContent='Hueco '+(best+1)+' de '+gaps.length;return best}
+ function go(i){i=Math.max(0,Math.min(gaps.length-1,i));var g=gaps[i];s.scrollTo({left:g.offsetLeft+g.offsetWidth/2-s.clientWidth/2,behavior:'auto'})}
+ s.addEventListener('scroll',function(){requestAnimationFrame(upd)});
+ document.getElementById('tlp').addEventListener('click',function(){go(upd()-1)});
+ document.getElementById('tln2').addEventListener('click',function(){go(upd()+1)});
+ go(1);upd();
+})();
+</script>
+</body>
+</html>

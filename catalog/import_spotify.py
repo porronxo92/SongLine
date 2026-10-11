@@ -49,6 +49,7 @@ CONFIDENCE_THRESHOLD = 0.75
 AMBIGUITY_MARGIN = 0.05
 ARTIST_MIN_SIM = 0.6  # con un artista distinto la formula puede pasar de 0.75 por titulo y anio
 MB_MIN_TITLE_SIM = 0.85
+RELAXED_MIN_CONFIDENCE = 0.9  # regla relajada: coincidencia clara basta para habilitar
 VERSION_PENALTY = 0.3
 COMPILATION_PENALTY = 0.15
 ORIGINAL_BONUS = 0.1
@@ -316,8 +317,16 @@ def year_status(
     decision: Decision,
     csv_year: int,
     mb_year: int | None,
+    strict: bool = False,
 ) -> tuple[str, str]:
     """Estado final ('verified' | 'disputed') y motivo.
+
+    Regla relajada (por defecto): el anio lo fija la curacion del CSV. Spotify da el anio del album
+    y MusicBrainz el de la primera edicion del ISRC, y ambos fallan con reediciones y recopilatorios.
+    Basta con una coincidencia clara: titulo y artista parecidos, confianza >= 0.9 y que no sea
+    directo ni version. Los desajustes de anio no bloquean; quedan en desajustes_anio.csv.
+
+    Regla estricta (strict=True): ademas exige que Spotify o MusicBrainz confirmen el anio.
 
     - Una fila que la persona curadora marco como 'disputed' nunca se promociona.
     - Sin MusicBrainz: verified solo si la coincidencia no es dudosa.
@@ -330,6 +339,14 @@ def year_status(
         return "disputed", "sin coincidencia en Spotify"
     flags = set(decision.flags)
     best = decision.best
+    if not strict:
+        if flags & {"live", "version"}:
+            return "disputed", "directo, version o remix"
+        if best.title_sim < MB_MIN_TITLE_SIM or best.artist_sim < ARTIST_MIN_SIM:
+            return "disputed", "titulo o artista no coinciden"
+        if decision.confidence < RELAXED_MIN_CONFIDENCE:
+            return "disputed", f"confianza {decision.confidence:.2f} < {RELAXED_MIN_CONFIDENCE}"
+        return "verified", ""
     if mb_year is None and "low_confidence" in decision.reasons:
         return "disputed", "confianza baja"
     if mb_year is not None and (best.title_sim < MB_MIN_TITLE_SIM or best.artist_sim < ARTIST_MIN_SIM):
@@ -519,15 +536,20 @@ class MusicBrainzClient:
     def first_release(self, isrc: str) -> str | None:
         if not isrc:
             return None
-        resp = request_with_retry(
-            self.http, "GET", MUSICBRAINZ_URL.format(isrc=isrc), sleep=self.sleep,
-            throttle=self.throttle,
-            headers={"User-Agent": MB_USER_AGENT, "Accept": "application/json"},
-            params={"inc": "recordings+releases", "fmt": "json"},
-        )
-        if resp.status_code == 404:
+        try:
+            resp = request_with_retry(
+                self.http, "GET", MUSICBRAINZ_URL.format(isrc=isrc), sleep=self.sleep,
+                throttle=self.throttle,
+                headers={"User-Agent": MB_USER_AGENT, "Accept": "application/json"},
+                params={"inc": "releases", "fmt": "json"},
+            )
+            if resp.status_code == 404:
+                return None
+            resp.raise_for_status()
+        except httpx.HTTPError as exc:
+            # MusicBrainz es solo una verificación extra: un fallo puntual no debe abortar 180 canciones.
+            print(f"  aviso: MusicBrainz no respondió para {isrc}: {exc}", file=sys.stderr)
             return None
-        resp.raise_for_status()
         return parse_mb_first_release(resp.json())
 
 
@@ -591,10 +613,17 @@ def process_rows(
     mb: MusicBrainzLike | None = None,
     only_pending: bool = False,
     log: Callable[[str], None] = lambda s: None,
+    strict: bool = False,
+    skip_ids: frozenset[str] = frozenset(),
+    results: list[RowResult] | None = None,
 ) -> list[RowResult]:
-    results: list[RowResult] = []
+    """Procesa las filas. `skip_ids`: IDs ya resueltos (p. ej. en la BD) que no se vuelven a buscar.
+
+    `results` permite recuperar lo ya procesado si una excepcion (RateLimitError) corta la ejecucion.
+    """
+    results = results if results is not None else []
     for n, row in enumerate(rows, 1):
-        if only_pending and row.get("SpotifyTrackId"):
+        if (only_pending and row.get("SpotifyTrackId")) or row.get("ID") in skip_ids:
             results.append(RowResult(row=row, skipped=True, status=row.get("Estado", "")))
             continue
         csv_year = int(row["Anio"])
@@ -610,6 +639,7 @@ def process_rows(
             mb_date = mb.first_release(decision.best.candidate.isrc)
         status, reason = year_status(
             row.get("Estado", "verified"), decision, csv_year, parse_year(mb_date) if mb is not None else None,
+            strict=strict,
         )
         res = RowResult(row, ranked, decision, mb_date, status, reason)
         results.append(res)
@@ -621,7 +651,11 @@ def process_rows(
 def apply_results(rows: list[dict[str, str]], results: list[RowResult]) -> list[dict[str, str]]:
     """Copia de las filas con SpotifyTrackId, ISRC y Estado actualizados. Anio intacto."""
     out: list[dict[str, str]] = []
-    for row, res in zip(rows, results):
+    for i, row in enumerate(rows):
+        res = results[i] if i < len(results) else None
+        if res is None:  # resultados parciales: las filas sin procesar quedan igual
+            out.append(dict(row))
+            continue
         new = dict(row)
         if not res.skipped:
             best = res.decision.best if res.decision else None
@@ -630,6 +664,61 @@ def apply_results(rows: list[dict[str, str]], results: list[RowResult]) -> list[
             new["Estado"] = res.status
         out.append(new)
     return out
+
+
+def build_db_updates(results: list[RowResult]) -> list[dict]:
+    """Parámetros para actualizar la tabla `songs` por csv_id. No toca el año curado.
+
+    `enabled` solo es true si el estado es verified y hay track_id: sin ID no se puede reproducir.
+    """
+    updates: list[dict] = []
+    for res in results:
+        if res.skipped:
+            continue
+        best = res.decision.best if res.decision else None
+        track_id = best.candidate.track_id if best else ""
+        updates.append({
+            "csv_id": res.row["ID"],
+            "track_id": track_id or None,
+            "isrc": (best.candidate.isrc if best else "") or None,
+            "album_date": (best.candidate.release_date if best else "") or None,
+            "mb_date": res.mb_first_release or None,
+            "confidence": float(res.decision.confidence) if res.decision else None,
+            "flags": list(res.decision.flags) if res.decision else [],
+            "status": res.status,
+            "enabled": res.status == "verified" and bool(track_id),
+        })
+    return updates
+
+
+UPDATE_SONGS_SQL = """
+    UPDATE songs SET spotify_track_id = :track_id, isrc = :isrc, spotify_album_date = :album_date,
+                     mb_first_release = :mb_date, match_confidence = :confidence, match_flags = :flags,
+                     year_status = :status, enabled = :enabled, updated_at = now()
+    WHERE csv_id = :csv_id
+"""
+
+
+def write_db(results: list[RowResult]) -> tuple[int, int]:
+    """Actualiza `songs` en la base del .env (Neon). Devuelve (filas actualizadas, habilitadas)."""
+    import asyncio
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "apps" / "server"))
+    from app.config import AppConfig  # noqa: PLC0415
+    from sqlalchemy import text  # noqa: PLC0415
+    from sqlalchemy.ext.asyncio import create_async_engine  # noqa: PLC0415
+
+    updates = build_db_updates(results)
+
+    async def run() -> int:
+        engine = create_async_engine(AppConfig().database_url)
+        async with engine.begin() as conn:
+            res = await conn.execute(text(UPDATE_SONGS_SQL), updates)
+            n = res.rowcount if res.rowcount and res.rowcount > 0 else len(updates)
+        await engine.dispose()
+        return n
+
+    return asyncio.run(run()), sum(1 for u in updates if u["enabled"])
 
 
 MATCH_COLUMNS = [
@@ -700,29 +789,101 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--musicbrainz", action="store_true", help="verifica el anio por ISRC")
     p.add_argument("--write-csv", action="store_true",
                    help="reescribe SpotifyTrackId, ISRC y Estado (nunca Anio)")
+    p.add_argument("--resume", action="store_true",
+                   help="con --write-db: no vuelve a buscar las canciones que ya tienen spotify_track_id en la BD")
+    p.add_argument("--strict-years", action="store_true",
+                   help="exige que Spotify o MusicBrainz confirmen el anio (por defecto basta una coincidencia clara)")
+    p.add_argument("--write-db", action="store_true",
+                   help="actualiza la tabla songs de DATABASE_URL (track_id, ISRC, estado, enabled; nunca el anio). "
+                        "Requiere el python de apps/server/.venv")
     return p
+
+
+def load_dotenv(path: Path) -> None:
+    """Carga CLAVE=valor del .env de la raíz sin pisar variables ya definidas en el entorno."""
+    if not path.is_file():
+        return
+    for line in path.read_text(encoding="utf-8-sig").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        os.environ.setdefault(key.strip(), value.strip().strip("\"'"))
+
+
+def ids_resolved_in_db() -> frozenset[str]:
+    """csv_id de las canciones que ya tienen spotify_track_id en la base del .env."""
+    import asyncio
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "apps" / "server"))
+    from app.config import AppConfig  # noqa: PLC0415
+    from sqlalchemy import text  # noqa: PLC0415
+    from sqlalchemy.ext.asyncio import create_async_engine  # noqa: PLC0415
+
+    async def run() -> frozenset[str]:
+        engine = create_async_engine(AppConfig().database_url)
+        async with engine.connect() as conn:
+            rows = (await conn.execute(text("SELECT csv_id FROM songs WHERE spotify_track_id IS NOT NULL"))).scalars().all()
+        await engine.dispose()
+        return frozenset(rows)
+
+    return asyncio.run(run())
+
+
+def use_system_certificates() -> None:
+    """Usa los certificados de Windows/macOS si `truststore` está instalado.
+
+    Hace falta tras un proxy corporativo que re-firma el HTTPS con su propia CA. La verificación
+    sigue activa: solo cambia qué almacén de CA se consulta.
+    """
+    try:
+        import truststore  # noqa: PLC0415
+    except ImportError:
+        return
+    truststore.inject_into_ssl()
 
 
 def main(argv: list[str] | None = None, spotify: SpotifyLike | None = None,
          mb: MusicBrainzLike | None = None) -> int:
     args = build_parser().parse_args(argv)
     if spotify is None:
+        use_system_certificates()
+        load_dotenv(Path(__file__).resolve().parent.parent / ".env")
         cid, secret = os.environ.get("SPOTIFY_CLIENT_ID"), os.environ.get("SPOTIFY_CLIENT_SECRET")
         if not cid or not secret:
-            print("Faltan SPOTIFY_CLIENT_ID y SPOTIFY_CLIENT_SECRET en el entorno.", file=sys.stderr)
+            print("Faltan SPOTIFY_CLIENT_ID y SPOTIFY_CLIENT_SECRET (en el entorno o en el .env de la raíz).", file=sys.stderr)
             return 2
         spotify = SpotifyClient(cid, secret, market=args.market)
     if args.musicbrainz and mb is None:
         mb = MusicBrainzClient()
     rows = read_songs(args.csv)
-    results = process_rows(rows, spotify, mb if args.musicbrainz else None,
-                           only_pending=args.only_pending, log=print)
+    skip_ids: frozenset[str] = frozenset()
+    if args.resume:
+        load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+        skip_ids = ids_resolved_in_db()
+        print(f"--resume: {len(skip_ids)} canciones ya resueltas en la BD, se saltan.")
+    results: list[RowResult] = []
+    interrupted: RateLimitError | None = None
+    try:
+        process_rows(rows, spotify, mb if args.musicbrainz else None,
+                     only_pending=args.only_pending, log=print, strict=args.strict_years,
+                     skip_ids=skip_ids, results=results)
+    except RateLimitError as exc:
+        # Spotify corta la ejecucion: se conserva y se guarda lo ya procesado.
+        interrupted = exc
+        done = sum(not r.skipped for r in results)
+        print(f"AVISO: {exc}. Se guarda lo procesado ({done} canciones). "
+              "Vuelve a ejecutar con --resume cuando pase el bloqueo.", file=sys.stderr)
     summary = write_reports(results, args.out)
     if args.write_csv:
         write_songs(args.csv, apply_results(rows, results))
+    if args.write_db:
+        load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+        updated, enabled = write_db(results)
+        print(f"BD actualizada: {updated} canciones, {enabled} habilitadas (verified con track_id).")
     print(f"Procesadas {summary['processed']}, dudosas {summary['doubtful']}, "
           f"desajustes de anio {summary['year_mismatch']}. Informes en {args.out}/")
-    return 0
+    return 3 if interrupted else 0
 
 
 if __name__ == "__main__":

@@ -1,0 +1,5 @@
+ID,Cancion,Artista,Anio,Genero,Origen,AliasTitulo,AliasArtista,Nota,SpotifyTrackId,ISRC,Estado
+M001,Song Alpha,Band One,1985,rock,intl,,,,trM1,,verified
+M002,Song Beta,Band Two,1992,pop,intl,,,,trM2,,verified
+M003,Song Gamma,Band Three,2001,pop,intl,,,,trM3,,
+M004,Song Delta,Band Four,2010,pop,intl,,,,trM4,,disputed

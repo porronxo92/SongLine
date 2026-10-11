@@ -1,14 +1,13 @@
 import clsx from 'clsx';
-import { Circle, Diamond, Loader2, Square, Triangle } from 'lucide-react';
+import { ArrowLeft, Circle, Diamond, Loader2, Minus, Plus, Square, Triangle } from 'lucide-react';
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
 import { es } from '../i18n/es';
 import type { Shape } from '../lib/teams';
 import { useRoom } from '../store/room';
 
-type Variant = 'primary' | 'pink' | 'violet' | 'soft' | 'danger';
+type Variant = 'primary' | 'secondary' | 'accent' | 'danger' | 'ghost';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
@@ -36,7 +35,7 @@ export function Card({
   ...rest
 }: { className?: string; children: ReactNode } & HTMLAttributes<HTMLDivElement>) {
   return (
-    <div {...rest} className={clsx('clay p-5', className)}>
+    <div {...rest} className={clsx('panel p-5', className)}>
       {children}
     </div>
   );
@@ -51,28 +50,30 @@ export function Spinner({ label = es.common.loading }: { label?: string }) {
   );
 }
 
-/** Marco de pantalla con título y botón de volver opcional. */
+/** Marco de pantalla con título, botón de volver y acciones opcionales. */
 export function Screen({
   title,
   back,
+  actions,
   children,
   footer,
 }: {
   title?: string;
   back?: string | (() => void);
+  actions?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
 }) {
   const navigate = useNavigate();
   return (
     <main className="screen">
-      {title || back ? (
+      {title || back || actions ? (
         <header className="flex items-center gap-3">
           {back ? (
             <button
               type="button"
               aria-label={es.common.back}
-              className="btn btn-soft !min-h-[48px] !px-3"
+              className="btn btn-secondary btn-icon"
               onClick={() => {
                 if (typeof back === 'function') back();
                 else navigate(back);
@@ -81,7 +82,8 @@ export function Screen({
               <ArrowLeft aria-hidden />
             </button>
           ) : null}
-          {title ? <h1 className="font-display text-3xl font-semibold">{title}</h1> : null}
+          {title ? <h1 className="screen-title min-w-0 flex-1">{title}</h1> : <span className="flex-1" />}
+          {actions}
         </header>
       ) : null}
       <div className="flex flex-1 flex-col gap-4">{children}</div>
@@ -114,7 +116,7 @@ export function Toast() {
   return (
     <div
       role="alert"
-      className="fixed inset-x-4 z-[60] mx-auto max-w-md rounded-clay bg-foreground px-4 py-3 text-center font-semibold text-white shadow-clay"
+      className="toast fixed inset-x-4 z-[60] mx-auto max-w-md px-4 py-3 text-center font-semibold"
       style={{ bottom: 'max(16px, env(safe-area-inset-bottom))' }}
     >
       {toast.text}
@@ -145,31 +147,45 @@ export function Stepper({
       <div className="flex items-center gap-2" role="group" aria-label={label}>
         <button
           type="button"
-          className="btn btn-soft !px-0"
-          style={{ width: 52 }}
+          className="btn btn-secondary btn-icon"
           aria-label={`${es.create.less}: ${label}`}
           disabled={value <= min}
           onClick={() => {
             onChange(Math.max(min, value - step));
           }}
         >
-          −
+          <Minus aria-hidden size={20} />
         </button>
-        <output className="year min-w-[4.5rem] text-center text-xl" aria-live="polite">
+        <output className="year min-w-[5rem] text-center text-lg" aria-live="polite">
           {format ? format(value) : String(value)}
         </output>
         <button
           type="button"
-          className="btn btn-soft !px-0"
-          style={{ width: 52 }}
+          className="btn btn-secondary btn-icon"
           aria-label={`${es.create.more}: ${label}`}
           disabled={value >= max}
           onClick={() => {
             onChange(Math.min(max, value + step));
           }}
         >
-          +
+          <Plus aria-hidden size={20} />
         </button>
+      </div>
+    </div>
+  );
+}
+
+/** Indicador de paso: texto visible y barras. El paso actual lleva `aria-current="step"`. */
+export function StepIndicator({ current, total }: { current: number; total: number }) {
+  return (
+    <div className="steps">
+      <p className="overline" aria-current="step">
+        {es.create.step(current, total)}
+      </p>
+      <div className="steps-bars" aria-hidden>
+        {Array.from({ length: total }, (_, i) => (
+          <span key={i} className="steps-bar" data-done={i < current} />
+        ))}
       </div>
     </div>
   );

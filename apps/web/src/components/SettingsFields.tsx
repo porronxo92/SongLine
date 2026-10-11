@@ -1,5 +1,6 @@
 import type { EditableSettings } from '../protocol/types';
 import { es } from '../i18n/es';
+import { PackPicker } from './PackPicker';
 import { Stepper } from './ui';
 
 interface Option<T extends string> {
@@ -34,16 +35,10 @@ export function Segmented<T extends string>({
               onClick={() => {
                 onChange(o.value);
               }}
-              className="btn !flex-col !items-start !gap-0.5 !px-3 text-left"
-              style={{
-                background: on ? 'var(--color-secondary)' : '#fff',
-                color: on ? '#000' : 'var(--color-foreground)',
-                borderColor: on ? '#6d3fd6' : 'var(--color-border)',
-                minHeight: 72,
-              }}
+              className="choice"
             >
               <span>{o.label}</span>
-              <span className="text-xs font-semibold leading-tight">{o.hint}</span>
+              <small>{o.hint}</small>
             </button>
           );
         })}
@@ -52,16 +47,14 @@ export function Segmented<T extends string>({
   );
 }
 
-/** Ajustes editables de la sala. Los usa la pantalla Crear y los controles del anfitrión en el lobby. */
-export function SettingsFields({
-  values,
-  onChange,
-  minTeams = 2,
-}: {
+interface FieldsProps {
   values: EditableSettings;
   onChange: (patch: Partial<EditableSettings>) => void;
   minTeams?: number;
-}) {
+}
+
+/** Ajustes de juego sin géneros: paso 1 de Crear y base de los ajustes del lobby. */
+export function GameSettingsFields({ values, onChange, minTeams = 2 }: FieldsProps) {
   return (
     <div className="flex flex-col gap-5">
       <Stepper
@@ -114,6 +107,21 @@ export function SettingsFields({
         ]}
         onChange={(audio_source) => {
           onChange({ audio_source });
+        }}
+      />
+    </div>
+  );
+}
+
+/** Todos los ajustes editables juntos. Los usa el lobby del anfitrión. */
+export function SettingsFields(props: FieldsProps) {
+  return (
+    <div className="flex flex-col gap-5">
+      <GameSettingsFields {...props} />
+      <PackPicker
+        value={props.values.packs}
+        onChange={(packs) => {
+          props.onChange({ packs });
         }}
       />
     </div>

@@ -13,7 +13,8 @@ WORKDIR /opt/hitster
 COPY apps/server /opt/hitster/apps/server
 RUN pip install /opt/hitster/apps/server
 
-COPY catalog/songs.csv /opt/hitster/catalog/songs.csv
+COPY catalog/songs.csv catalog/packs.json /opt/hitster/catalog/
+COPY catalog/packs/ /opt/hitster/catalog/packs/
 
 WORKDIR /opt/hitster/apps/server
 USER app

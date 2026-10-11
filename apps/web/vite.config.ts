@@ -2,6 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
+const apiPort = process.env.VITE_API_PORT ?? '8000';
+const webPort = Number(process.env.VITE_PORT ?? '5173');
+
 export default defineConfig({
   plugins: [
     react(),
@@ -13,8 +16,8 @@ export default defineConfig({
         short_name: 'SongLine',
         description: 'Escucha, adivina y ordena la historia de la música. ¿Qué año suena?',
         display: 'standalone',
-        theme_color: '#EC4899',
-        background_color: '#FDF2F8',
+        theme_color: '#0D0E15',
+        background_color: '#0D0E15',
         lang: 'es',
         start_url: '/',
         scope: '/',
@@ -45,14 +48,15 @@ export default defineConfig({
   ],
   server: {
     host: true,
-    port: 5173,
+    port: webPort,
+    strictPort: true,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8000',
+        target: `http://127.0.0.1:${apiPort}`,
         changeOrigin: true,
       },
       '/ws': {
-        target: 'ws://127.0.0.1:8000',
+        target: `ws://127.0.0.1:${apiPort}`,
         ws: true,
         changeOrigin: true,
       },

@@ -210,6 +210,11 @@ class Rematch:
 
 
 @dataclass(frozen=True)
+class EndGame:
+    sender: int | None
+
+
+@dataclass(frozen=True)
 class TimerFired:
     name: str
     timer_id: str
@@ -239,6 +244,7 @@ Command = (
     | AcceptGuess
     | NextTurn
     | Rematch
+    | EndGame
     | TimerFired
 )
 

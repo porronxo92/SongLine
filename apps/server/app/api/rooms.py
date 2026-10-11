@@ -45,6 +45,8 @@ def create_room(
         settings = Settings.model_validate(body.settings)
     except ValidationError as e:
         raise HTTPException(status_code=422, detail="invalid settings") from e
+    if set(settings.packs) - svc.pack_slugs:
+        raise HTTPException(status_code=422, detail="invalid settings")
     try:
         rt = svc.manager.create(sh, (body.name or "").strip() or "Equipo 1", body.color, settings)
     except RoomsFull as e:

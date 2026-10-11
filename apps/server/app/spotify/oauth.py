@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import logging
 import secrets
 import time
 from collections.abc import Callable
@@ -16,7 +17,11 @@ from app.spotify.crypto import TokenCipher
 
 AUTHORIZE_URL = "https://accounts.spotify.com/authorize"
 TOKEN_URL = "https://accounts.spotify.com/api/token"
-SCOPES = "streaming user-read-private user-read-playback-state user-modify-playback-state"
+log = logging.getLogger(__name__)
+
+# El Web Playback SDK exige streaming + user-read-email + user-read-private; sin los tres, check_scope da 403.
+SCOPES = "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state"
+SDK_REQUIRED_SCOPES = ("streaming", "user-read-email", "user-read-private")
 STATE_TTL_S = 600
 MAX_PENDING = 200
 NONCE_COOKIE = "hc_oauth_nonce"
@@ -105,9 +110,15 @@ class SpotifyAuth:
         """Single use. The browser cookie must carry the nonce bound to this state (login CSRF)."""
         self._gc()
         pending = self._pending.pop(state, None)
-        if pending is None or not nonce:
+        if pending is None:
+            # Estado desconocido: caducado (> STATE_TTL_S), ya usado, o el servidor se reinicio tras /start.
+            log.warning("login rechazado: state desconocido (pendientes en memoria: %d)", len(self._pending))
+            raise SpotifyAuthError("invalid_state")
+        if not nonce:
+            log.warning("login rechazado: el navegador no envio la cookie de nonce")
             raise SpotifyAuthError("invalid_state")
         if not secrets.compare_digest(nonce.encode("utf-8", "surrogatepass"), pending.nonce.encode()):
+            log.warning("login rechazado: la cookie de nonce no coincide con este state")
             raise SpotifyAuthError("invalid_state")
         return pending
 
@@ -126,7 +137,15 @@ class SpotifyAuth:
         )
         if resp.status_code != 200:
             raise SpotifyAuthError("token_exchange_failed")
-        self._store(pending.session_hash, resp.json(), previous_refresh=None)
+        data = resp.json()
+        granted = set(str(data.get("scope", "")).split())
+        log.info("spotify login: scopes concedidos = %s", sorted(granted))
+        missing = [sc for sc in SDK_REQUIRED_SCOPES if sc not in granted]
+        if missing:
+            # Sin ellos el Web Playback SDK falla despues con 403 "Token does not satisfy scope".
+            log.warning("spotify login rechazado: faltan scopes %s", missing)
+            raise SpotifyAuthError("missing_scope")
+        self._store(pending.session_hash, data, previous_refresh=None)
         return pending.return_to
 
     # -- tokens

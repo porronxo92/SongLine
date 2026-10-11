@@ -96,7 +96,7 @@ def test_h1_attacker_login_link_does_not_log_the_victim_in(make_app: MakeApp) ->
     app, _ = spotify_app(make_app)
     with respx.mock(assert_all_called=False) as mock, TestClient(app) as attacker:
         mock.post(TOKEN_URL).respond(
-            200, json={"access_token": "VICTIM", "refresh_token": "R", "expires_in": 3600}
+            200, json={"access_token": "VICTIM", "refresh_token": "R", "expires_in": 3600, "scope": "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state"}
         )
         a_tok = tok(attacker)
         _, state = start_login(attacker, a_tok)
@@ -115,7 +115,7 @@ def test_h1_wrong_nonce_is_refused_and_right_one_is_single_use(make_app: MakeApp
     app, _ = spotify_app(make_app)
     with respx.mock(assert_all_called=False) as mock, TestClient(app) as c:
         mock.post(TOKEN_URL).respond(
-            200, json={"access_token": "A", "refresh_token": "R", "expires_in": 3600}
+            200, json={"access_token": "A", "refresh_token": "R", "expires_in": 3600, "scope": "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state"}
         )
         t = tok(c)
         _, state = start_login(c, t, "/anfitrion/audio")

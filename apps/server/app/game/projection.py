@@ -12,7 +12,7 @@ from pydantic import BaseModel, ConfigDict
 from pydantic.alias_generators import to_camel
 
 from app.game.models import Card, Phase, Room, Team
-from app.game.rules import card_count
+from app.game.rules import card_count, rank_standings
 
 
 class CamelModel(BaseModel):
@@ -45,6 +45,7 @@ class SettingsView(CamelModel):
     disconnect_grace_s: int
     start_position_ms: int
     audio_source: str
+    packs: list[str]
 
 
 class YouView(CamelModel):
@@ -74,6 +75,26 @@ class GuessView(CamelModel):
     artist: str
 
 
+class SlotCheckView(CamelModel):
+    index: int
+    left_year: int | None
+    right_year: int | None
+    ok: bool
+    reason: str
+    valid_from: int
+    valid_to: int
+
+
+class ObjectionCheckView(SlotCheckView):
+    slot: int
+    token_spent: bool
+
+
+class TokenView(CamelModel):
+    awarded: bool
+    reason: str
+
+
 class ResultView(CamelModel):
     placed_ok: bool
     objection_slot: int | None
@@ -84,6 +105,11 @@ class ResultView(CamelModel):
     artist_ok: bool
     token_awarded: bool
     token_delta: dict[str, int]
+    song_year: int
+    placement: SlotCheckView
+    objection: ObjectionCheckView | None
+    token: TokenView
+    headline: str
 
 
 class TurnView(CamelModel):
@@ -119,6 +145,7 @@ class StandingView(CamelModel):
     name: str | None
     cards: int
     tokens: int
+    rank: int
 
 
 class RoomView(CamelModel):
@@ -159,12 +186,13 @@ def token_delta(room: Room) -> dict[str, int]:
 
 
 def standings(room: Room) -> list[StandingView]:
+    ranks = rank_standings(room.teams)
     rows = [
-        StandingView(slot=t.slot, name=t.name, cards=card_count(t), tokens=t.tokens)
+        StandingView(slot=t.slot, name=t.name, cards=card_count(t), tokens=t.tokens, rank=ranks[t.slot])
         for t in room.teams
         if t.claimed
     ]
-    return sorted(rows, key=lambda r: (-r.cards, -r.tokens, r.slot))
+    return sorted(rows, key=lambda r: (r.rank, r.slot))
 
 
 def eligible_objectors(room: Room) -> list[int]:
@@ -220,6 +248,11 @@ def _turn_view(room: Room, viewer_slot: int | None) -> TurnView | None:
             artist_ok=turn.artist_ok,
             token_awarded=turn.token_awarded,
             token_delta=token_delta(room),
+            song_year=r.song_year,
+            placement=SlotCheckView(**r.placement.model_dump()),
+            objection=ObjectionCheckView(**r.objection.model_dump()) if r.objection else None,
+            token=TokenView(**r.token.model_dump()),
+            headline=r.headline,
         )
     return TurnView(
         team_slot=turn.team_slot,

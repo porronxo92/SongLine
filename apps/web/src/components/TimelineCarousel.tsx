@@ -1,5 +1,7 @@
+import clsx from 'clsx';
 import useEmblaCarousel from 'embla-carousel-react';
-import { ChevronLeft, ChevronRight, Lock } from 'lucide-react';
+import { useReducedMotion } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Info, Lock, Plus } from 'lucide-react';
 import { useCallback, useEffect, useMemo, type KeyboardEvent, type ReactNode } from 'react';
 import { es } from '../i18n/es';
 import { gapLabel } from '../lib/teams';
@@ -9,7 +11,7 @@ import { YearCard } from './MysteryCard';
 export type CarouselMode = 'readonly' | 'place' | 'object';
 
 const GAP_W = 112;
-const CARD_W = 100;
+const CARD_W = 112;
 
 interface Props {
   cards: CardPublic[];
@@ -21,6 +23,8 @@ interface Props {
   /** Hueco bloqueado (en `object`: el que eligió el equipo activo). */
   blockedIndex?: number | null;
   highlightId?: string | null;
+  /** Pista de años iguales bajo la etiqueta del hueco (una vez por pantalla). */
+  equalHint?: boolean;
 }
 
 /**
@@ -35,17 +39,19 @@ export function TimelineCarousel({
   onIndexChange,
   blockedIndex = null,
   highlightId = null,
+  equalHint = false,
 }: Props) {
   const interactive = mode !== 'readonly';
+  const reduce = useReducedMotion() === true;
   const options = useMemo(
     () => ({
       align: 'start' as const,
       containScroll: false as const,
       slidesToScroll: 2,
       watchDrag: interactive,
-      duration: 22,
+      duration: reduce ? 8 : 22,
     }),
-    [interactive],
+    [interactive, reduce],
   );
   const [viewportRef, embla] = useEmblaCarousel(options);
   const gaps = cards.length + 1;
@@ -114,17 +120,16 @@ export function TimelineCarousel({
       data-testid="timeline"
       data-mode={mode}
     >
-      <div className="relative overflow-hidden py-3" style={{ minHeight: 190 }}>
-        <div className="mx-auto" style={{ width: GAP_W }}>
-          <div ref={viewportRef} style={{ overflow: 'visible' }}>
-            <div className="flex">
+      <div className="tl">
+        <div className="absolute inset-y-0 left-1/2 flex items-center" style={{ width: GAP_W, marginLeft: -GAP_W / 2 }}>
+          <div ref={viewportRef} className="w-full" style={{ overflow: 'visible' }}>
+            <div className="flex items-center">
               {Array.from({ length: gaps }, (_, i) => {
                 const card = cards[i];
                 return (
                   <GapAndCard
                     key={card?.instanceId ?? `gap-${String(i)}`}
                     index={i}
-                    total={gaps}
                     card={card}
                     selected={i === clamped}
                     blocked={blockedIndex === i}
@@ -136,15 +141,15 @@ export function TimelineCarousel({
           </div>
         </div>
         {mystery ? (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">{mystery}</div>
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">{mystery}</div>
         ) : null}
       </div>
 
-      <div className="mt-1 flex items-center justify-center gap-3">
+      <div className="mt-1 flex items-center justify-center gap-2">
         {interactive ? (
           <button
             type="button"
-            className="btn btn-soft !px-3"
+            className="btn btn-secondary btn-icon"
             aria-label={es.timeline.prev}
             disabled={clamped <= 0}
             onClick={() => {
@@ -158,17 +163,15 @@ export function TimelineCarousel({
           role="status"
           aria-live="polite"
           data-testid="gap-label"
-          className="min-h-[3rem] min-w-[10rem] flex-1 text-center font-display text-xl font-semibold leading-tight"
+          className="tl-label"
         >
-          <span className="block">{label}</span>
-          <span className="block text-sm font-semibold text-muted-foreground">
-            {blocked ? es.timeline.blocked : es.timeline.slotOf(clamped, gaps)}
-          </span>
+          <b>{label}</b>
+          <span>{blocked ? es.timeline.blocked : es.timeline.slotOf(clamped, gaps)}</span>
         </p>
         {interactive ? (
           <button
             type="button"
-            className="btn btn-soft !px-3"
+            className="btn btn-secondary btn-icon"
             aria-label={es.timeline.next}
             disabled={clamped >= gaps - 1}
             onClick={() => {
@@ -179,20 +182,24 @@ export function TimelineCarousel({
           </button>
         ) : null}
       </div>
+      {equalHint ? (
+        <p className="ex-hint" data-testid="equal-hint">
+          <Info size={14} aria-hidden />
+          <span>{es.explain.equalHint}</span>
+        </p>
+      ) : null}
     </section>
   );
 }
 
 function GapAndCard({
   index,
-  total,
   card,
   selected,
   blocked,
   highlight,
 }: {
   index: number;
-  total: number;
   card: CardPublic | undefined;
   selected: boolean;
   blocked: boolean;
@@ -206,14 +213,8 @@ function GapAndCard({
         data-gap={index}
         aria-hidden
       >
-        <div
-          className="flex h-[140px] w-[104px] items-center justify-center rounded-clay border-4 border-dashed"
-          style={{
-            borderColor: selected ? 'var(--color-primary)' : 'var(--color-border)',
-            opacity: index < total ? 1 : 0,
-          }}
-        >
-          {blocked ? <Lock size={22} className="text-muted-foreground" /> : null}
+        <div className={clsx('slot', selected && !blocked && 'sel', blocked && 'locked')}>
+          {blocked ? <Lock size={22} /> : <Plus size={20} />}
         </div>
       </div>
       {card ? (

@@ -80,7 +80,7 @@ La identidad del emisor sale **siempre del token**, nunca del payload.
 | `audio_report` | `{playing: boolean}` | Solo anfitrión. Envíalo cuando el audio empieza o se detiene de verdad. El servidor lo difunde como `audio_status`. |
 | `audio_failed` | `{code}`; `"premium_required"` \| `"device_gone"` \| `"rate_limited"` \| `"unknown"` | Solo anfitrión. `device_gone` y `premium_required` pausan la partida. |
 | `kick` | `{slot}` | LOBBY, anfitrión. No puede expulsarse a sí mismo. |
-| `update_settings` | Parcial: `team_count` (2 a 4), `mode` (`"app"`\|`"voice"`), `target_cards` (3 a 30), `objection_window_s` (5 a 60), `audio_source` (`"spotify"`\|`"preview"`) | LOBBY, anfitrión. Cualquier otra clave da `invalid_settings` (las reglas D1 a D9 son fijas). `team_count` no puede dejar huecos ocupados fuera. |
+| `update_settings` | Parcial: `team_count` (2 a 4), `mode` (`"app"`\|`"voice"`), `target_cards` (3 a 30), `objection_window_s` (5 a 60), `audio_source` (`"spotify"`\|`"preview"`), `packs` (lista de slugs de packs de géneros, ver `GET /api/catalog/packs`; al menos uno, sin repetidos, solo slugs conocidos; por defecto `["mix"]`) | LOBBY, anfitrión. Cualquier otra clave da `invalid_settings` (las reglas D1 a D9 son fijas). `team_count` no puede dejar huecos ocupados fuera. `packs` lo sustituye entero (no es un parche de la lista). |
 | `start_game` | `{}` | LOBBY, anfitrión. Ver guardas abajo. |
 | `play_request` | `{}` | TURN_READY o PLACING, equipo activo. En PLACING repite la canción («Repetir»). |
 | `place_preview` | `{index}` | PLACING, activo. Máximo 10 por segundo; el exceso se ignora con `ack`. |
@@ -93,9 +93,10 @@ La identidad del emisor sale **siempre del token**, nunca del payload.
 | `accept_guess` | `{}` | REVEAL, **cualquier equipo con hueco**, modo `app` («Dar por bueno»). |
 | `next_turn` | `{}` | REVEAL, activo. Antes de `revealUnlocksAt` da `too_early`. |
 | `rematch` | `{}` | GAME_OVER, anfitrión. Vuelve a LOBBY conservando equipos y dispositivos. |
+| `end_game` | `{}` | Cualquier fase de partida (COUNTDOWN a REVEAL y PAUSED), solo anfitrión. En LOBBY y GAME_OVER da `wrong_phase`; si no es el anfitrión, `not_host`. Termina la partida con `game_over` `reason: "host_ended"`: ganan los equipos en posición 1 (más cartas; las fichas no desempatan, los empatados comparten posición). La carta en curso no se revela ni entra en ninguna línea. |
 | `ping` | `{t?}` | Cada 15 s. Responde `pong`. `t` es número o cadena de hasta 64 caracteres. |
 
-**Guardas de `start_game`** (en este orden): remitente = anfitrión (`not_host`); fase LOBBY (`wrong_phase`); todos los huecos de `team_count` ocupados (`teams_incomplete`); todos conectados (`teams_offline`); audio del anfitrión listo (`audio_not_ready`: `unlocked` y `sdkReady`+`premiumOk`, o `audio_source = "preview"` y `unlocked`); canciones suficientes (`catalog_too_small`).
+**Guardas de `start_game`** (en este orden): remitente = anfitrión (`not_host`); fase LOBBY (`wrong_phase`); todos los huecos de `team_count` ocupados (`teams_incomplete`); todos conectados (`teams_offline`); audio del anfitrión listo (`audio_not_ready`: `unlocked` y `sdkReady`+`premiumOk`, o `audio_source = "preview"` y `unlocked`); canciones suficientes (`catalog_too_small`). El mazo se construye con las canciones habilitadas de `settings.packs`, sin duplicados (por `track_id` y por título+artista normalizados); `catalog_too_small` se evalúa sobre ese mazo ya filtrado. La revancha conserva `packs`.
 
 Ejemplos:
 
@@ -125,7 +126,7 @@ Ejemplos:
 | `turn_resolved` | `{to_slot: number\|null, token_delta: {"<slot>": number}}` | Todos, al salir de REVEAL (resultado definitivo de fichas). |
 | `deck_low` | `{remaining}` | Todos, al empezar un turno con menos de 5 cartas en el mazo. |
 | `kicked` | `{reason: "host"}` | Solo el expulsado; después se cierra su WS con `4403`. |
-| `game_over` | `{winners: number[], reason: "target"\|"deck_exhausted", standings: {slot,name,cards,tokens}[]}` | Todos. |
+| `game_over` | `{winners: number[], reason: "target"\|"deck_exhausted"\|"host_ended", standings: {slot,name,cards,tokens,rank}[]}` | Todos. `winners` son los equipos con `rank` 1. `standings` va ordenada por `rank` y luego por `slot`. |
 | `pong` | `{t, server_ts}` | Remitente del `ping`. |
 
 Semántica de `audio_command` (solo anfitrión):
@@ -160,6 +161,68 @@ Ejemplo de `error`:
 {"type":"error","id":"…","payload":{"ref_id":"b1c2…","code":"objection_closed","message":"La ventana de objecion ya se cerro"}}
 ```
 
+### 3.2.1 `turn.result`: por qué un hueco es correcto o no
+
+Fuente única: `view.turn.result` dentro de `state`. Los eventos `reveal` y `turn_resolved` **no** llevan estos campos (las fichas pueden cambiar tras el `reveal` con `honor_claim`/`accept_guess`, y `state` siempre trae la versión vigente). Solo existe en REVEAL (y en PAUSED si se pausó desde REVEAL); en cualquier otra fase `turn.result` es `null` y no hay `songYear` en ningún sitio. En GAME_OVER `turn` es `null`.
+
+Todo se calcula con las líneas **antes** de insertar la carta (después los vecinos cambian), sobre la línea del equipo activo.
+
+```ts
+interface SlotCheck {
+  index: number;               // hueco elegido (0 = antes de la primera carta, n = tras la última)
+  leftYear: number | null;     // año de la carta vecina izquierda (null en el extremo)
+  rightYear: number | null;    // año de la vecina derecha (null en el extremo)
+  ok: boolean;
+  reason: "inside" | "equal_left" | "equal_right" | "equal_both" | "too_early" | "too_late";
+  validFrom: number;           // primer hueco que habría sido correcto
+  validTo: number;             // último hueco correcto (inclusive); con años iguales hay varios
+}
+```
+
+`reason`:
+
+| valor | significado |
+|---|---|
+| `inside` | el año queda estrictamente entre los vecinos, o en un extremo sin igualdad |
+| `equal_left` / `equal_right` / `equal_both` | correcto porque el año es igual al vecino izquierdo / derecho / ambos (los años iguales valen a ambos lados) |
+| `too_early` | la canción es anterior al vecino izquierdo: debía ir antes |
+| `too_late` | la canción es posterior al vecino derecho: debía ir después |
+
+`objection` es `null` si nadie objetó. Si no, es un `SlotCheck` del hueco del objetor en la línea del activo, más `slot` (equipo objetor) y `tokenSpent` (siempre `true`, D2).
+
+`token.reason`: `awarded` (hueco + título + artista correctos, D5), `wrong_slot` (colocó mal), `title_wrong`, `artist_wrong`, `title_and_artist_wrong`. Es el valor vigente: en modo voz, hasta que el activo hace `honor_claim` se muestra `title_and_artist_wrong` (provisional); cambia con cada `honor_claim`/`accept_guess`. `already_lost_to_objection` no existe: con las reglas actuales la objeción no cambia la ficha del activo.
+
+`headline` (titular del desenlace):
+
+| valor | caso |
+|---|---|
+| `kept` | la carta se queda en el activo, sin objeción |
+| `kept_objection_failed` | hubo objeción y el activo tenía razón (el objetor pierde su ficha) |
+| `stolen` | el activo falló y el objetor acertó: la carta va a `toSlot` |
+| `discarded` | el activo falló, nadie objetó: carta descartada |
+| `discarded_objection_failed` | el activo falló y el objetor también: carta descartada |
+
+Ejemplo 1: el activo pone la carta (2012) entre 2012 y 2015, año igual al vecino izquierdo. `validFrom` es 0 porque ponerla antes del 2012 también valía.
+
+```json
+{"songYear":2012,"placedOk":true,"outcome":"kept","toSlot":0,"headline":"kept",
+ "placement":{"index":1,"leftYear":2012,"rightYear":2015,"ok":true,"reason":"equal_left","validFrom":0,"validTo":1},
+ "objection":null,
+ "token":{"awarded":true,"reason":"awarded"}}
+```
+
+Ejemplo 2: la carta (1990) se colocó tras 2000 (debía ir antes); el equipo 1 objetó en el hueco 1 y se la queda.
+
+```json
+{"songYear":1990,"placedOk":false,"outcome":"stolen","toSlot":1,"headline":"stolen",
+ "objectionSlot":1,"objectionOk":true,
+ "placement":{"index":2,"leftYear":2000,"rightYear":null,"ok":false,"reason":"too_early","validFrom":1,"validTo":1},
+ "objection":{"slot":1,"index":1,"leftYear":1980,"rightYear":2000,"ok":true,"reason":"inside","validFrom":1,"validTo":1,"tokenSpent":true},
+ "token":{"awarded":false,"reason":"wrong_slot"}}
+```
+
+(Los ejemplos omiten `titleOk`, `artistOk`, `tokenAwarded` y `tokenDelta`, que no cambian.)
+
 ### 3.3 Códigos de `error`
 
 | code | Cuándo |
@@ -173,7 +236,7 @@ Ejemplo de `error`:
 | `not_host` | Orden exclusiva del anfitrión. |
 | `not_allowed` | Emisor sin permiso (p. ej. el activo intentando objetar, o espectador). |
 | `invalid_slot`, `invalid_name`, `slot_taken`, `host_cannot_move`, `game_started` | Errores de `claim_slot` / `kick`. |
-| `invalid_settings` | `update_settings` con claves no editables o valores fuera de rango. |
+| `invalid_settings` | `update_settings` con claves no editables o valores fuera de rango. Para `packs`: lista vacía, slugs repetidos, slug con formato inválido o slug desconocido. |
 | `teams_incomplete`, `teams_offline`, `audio_not_ready`, `catalog_too_small` | Guardas de `start_game`. |
 | `invalid_index` | `index` fuera de `0..len(línea)`. |
 | `wrong_mode` | Orden de modo `app` en sala `voice` o al revés. |
@@ -250,6 +313,12 @@ interface TurnView {
     artistOk: boolean;
     tokenAwarded: boolean;                // ficha +1 al activo (hueco + título + artista)
     tokenDelta: Record<string, number>;   // {"0": 1, "2": -1}; el objetor siempre -1
+    // Explicación estructurada (ver 3.2.1). Solo existe en REVEAL.
+    songYear: number;
+    placement: SlotCheck;                 // el hueco del equipo activo
+    objection: (SlotCheck & { slot: number; tokenSpent: boolean }) | null;
+    token: { awarded: boolean; reason: "awarded" | "wrong_slot" | "title_wrong" | "artist_wrong" | "title_and_artist_wrong" };
+    headline: "kept" | "kept_objection_failed" | "stolen" | "discarded" | "discarded_objection_failed";
   } | null;
   revealUnlocksAt: number | null;         // solo REVEAL: desde aquí vale next_turn
 }
@@ -274,8 +343,8 @@ interface RoomView {
     resumePhase: Phase | null;
   } | null;
   winners: number[] | null;          // solo game_over
-  gameOverReason: "target" | "deck_exhausted" | null;
-  standings: { slot: number; name: string | null; cards: number; tokens: number }[] | null; // solo game_over
+  gameOverReason: "target" | "deck_exhausted" | "host_ended" | null;
+  standings: { slot: number; name: string | null; cards: number; tokens: number; rank: number }[] | null; // solo game_over; ordenada por rank, luego slot
 }
 ```
 
@@ -303,7 +372,7 @@ Carta en curso (la que se está jugando), por fase:
 | `song_id` | nunca | nunca | nunca | **nunca** (solo `instanceId`, aleatorio por partida) | nunca |
 | `turn.guess` (modo app) | n/a | solo al activo | solo al activo | a todos | n/a |
 | `turn.previewIndex` | n/a | a todos (solo PLACING) | `null` | `null` | n/a |
-| `turn.result` | n/a | `null` | `null` | presente | n/a |
+| `turn.result` (incl. `songYear`, `placement`, `objection`, `token`, `headline`) | n/a | `null` | `null` | presente | n/a |
 | Mazo | solo `deckRemaining` | igual | igual | igual | igual |
 
 Notas:
@@ -327,8 +396,9 @@ Cabecera de identidad en las rutas marcadas con (S): `Authorization: Bearer <ses
 | `GET /api/auth/spotify/token` (S) | | `200 {"access_token","expires_at"}` (epoch s; se refresca si quedan < 5 min). `401 not_logged_in` si no hay login |
 | `POST /api/auth/spotify/verify-premium` (S) | `{"device_id": "…"}` | `200 {"premium": true}` o `{"premium": false, "reason": "premium_required"\|"user_not_registered"\|"no_session"\|"device_gone"\|"rate_limited"\|"unknown"}` |
 | `POST /api/auth/logout` (S) | | `204` |
-| `POST /api/rooms` (S) | `{"settings": {…editables…}, "name"?: string, "color"?: string}` | `200 {"code":"4821","ws_url":"ws://host/ws/rooms/4821","ws_path":"/ws/rooms/4821","slot":0}`. `401` sin sesión, `422` ajustes no editables o inválidos, `429 rate_limited` (5 creaciones por minuto y por IP), `503 rooms_full` |
+| `POST /api/rooms` (S) | `{"settings": {…editables…}, "name"?: string, "color"?: string}` | `200 {"code":"4821","ws_url":"ws://host/ws/rooms/4821","ws_path":"/ws/rooms/4821","slot":0}`. `401` sin sesión, `422` ajustes no editables o inválidos (incluye `settings.packs` vacío, repetido o con slugs desconocidos), `429 rate_limited` (5 creaciones por minuto y por IP), `503 rooms_full` |
 | `GET /api/rooms/{code}` (S opcional) | | `200 {"status":"open"\|"started"\|"full","mode":"app"\|"voice","team_count":n,"target_cards":n,"slots":[{"slot":0,"taken":true,"name":"…","color":"…","suggested_color":"#E63946","is_host":true},…],"your_slot":number\|null}`. `404 room_not_found`; `429 rate_limited` tras 20 intentos fallidos por minuto y por IP |
+| `GET /api/catalog/packs` | | `200 [{"slug":"mix","name":"Mix variado","description":"…","icon":"disc-3","count":180},…]` ordenado por `sort`. Público (sin sesión). `icon` es un nombre de icono de lucide-react. `count` son las canciones habilitadas del pack; un pack con `count` 0 se devuelve igualmente (la web lo muestra deshabilitado). Las definiciones salen de `catalog/packs.json` |
 | `GET /api/catalog/stats` | | `200 {"total":n,"by_decade":{"1980s":n,…},"by_origin":{"es":n,"intl":n,"unknown":n}}` |
 | `GET /api/turn/audio?code=4821` (S, solo anfitrión) | | `200` audio en streaming (`audio/mpeg`; en modo fake un WAV de silencio). `403 host_only`, `403 no_preview_turn` (solo vale mientras el turno en curso use `audioSource = "preview"`), `404 preview_unavailable`, `502 preview_upstream_error`. Cabecera `Cache-Control: no-store`. No expone la URL de Deezer |
 | `GET /api/healthz` | | `200 {"status":"ok"}` |
@@ -365,7 +435,7 @@ Arranque: `AUTH_MODE=fake CATALOG_SOURCE=csv PERSISTENCE=none uvicorn app.main:a
 | Anfitrión sin conexión en el lobby | A los 30 s el anfitrión pasa al siguiente hueco ocupado y conectado (`you.isHost`/`teams[].isHost` cambian) |
 | Ficha | +1 al activo si hueco correcto **y** título **y** artista correctos (D5). La ficha del objetor se gasta siempre (D2). Se puede corregir (`honor_claim` / `accept_guess`) hasta salir de REVEAL |
 | Resolución | Hueco del activo correcto: se queda la carta. Si no, objeción correcta: la carta va a la línea del objetor (en su sitio). Si no: se descarta |
-| Fin | Al salir de REVEAL, si alguien tiene `targetCards` cartas (la inicial cuenta, D3) → `target`. Si el mazo está vacío al empezar un turno → `deck_exhausted`: gana quien tenga más cartas, luego más fichas; empate total = ganadores compartidos |
+| Fin | Al salir de REVEAL, si alguien tiene `targetCards` cartas (la inicial cuenta, D3) → `target`. Si el mazo está vacío al empezar un turno → `deck_exhausted`: ranking solo por cartas (ver abajo). El anfitrión puede cortar antes con `end_game` → `host_ended` (misma regla de ranking; la carta en curso, si no estaba revelada, vuelve al fondo del mazo sin enviarse a nadie) |
 | Sin expulsión en partida | `kick` solo en LOBBY (D4) |
 | Limpieza | 15 min en GAME_OVER sin revancha, o 2 h sin actividad ni conexiones: la sala se destruye |
 
@@ -376,3 +446,7 @@ Arranque: `AUTH_MODE=fake CATALOG_SOURCE=csv PERSISTENCE=none uvicorn app.main:a
 - El proxy (Caddy) no publica `/api/admin`; añade `Cache-Control: no-store` a `/api/*` y limita el cuerpo a 64 KB.
 - La API corre con `--no-access-log --ws-max-size 16384` y `--proxy-headers --forwarded-allow-ips=<subred de Caddy>`: la IP del cliente es `request.client.host`; `X-Forwarded-For` solo cuenta si viene del proxy de confianza.
 - Arranque: `AUTH_MODE=fake` se rechaza si `PUBLIC_ORIGIN` no es localhost o 127.0.0.1. Con otro origen, `SESSION_SECRET` es obligatorio.
+
+### Ranking final
+
+Se ordena solo por número de cartas en la línea (la inicial cuenta). Las fichas no desempatan. Los equipos con las mismas cartas comparten posición y el siguiente salta los huecos (1, 1, 3). `rank` es un entero >= 1. Dentro de un empate, el orden es por `slot`. `winners` son los equipos con `rank` 1, también en `target`, `deck_exhausted` y `host_ended`. Un equipo sin reclamar no aparece.

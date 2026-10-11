@@ -23,10 +23,11 @@ def _split_aliases(raw: str) -> tuple[str, ...]:
     return tuple(a.strip() for a in raw.split("|") if a.strip())
 
 
-def parse_csv(path: Path) -> list[Song]:
+def parse_csv(path: Path, pack: str = "mix", start_id: int = 1) -> list[Song]:
     """Parse `ID,Cancion,Artista,Anio,Genero,Origen,AliasTitulo,AliasArtista,Nota,SpotifyTrackId,ISRC,Estado`.
 
     Empty `Estado` counts as verified. `ambiguous` and `disputed` rows are excluded.
+    Song ids are `start_id + row index`, so several files can share one id space.
     """
     songs: list[Song] = []
     with path.open(encoding="utf-8-sig", newline="") as fh:
@@ -39,15 +40,16 @@ def parse_csv(path: Path) -> list[Song]:
             try:
                 year = int((row.get("Anio") or "").strip())
             except ValueError:
-                log.warning("songs.csv row %s skipped: invalid year", n)
+                log.warning("%s row %s skipped: invalid year", path.name, n)
                 continue
             if not title or not artist or not 1900 <= year <= 2100:
-                log.warning("songs.csv row %s skipped: incomplete", n)
+                log.warning("%s row %s skipped: incomplete", path.name, n)
                 continue
             songs.append(
                 Song(
-                    id=n,
+                    id=start_id + n - 1,
                     csv_id=(row.get("ID") or str(n)).strip(),
+                    pack=pack,
                     title=title,
                     artist=artist,
                     year=year,
@@ -64,14 +66,24 @@ def parse_csv(path: Path) -> list[Song]:
 
 
 class CsvSongRepository:
-    def __init__(self, path: Path) -> None:
+    """`songs.csv` is the `mix` pack; every `<packs_dir>/<slug>.csv` is the pack `<slug>`."""
+
+    def __init__(self, path: Path, packs_dir: Path | None = None) -> None:
         self.path = path
+        self.packs_dir = packs_dir if packs_dir is not None else path.parent / "packs"
 
     async def load_enabled(self) -> list[Song]:
-        if not self.path.exists():
+        sources: list[tuple[str, Path]] = []
+        if self.path.exists():
+            sources.append(("mix", self.path))
+        else:
             log.warning("catalog csv not found: %s", self.path)
-            return []
-        return parse_csv(self.path)
+        if self.packs_dir.is_dir():
+            sources.extend((p.stem, p) for p in sorted(self.packs_dir.glob("*.csv")) if p.stem != "mix")
+        songs: list[Song] = []
+        for pack, path in sources:
+            songs.extend(parse_csv(path, pack, start_id=max((s.id for s in songs), default=0) + 1))
+        return songs
 
 
 class PostgresSongRepository:
@@ -97,6 +109,7 @@ class PostgresSongRepository:
             genre=r["genre"] or "",
             origin=r["origin"] or "",
             note=r["year_note"] or "",
+            pack=r.get("pack") or "mix",
         )
 
     async def load_enabled(self) -> list[Song]:
@@ -104,7 +117,7 @@ class PostgresSongRepository:
 
         q = text(
             "SELECT id, csv_id, title, artist, year, spotify_track_id, isrc, title_aliases, "
-            "artist_aliases, genre, origin, year_note FROM songs WHERE enabled = true"
+            "artist_aliases, genre, origin, year_note, pack FROM songs WHERE enabled = true"
         )
         async with self.engine.connect() as conn:
             rows = (await conn.execute(q)).mappings().all()

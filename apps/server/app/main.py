@@ -15,6 +15,12 @@ from app.services import Services, build_services
 from app.ws.router import router as ws_router
 
 log = logging.getLogger("hitster")
+# uvicorn solo configura sus propios loggers: sin esto, los avisos INFO de la app (p. ej. los permisos de Spotify) no salen.
+logging.getLogger("app").setLevel(logging.INFO)
+if not logging.getLogger("app").handlers:
+    _h = logging.StreamHandler()
+    _h.setFormatter(logging.Formatter("%(levelname)s:     %(name)s: %(message)s"))
+    logging.getLogger("app").addHandler(_h)
 
 
 def create_app(config: AppConfig | None = None, services: Services | None = None) -> FastAPI:

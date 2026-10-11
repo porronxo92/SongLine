@@ -28,6 +28,8 @@ export interface RoomOptions {
   /** Cartas para ganar. Por defecto, el valor de Crear (10). */
   target?: number;
   hostName?: string;
+  /** Packs de géneros que se marcan además de `mix` (slugs). */
+  packs?: string[];
 }
 
 /**
@@ -46,7 +48,15 @@ export async function createRoom(host: Page, o: RoomOptions): Promise<string> {
     }
     await expect(host.getByRole('group', { name: es.create.target }).locator('output')).toHaveText(String(o.target));
   }
+  // Paso 1 de 2 listo: los géneros se eligen en el paso 2.
   await host.getByRole('radio', { name: new RegExp(`^${o.mode === 'voice' ? es.create.modeVoice : es.create.modeApp}`) }).click();
+  await host.getByRole('button', { name: es.create.next }).click();
+  await expect(host).toHaveURL(/\/crear\/generos$/);
+  for (const slug of o.packs ?? []) {
+    const tile = host.locator(`[data-slug="${slug}"]`);
+    await tile.click();
+    await expect(tile).toHaveAttribute('aria-checked', 'true');
+  }
   await host.getByRole('button', { name: es.common.continue }).click();
 
   // Modo fake: se salta el login y llega el AudioGate.

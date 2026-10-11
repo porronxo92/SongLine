@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import re
 from enum import StrEnum
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class Phase(StrEnum):
@@ -40,6 +41,11 @@ class Song(BaseModel, frozen=True):
     genre: str = ""
     origin: str = ""
     note: str = ""
+    pack: str = "mix"  # catalog pack slug; server-only, never projected
+
+
+PACK_SLUG_PATTERN = r"^[a-z0-9][a-z0-9-]{0,39}$"
+MAX_PACKS = 20
 
 
 class Settings(BaseModel):
@@ -55,10 +61,23 @@ class Settings(BaseModel):
     disconnect_grace_s: int = 60
     start_position_ms: int = 10_000  # D9
     audio_source: Literal["spotify", "preview"] = "spotify"  # D7
+    packs: list[str] = Field(default_factory=lambda: ["mix"], max_length=MAX_PACKS)
+
+    @field_validator("packs")
+    @classmethod
+    def _check_packs(cls, v: list[str]) -> list[str]:
+        """Shape only (pure). Whether each slug exists is checked at the boundary against the catalog."""
+        if not v:
+            raise ValueError("at least one pack")
+        if len(set(v)) != len(v):
+            raise ValueError("duplicate packs")
+        if not all(re.fullmatch(PACK_SLUG_PATTERN, p) for p in v):
+            raise ValueError("invalid pack slug")
+        return v
 
 
 # Settings the host may change from the lobby. Everything else is fixed by D1-D9.
-EDITABLE_SETTINGS = frozenset({"team_count", "mode", "target_cards", "objection_window_s", "audio_source"})
+EDITABLE_SETTINGS = frozenset({"team_count", "mode", "target_cards", "objection_window_s", "audio_source", "packs"})
 
 
 class AudioHost(BaseModel):
@@ -102,12 +121,49 @@ class Team(BaseModel):
         return self.session_token_hash is not None
 
 
+SlotReason = Literal["inside", "equal_left", "equal_right", "equal_both", "too_early", "too_late"]
+TokenReason = Literal[
+    "awarded", "wrong_slot", "title_wrong", "artist_wrong", "title_and_artist_wrong"
+]
+Headline = Literal["kept", "kept_objection_failed", "stolen", "discarded", "discarded_objection_failed"]
+
+
+class SlotExplanation(BaseModel):
+    """Why a slot in a sorted line is (in)correct for a given year.
+
+    `valid_from..valid_to` is the inclusive range of slot indexes that would have been correct.
+    """
+
+    index: int
+    left_year: int | None
+    right_year: int | None
+    ok: bool
+    reason: SlotReason
+    valid_from: int
+    valid_to: int
+
+
+class ObjectionExplanation(SlotExplanation):
+    slot: int  # objector team
+    token_spent: bool = True  # D2: the objection token is always spent
+
+
+class TokenOutcome(BaseModel):
+    awarded: bool = False
+    reason: TokenReason = "wrong_slot"
+
+
 class TurnResult(BaseModel):
     placed_ok: bool
     objection_slot: int | None = None
     objection_ok: bool | None = None
     outcome: Literal["kept", "stolen", "discarded"]
     to_slot: int | None = None
+    song_year: int
+    placement: SlotExplanation
+    objection: ObjectionExplanation | None = None
+    token: TokenOutcome = Field(default_factory=TokenOutcome)
+    headline: Headline
 
 
 class Turn(BaseModel):
@@ -162,7 +218,7 @@ class Room(BaseModel):
     timer_seq: int = 0
     version: int = 0
     winners: list[int] = Field(default_factory=list)
-    game_over_reason: Literal["target", "deck_exhausted"] | None = None
+    game_over_reason: Literal["target", "deck_exhausted", "host_ended"] | None = None
 
     def team(self, slot: int) -> Team:
         return self.teams[slot]

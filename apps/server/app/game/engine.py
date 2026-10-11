@@ -26,6 +26,7 @@ from app.game.commands import (
     DeviceReady,
     Disconnected,
     Effect,
+    EndGame,
     GameError,
     GuessSubmit,
     HonorClaim,
@@ -52,13 +53,17 @@ from app.game.commands import (
 from app.game.models import (
     EDITABLE_SETTINGS,
     Card,
+    Headline,
+    ObjectionExplanation,
     PauseInfo,
     PauseReason,
     Phase,
     Room,
     Settings,
+    Song,
     Team,
     TimerRef,
+    TokenOutcome,
     Turn,
     TurnResult,
 )
@@ -66,11 +71,11 @@ from app.game.projection import audio_ready, card_public, standings
 from app.game.rules import (
     card_count,
     deal_initial,
+    explain_slot,
     insert_sorted,
-    line_slot_is_correct,
     pick_winners,
 )
-from app.game.validate_guess import validate_guess
+from app.game.validate_guess import normalize, validate_guess
 
 COUNTDOWN_S = 3.0
 REVEAL_MIN_S = 5.0
@@ -238,15 +243,15 @@ def _enter_turn_ready(room: Room, fx: Fx, now: float, slot: int) -> None:
         fx.append(Broadcast("deck_low", {"remaining": len(room.deck)}))
 
 
-def _game_over(room: Room, fx: Fx, now: float, reason: str) -> None:
+def _game_over(
+    room: Room, fx: Fx, now: float, reason: Literal["target", "deck_exhausted", "host_ended"]
+) -> None:
     _cancel_all_timers(room, fx)
     room.phase = Phase.GAME_OVER
     room.paused_from = None
     room.pause = None
-    room.game_over_reason = "target" if reason == "target" else "deck_exhausted"
-    room.winners = pick_winners(
-        room.teams, only_reached=room.settings.target_cards if reason == "target" else None
-    )
+    room.game_over_reason = reason
+    room.winners = pick_winners(room.teams)
     room.turn = None
     room.audio.playing = False
     _start_timer(room, fx, now, "room_gc", GAME_OVER_GC_S)
@@ -277,10 +282,21 @@ def _after_guess(room: Room, fx: Fx, now: float) -> None:
         _reveal(room, fx, now)
 
 
+def _token_outcome(placed_ok: bool, title_ok: bool, artist_ok: bool) -> TokenOutcome:
+    if not placed_ok:
+        return TokenOutcome(awarded=False, reason="wrong_slot")
+    if title_ok and artist_ok:
+        return TokenOutcome(awarded=True, reason="awarded")
+    if not title_ok and not artist_ok:
+        return TokenOutcome(awarded=False, reason="title_and_artist_wrong")
+    return TokenOutcome(awarded=False, reason="artist_wrong" if title_ok else "title_wrong")
+
+
 def _recompute_token(room: Room) -> None:
     turn = room.turn
     assert turn is not None and turn.result is not None
     awarded = turn.result.placed_ok and turn.title_ok and turn.artist_ok  # D5
+    turn.result.token = _token_outcome(turn.result.placed_ok, turn.title_ok, turn.artist_ok)
     active = room.teams[turn.team_slot]
     if awarded and not turn.token_awarded:
         active.tokens += 1
@@ -297,29 +313,43 @@ def _reveal(room: Room, fx: Fx, now: float) -> None:
     card = turn.card
     active = room.teams[turn.team_slot]
     assert turn.placed_index is not None
-    placed_ok = line_slot_is_correct(active.timeline, turn.placed_index, card.year)
+    # Explanations are computed before the card is inserted anywhere: neighbours change afterwards.
+    years = [c.year for c in active.timeline]
+    placement = explain_slot(years, turn.placed_index, card.year)
+    placed_ok = placement.ok
     obj_ok: bool | None = None
     obj_slot: int | None = None
+    obj_expl: ObjectionExplanation | None = None
     if turn.objection is not None:
         obj_slot = turn.objection[0]
-        obj_ok = line_slot_is_correct(active.timeline, turn.objection[1], card.year)
+        obj_expl = ObjectionExplanation(
+            **explain_slot(years, turn.objection[1], card.year).model_dump(), slot=obj_slot
+        )
+        obj_ok = obj_expl.ok
     outcome: Literal["kept", "stolen", "discarded"]
+    headline: Headline
     to_slot: int | None
     if placed_ok:
         active.timeline.insert(turn.placed_index, card)
         outcome, to_slot = "kept", active.slot
+        headline = "kept" if obj_slot is None else "kept_objection_failed"
     elif obj_slot is not None and obj_ok:
         insert_sorted(room.teams[obj_slot].timeline, card)
-        outcome, to_slot = "stolen", obj_slot
+        outcome, to_slot, headline = "stolen", obj_slot, "stolen"
     else:
         room.discard.append(card)
         outcome, to_slot = "discarded", None
+        headline = "discarded" if obj_slot is None else "discarded_objection_failed"
     turn.result = TurnResult(
         placed_ok=placed_ok,
         objection_slot=obj_slot,
         objection_ok=obj_ok,
         outcome=outcome,
         to_slot=to_slot,
+        song_year=card.year,
+        placement=placement,
+        objection=obj_expl,
+        headline=headline,
     )
     guess_auto: dict[str, Any] | None = None
     if room.settings.mode == "app" and turn.guessed:
@@ -500,6 +530,29 @@ def _h_update_settings(room: Room, cmd: UpdateSettings, now: float, fx: Fx) -> N
     room.settings = new
 
 
+def _song_keys(s: Song) -> tuple[str, str]:
+    title, artist = normalize(s.title), normalize(s.artist)
+    return (f"t:{s.track_id}" if s.track_id else "", f"a:{title}|{artist}" if title and artist else "")
+
+
+def _pool_for_packs(songs: tuple[Song, ...], packs: list[str]) -> list[Song]:
+    """Songs of the chosen packs, deduplicated (by track id and by normalized title+artist).
+
+    The first listed pack wins a duplicate. A song appears at most once per game.
+    """
+    rank = {p: i for i, p in enumerate(packs)}
+    chosen = sorted((s for s in songs if s.pack in rank), key=lambda s: rank[s.pack])
+    seen: set[str] = set()
+    out: list[Song] = []
+    for s in chosen:
+        keys = [k for k in _song_keys(s) if k]
+        if any(k in seen for k in keys):
+            continue
+        seen.update(keys)
+        out.append(s)
+    return out
+
+
 def _h_start(room: Room, cmd: Start, now: float, fx: Fx) -> None:
     _require(room, Phase.LOBBY)
     _require_host(room, cmd.sender)
@@ -510,7 +563,7 @@ def _h_start(room: Room, cmd: Start, now: float, fx: Fx) -> None:
     if not audio_ready(room):
         raise GameError("audio_not_ready", "El audio del anfitrion no esta listo")
     n_teams = room.settings.team_count
-    uniq = {s.id: s for s in cmd.songs}
+    uniq = {s.id: s for s in _pool_for_packs(cmd.songs, room.settings.packs)}
     avail = [s for sid, s in uniq.items() if sid not in set(room.used_song_ids)]
     if len(avail) < n_teams + room.settings.target_cards:
         avail = list(uniq.values())
@@ -752,6 +805,16 @@ def _h_rematch(room: Room, cmd: Rematch, now: float, fx: Fx) -> None:
     room.phase = Phase.LOBBY
 
 
+def _h_end_game(room: Room, cmd: EndGame, now: float, fx: Fx) -> None:
+    if room.phase in (Phase.LOBBY, Phase.GAME_OVER):
+        raise GameError("wrong_phase", f"No se puede hacer esto en la fase {room.phase}")
+    _require_host(room, cmd.sender)
+    _stop_audio(room, fx)
+    if room.turn is not None and room.turn.result is None:
+        room.deck.append(room.turn.card)  # never revealed, never in a line: back to the deck
+    _game_over(room, fx, now, "host_ended")
+
+
 def _h_timer(room: Room, cmd: TimerFired, now: float, fx: Fx) -> None:
     ref = room.timers.get(cmd.name)
     if ref is None or ref.timer_id != cmd.timer_id:
@@ -816,6 +879,7 @@ _HANDLERS: dict[type, Callable[[Room, Any, float, Fx], None]] = {
     AcceptGuess: _h_accept_guess,
     NextTurn: _h_next_turn,
     Rematch: _h_rematch,
+    EndGame: _h_end_game,
     TimerFired: _h_timer,
 }
 

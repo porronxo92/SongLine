@@ -40,6 +40,8 @@ export interface SettingsView {
   disconnectGraceS: number;
   startPositionMs: number;
   audioSource: AudioSource;
+  /** Slugs de los packs de géneros elegidos. */
+  packs: string[];
 }
 
 export interface TeamView {
@@ -56,7 +58,28 @@ export interface TeamView {
 
 export type Outcome = 'kept' | 'stolen' | 'discarded';
 
+export type SlotReason = 'inside' | 'equal_left' | 'equal_right' | 'equal_both' | 'too_early' | 'too_late';
+
+/** Comprobación de un hueco sobre la línea del equipo activo, antes de insertar la carta (PROTOCOL 3.2.1). */
+export interface SlotCheck {
+  index: number;
+  leftYear: number | null;
+  rightYear: number | null;
+  ok: boolean;
+  reason: SlotReason;
+  validFrom: number;
+  validTo: number;
+}
+
+export type TokenReason = 'awarded' | 'wrong_slot' | 'title_wrong' | 'artist_wrong' | 'title_and_artist_wrong';
+export type Headline = 'kept' | 'kept_objection_failed' | 'stolen' | 'discarded' | 'discarded_objection_failed';
+
 export interface TurnResult {
+  songYear: number;
+  placement: SlotCheck;
+  objection: (SlotCheck & { slot: number; tokenSpent: boolean }) | null;
+  token: { awarded: boolean; reason: TokenReason };
+  headline: Headline;
   placedOk: boolean;
   objectionSlot: number | null;
   objectionOk: boolean | null;
@@ -97,6 +120,8 @@ export interface Standing {
   name: string | null;
   cards: number;
   tokens: number;
+  /** Posición con empates (1, 1, 3). Solo cuentan las cartas. */
+  rank: number;
 }
 
 export interface RoomView {
@@ -110,7 +135,7 @@ export interface RoomView {
   audio: { hostReady: boolean; playing: boolean; source: AudioSource };
   pause: PauseView | null;
   winners: number[] | null;
-  gameOverReason: 'target' | 'deck_exhausted' | null;
+  gameOverReason: 'target' | 'deck_exhausted' | 'host_ended' | null;
   standings: Standing[] | null;
 }
 
@@ -124,6 +149,7 @@ export interface EditableSettings {
   target_cards: number;
   objection_window_s: number;
   audio_source: AudioSource;
+  packs: string[];
 }
 
 export interface ClientPayloads {
@@ -147,6 +173,7 @@ export interface ClientPayloads {
   accept_guess: Record<string, never>;
   next_turn: Record<string, never>;
   rematch: Record<string, never>;
+  end_game: Record<string, never>;
   ping: { t?: number };
 }
 export type ClientMessageType = keyof ClientPayloads;
@@ -167,7 +194,7 @@ export type AudioCommandAction = 'prepare' | 'tap_required' | 'play_preview' | '
 
 export interface GameOverPayload {
   winners: number[];
-  reason: 'target' | 'deck_exhausted';
+  reason: 'target' | 'deck_exhausted' | 'host_ended';
   standings: Standing[];
 }
 
@@ -245,6 +272,14 @@ export interface RoomInfo {
   target_cards: number;
   slots: RoomInfoSlot[];
   your_slot: number | null;
+}
+/** `GET /api/catalog/packs`. `count` son las canciones habilitadas del pack. */
+export interface CatalogPack {
+  slug: string;
+  name: string;
+  description: string;
+  icon: string;
+  count: number;
 }
 export interface SpotifyToken {
   access_token: string;

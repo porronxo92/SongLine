@@ -1,0 +1,171 @@
+ID,Cancion,Artista,Anio,Genero,Origen,AliasTitulo,AliasArtista,Nota,SpotifyTrackId,ISRC,Estado
+DIS001,Heigh-Ho,The Dwarfs,1937,disney,intl,Eh-Ho|Hi-Ho,Blancanieves y los siete enanitos|Blancanieves,Snow White and the Seven Dwarfs (1937),,,verified
+DIS002,I'm Wishing,Adriana Caselotti,1937,disney,intl,Deseo,Blancanieves y los siete enanitos|Blancanieves,Snow White and the Seven Dwarfs (1937),,,verified
+DIS003,Someday My Prince Will Come,Adriana Caselotti,1937,disney,intl,Algún día mi príncipe vendrá,Blancanieves y los siete enanitos|Blancanieves,Snow White and the Seven Dwarfs (1937),,,verified
+DIS004,Whistle While You Work,Adriana Caselotti,1937,disney,intl,Silba mientras trabaja|Silba mientras trabajas,Blancanieves y los siete enanitos|Blancanieves,Snow White and the Seven Dwarfs (1937),,,verified
+DIS005,Give a Little Whistle,Cliff Edwards,1940,disney,intl,Da un pequeño silbido|Silba un poquito,Pinocho,Pinocchio (1940),,,verified
+DIS006,Hi-Diddle-Dee-Dee (An Actor's Life for Me),Cliff Edwards,1940,disney,intl,Hi-Diddle-Dee-Dee|Ser actor,Pinocho,Pinocchio (1940),,,verified
+DIS007,I've Got No Strings,Dickie Jones,1940,disney,intl,No tengo hilos|Sin hilos,Pinocho,Pinocchio (1940),,,verified
+DIS008,When You Wish Upon a Star,Cliff Edwards,1940,disney,intl,Cuando pides una estrella|Una estrella,Pinocho,Pinocchio (1940),,,verified
+DIS009,Baby Mine,Betty Noyes,1941,disney,intl,Mi pequeño|Mi bebé,Dumbo,Dumbo (1941),,,verified
+DIS010,Pink Elephants on Parade,Sterling Holloway,1941,disney,intl,Elefantes rosas|Desfile de elefantes rosas,Dumbo,Dumbo (1941),,,verified
+DIS011,A Dream Is a Wish Your Heart Makes,Ilene Woods,1950,disney,intl,Un sueño es un deseo que hace tu corazón|Sueña,Cenicienta,Cinderella (1950),,,verified
+DIS012,Bibbidi-Bobbidi-Boo,Verna Felton,1950,disney,intl,Bibidi Babidi Bu|Bibbidi Bobbidi Boo,Cenicienta,Cinderella (1950),,,verified
+DIS013,So This Is Love,Ilene Woods,1950,disney,intl,Así es el amor|Esto es el amor,Cenicienta,Cinderella (1950),,,verified
+DIS014,The Work Song,Ilene Woods,1950,disney,intl,La canción del trabajo|Canción del trabajo,Cenicienta,Cinderella (1950),,,verified
+DIS015,I'm Late,Bill Thompson,1951,disney,intl,Llego tarde|Es tarde,Alicia en el País de las Maravillas,Alice in Wonderland (1951),,,verified
+DIS016,The Unbirthday Song,Ed Wynn,1951,disney,intl,La canción del no cumpleaños|Feliz no cumpleaños,Alicia en el País de las Maravillas,Alice in Wonderland (1951),,,verified
+DIS017,Following the Leader,Bobby Driscoll,1953,disney,intl,Siguiendo al jefe|Siguiendo al líder,Peter Pan,Peter Pan (1953),,,verified
+DIS018,The Second Star to the Right,The Jud Conlon Chorale,1953,disney,intl,La segunda estrella a la derecha,Peter Pan,Peter Pan (1953),,,verified
+DIS019,You Can Fly! You Can Fly! You Can Fly!,Bobby Driscoll,1953,disney,intl,Podéis volar|Vuela,Peter Pan,Peter Pan (1953),,,verified
+DIS020,Bella Notte (This Is the Night),Peggy Lee,1955,disney,intl,Bella Notte|Esta es la noche,La Dama y el Vagabundo|Dama y Vagabundo,Lady and the Tramp (1955),,,verified
+DIS021,He's a Tramp,Peggy Lee,1955,disney,intl,Es un vagabundo|Él es un vagabundo,La Dama y el Vagabundo|Dama y Vagabundo,Lady and the Tramp (1955),,,verified
+DIS022,La La Lu,Peggy Lee,1955,disney,intl,La la lu|Nana,La Dama y el Vagabundo|Dama y Vagabundo,Lady and the Tramp (1955),,,verified
+DIS023,The Siamese Cat Song,Peggy Lee,1955,disney,intl,La canción de los gatos siameses|Los gatos siameses,La Dama y el Vagabundo|Dama y Vagabundo,Lady and the Tramp (1955),,,verified
+DIS024,Once Upon a Dream,Mary Costa,1959,disney,intl,Alguna vez soñé|Érase una vez un sueño,La bella durmiente|Bella durmiente,Sleeping Beauty (1959),,,verified
+DIS025,Cruella De Vil,Bill Lee,1961,disney,intl,Cruella de Vil,101 dálmatas|Los 101 dálmatas,One Hundred and One Dalmatians (1961),,,verified
+DIS026,A Spoonful of Sugar,Julie Andrews,1964,disney,intl,Un poco de azúcar|Con un poquito de azúcar,Mary Poppins,Mary Poppins (1964),,,verified
+DIS027,Chim Chim Cher-ee,Dick Van Dyke,1964,disney,intl,Chim Chim Cheree|Deshollinador,Mary Poppins,Mary Poppins (1964),,,verified
+DIS028,Let's Go Fly a Kite,Dick Van Dyke,1964,disney,intl,Vamos a volar una cometa|Remonta tu cometa,Mary Poppins,Mary Poppins (1964),,,verified
+DIS029,Supercalifragilisticexpialidocious,Julie Andrews,1964,disney,intl,Supercalifragilisticoespialidoso,Mary Poppins,Mary Poppins (1964),,,verified
+DIS030,I Wan'na Be Like You,Louis Prima,1967,disney,intl,Quiero ser como tú,El libro de la selva,The Jungle Book (1967),,,verified
+DIS031,That's What Friends Are For,The Vultures,1967,disney,intl,Para eso están los amigos|Eso es lo que hacen los amigos,El libro de la selva,The Jungle Book (1967),,,verified
+DIS032,The Bare Necessities,Phil Harris,1967,disney,intl,Lo más vital|Busca lo más vital|Lo necesario,El libro de la selva,The Jungle Book (1967),,,verified
+DIS033,Trust in Me,Sterling Holloway,1967,disney,intl,Confía en mí,El libro de la selva,The Jungle Book (1967),,,verified
+DIS034,Everybody Wants to Be a Cat,Scatman Crothers,1970,disney,intl,Todos quieren ser gatos|Todo el mundo quiere ser un gato,Los Aristogatos|Aristogatos,The Aristocats (1970),,,verified
+DIS035,Scales and Arpeggios,Liz English,1970,disney,intl,Escalas y arpegios|Escalas y arpegios musicales,Los Aristogatos|Aristogatos,The Aristocats (1970),,,verified
+DIS036,The Aristocats,Maurice Chevalier,1970,disney,intl,Los Aristogatos|Aristogatos,Los Aristogatos|Aristogatos,The Aristocats (1970),,,verified
+DIS037,Love,Nancy Adams,1973,disney,intl,Amor,Robin Hood,Robin Hood (1973),,,verified
+DIS038,Not in Nottingham,Roger Miller,1973,disney,intl,Ya no en Nottingham|No en Nottingham,Robin Hood,Robin Hood (1973),,,verified
+DIS039,Oo-De-Lally,Roger Miller,1973,disney,intl,Ou-de-lali|Oo de Lally,Robin Hood,Robin Hood (1973),,,verified
+DIS040,Whistle-Stop,Roger Miller,1973,disney,intl,Whistle Stop|Silbido,Robin Hood,Robin Hood (1973),,,verified
+DIS041,Candle on the Water,Helen Reddy,1977,disney,intl,Vela sobre el agua,Elliott el dragón invisible|Pete y su dragón,Pete's Dragon (1977),,,verified
+DIS042,Someone's Waiting for You,Shelby Flint,1977,disney,intl,Alguien te espera,Los rescatadores,The Rescuers (1977),,,verified
+DIS043,Best of Friends,Pearl Bailey,1981,disney,intl,Los mejores amigos|Mejores amigos,Tod y Toby|Zorro y el sabueso,The Fox and the Hound (1981),,,verified
+DIS044,Let Me Be Good to You,Melissa Manchester,1986,disney,intl,Déjame ser buena contigo,"Basil, el ratón superdetective|Basil el ratón superdetective",The Great Mouse Detective (1986),,,verified
+DIS045,Good Company,Myhanh Tran,1988,disney,intl,Buena compañía,Oliver y su pandilla|Oliver y compañía,Oliver & Company (1988),,,verified
+DIS046,Once Upon a Time in New York City,Huey Lewis,1988,disney,intl,Érase una vez en Nueva York,Oliver y su pandilla|Oliver y compañía,Oliver & Company (1988),,,verified
+DIS047,Streets of Gold,Ruth Pointer,1988,disney,intl,Calles de oro,Oliver y su pandilla|Oliver y compañía,Oliver & Company (1988),,,verified
+DIS048,Why Should I Worry?,Billy Joel,1988,disney,intl,¿Por qué debería preocuparme?|Por qué preocuparme,Oliver y su pandilla|Oliver y compañía,Oliver & Company (1988),,,verified
+DIS049,Kiss the Girl,Samuel E. Wright,1989,disney,intl,Bésala|Besa a la chica,La Sirenita,The Little Mermaid (1989),,,verified
+DIS050,Part of Your World,Jodi Benson,1989,disney,intl,Parte de tu mundo|En tu mundo,La Sirenita,The Little Mermaid (1989),,,verified
+DIS051,Poor Unfortunate Souls,Pat Carroll,1989,disney,intl,Pobres almas en desgracia|Pobres almas desafortunadas,La Sirenita,The Little Mermaid (1989),,,verified
+DIS052,Under the Sea,Samuel E. Wright,1989,disney,intl,Bajo el mar|En el fondo del mar,La Sirenita,The Little Mermaid (1989),,,verified
+DIS053,Be Our Guest,Jerry Orbach,1991,disney,intl,Sé nuestro invitado|Ser tu invitado,La Bella y la Bestia,Beauty and the Beast (1991),,,verified
+DIS054,Beauty and the Beast,Angela Lansbury,1991,disney,intl,La bella y la bestia|Cuento eterno,La Bella y la Bestia,Beauty and the Beast (1991),,,verified
+DIS055,Belle,Paige O'Hara,1991,disney,intl,Bella,La Bella y la Bestia,Beauty and the Beast (1991),,,verified
+DIS056,Gaston,Richard White,1991,disney,intl,Gastón,La Bella y la Bestia,Beauty and the Beast (1991),,,verified
+DIS057,A Whole New World,Brad Kane,1992,disney,intl,Un mundo ideal|Un mundo nuevo,Aladdín,Aladdin (1992),,,verified
+DIS058,Arabian Nights,Bruce Adler,1992,disney,intl,Noches de Arabia|Noches árabes,Aladdín,Aladdin (1992),,,verified
+DIS059,Friend Like Me,Robin Williams,1992,disney,intl,Soy tu amigo|Un amigo como yo,Aladdín,Aladdin (1992),,,verified
+DIS060,Prince Ali,Robin Williams,1992,disney,intl,Príncipe Ali,Aladdín,Aladdin (1992),,,verified
+DIS061,Can You Feel the Love Tonight,Joseph Williams,1994,disney,intl,Esta noche el amor brillará,El Rey León,The Lion King (1994),,,verified
+DIS062,Circle of Life,Carmen Twillie,1994,disney,intl,El ciclo de la vida|Círculo de la vida,El Rey León,The Lion King (1994),,,verified
+DIS063,Hakuna Matata,Nathan Lane,1994,disney,intl,Hakuna Matata,El Rey León,The Lion King (1994),,,verified
+DIS064,I Just Can't Wait to Be King,Jason Weaver,1994,disney,intl,Yo quiero ser rey|Ya quiero ser el rey,El Rey León,The Lion King (1994),,,verified
+DIS065,Colors of the Wind,Judy Kuhn,1995,disney,intl,Colores en el viento|Colores del viento,Pocahontas,Pocahontas (1995),,,verified
+DIS066,I Will Go Sailing No More,Randy Newman,1995,disney,intl,No volveré a navegar,Toy Story,Toy Story (1995),,,verified
+DIS067,Just Around the Riverbend,Judy Kuhn,1995,disney,intl,Tras la curva del río|Tras la curva,Pocahontas,Pocahontas (1995),,,verified
+DIS068,Strange Things,Randy Newman,1995,disney,intl,Cosas extrañas,Toy Story,Toy Story (1995),,,verified
+DIS069,You've Got a Friend in Me,Randy Newman,1995,disney,intl,Tienes un amigo en mí|Yo soy tu amigo fiel,Toy Story,Toy Story (1995),,,verified
+DIS070,God Help the Outcasts,Heidi Mollenhauer,1996,disney,intl,Dios ayuda a los marginados|Que Dios ayude a los marginados,El jorobado de Notre Dame,The Hunchback of Notre Dame (1996),,,verified
+DIS071,Hellfire,Tony Jay,1996,disney,intl,Fuego infernal,El jorobado de Notre Dame,The Hunchback of Notre Dame (1996),,,verified
+DIS072,Out There,Tony Jay,1996,disney,intl,Allá afuera|Ahí fuera,El jorobado de Notre Dame,The Hunchback of Notre Dame (1996),,,verified
+DIS073,The Bells of Notre Dame,Paul Kandel,1996,disney,intl,Las campanas de Notre Dame,El jorobado de Notre Dame,The Hunchback of Notre Dame (1996),,,verified
+DIS074,A Star Is Born,Lillias White,1997,disney,intl,Nace una estrella,Hércules,Hercules (1997),,,verified
+DIS075,Go the Distance,Roger Bart,1997,disney,intl,Ve hasta el final|Un héroe de verdad,Hércules,Hercules (1997),,,verified
+DIS076,I Won't Say (I'm in Love),Susan Egan,1997,disney,intl,No lo diré (estoy enamorada)|No lo diré,Hércules,Hercules (1997),,,verified
+DIS077,Zero to Hero,Tawatha Agee,1997,disney,intl,De cero a héroe,Hércules,Hercules (1997),,,verified
+DIS078,A Girl Worth Fighting For,Harvey Fierstein,1998,disney,intl,Una chica por la que luchar|Una chica por quien luchar,Mulán|Mulan,Mulan (1998),,,verified
+DIS079,Honor to Us All,Beth Fowler,1998,disney,intl,Honor a nosotros|Honor para todos,Mulán|Mulan,Mulan (1998),,,verified
+DIS080,I'll Make a Man Out of You,Donny Osmond,1998,disney,intl,De un hombre haré|Haré de ti un hombre,Mulán|Mulan,Mulan (1998),,,verified
+DIS081,Reflection,Lea Salonga,1998,disney,intl,Reflejo,Mulán|Mulan,Mulan (1998),,,verified
+DIS082,The Time of Your Life,Randy Newman,1998,disney,intl,El tiempo de tu vida|La hora de tu vida,Bichos|Bichos: Una aventura en miniatura,A Bug's Life (1998),,,verified
+DIS083,Son of Man,Phil Collins,1999,disney,intl,Hijo de la humanidad|Hijo del hombre,Tarzán|Tarzan,Tarzan (1999),,,verified
+DIS084,Strangers Like Me,Phil Collins,1999,disney,intl,Extraños como yo|Extraño como yo,Tarzán|Tarzan,Tarzan (1999),,,verified
+DIS085,Two Worlds,Phil Collins,1999,disney,intl,Dos mundos,Tarzán|Tarzan,Tarzan (1999),,,verified
+DIS086,When She Loved Me,Sarah McLachlan,1999,disney,intl,Cuando ella me quería|Cuando ella me amaba,Toy Story 2,Toy Story 2 (1999),,,verified
+DIS087,You'll Be in My Heart,Phil Collins,1999,disney,intl,Estarás en mi corazón,Tarzán|Tarzan,Tarzan (1999),,,verified
+DIS088,My Funny Friend and Me,Sting,2000,disney,intl,Mi divertido amigo y yo,El emperador y sus locuras|Las locuras del emperador,The Emperor's New Groove (2000),,,verified
+DIS089,If I Didn't Have You,Billy Crystal,2001,disney,intl,Si no te tuviera a ti,"Monstruos S.A.|Monstruos, S.A.","Monsters, Inc. (2001)",,,verified
+DIS090,Hawaiian Roller Coaster Ride,Mark Keali'i Ho'omalu,2002,disney,intl,Montaña rusa hawaiana,Lilo y Stitch,Lilo & Stitch (2002),,,verified
+DIS091,He Mele No Lilo,Mark Keali'i Ho'omalu,2002,disney,intl,Canción para Lilo,Lilo y Stitch,Lilo & Stitch (2002),,,verified
+DIS092,Great Spirits,Phil Collins,2003,disney,intl,Grandes espíritus,Hermano oso,Brother Bear (2003),,,verified
+DIS093,No Way Out (Theme from Brother Bear),Phil Collins,2003,disney,intl,Sin salida,Hermano oso,Brother Bear (2003),,,verified
+DIS094,On My Way,Phil Collins,2003,disney,intl,En mi camino|De camino,Hermano oso,Brother Bear (2003),,,verified
+DIS095,Breaking Free,Zac Efron,2006,disney,intl,Libres|Rompiendo cadenas,High School Musical,"High School Musical (2006), producción televisiva",,,verified
+DIS096,Get'cha Head in the Game,Zac Efron,2006,disney,intl,Metete en el juego|Cabeza en el juego,High School Musical,"High School Musical (2006), producción televisiva",,,verified
+DIS097,Life Is a Highway,Rascal Flatts,2006,disney,intl,La vida es una carretera,Cars,Cars (2006),,,verified
+DIS098,Nobody's Perfect,Hannah Montana,2006,disney,intl,Nadie es perfecto,Hannah Montana,"Hannah Montana (2006), producción televisiva",,,verified
+DIS099,Our Town,James Taylor,2006,disney,intl,Nuestro pueblo,Cars,Cars (2006),,,verified
+DIS100,Pumpin' Up the Party,Hannah Montana,2006,disney,intl,Animando la fiesta,Hannah Montana,"Hannah Montana (2006), producción televisiva. duda de si pertenece a la primera temporada (2006) o a una posterior",,,disputed
+DIS101,Real Gone,Sheryl Crow,2006,disney,intl,Real Gone,Cars,Cars (2006),,,verified
+DIS102,Rock Star,Hannah Montana,2006,disney,intl,Estrella de rock,Hannah Montana,"Hannah Montana (2006), producción televisiva",,,verified
+DIS103,Route 66,John Mayer,2006,disney,intl,Ruta 66,Cars,Cars (2006),,,verified
+DIS104,Start of Something New,Zac Efron,2006,disney,intl,El comienzo de algo nuevo,High School Musical,"High School Musical (2006), producción televisiva",,,verified
+DIS105,The Best of Both Worlds,Hannah Montana,2006,disney,intl,Lo mejor de los dos mundos|Lo mejor de ambos mundos,Hannah Montana,"Hannah Montana (2006), producción televisiva",,,verified
+DIS106,What I've Been Looking For,Ashley Tisdale,2006,disney,intl,Lo que estaba buscando,High School Musical,"High School Musical (2006), producción televisiva",,,verified
+DIS107,Fabulous,Ashley Tisdale,2007,disney,intl,Fabulosa,High School Musical 2,"High School Musical 2 (2007), producción televisiva",,,verified
+DIS108,Happy Working Song,Amy Adams,2007,disney,intl,Canción del trabajo feliz|La canción del trabajo feliz,Encantada,Enchanted (2007),,,verified
+DIS109,Le Festin,Camille,2007,disney,intl,El festín|El banquete,Ratatouille,Ratatouille (2007),,,verified
+DIS110,So Close,Jon McLaughlin,2007,disney,intl,Tan cerca,Encantada,Enchanted (2007),,,verified
+DIS111,That's How You Know,Amy Adams,2007,disney,intl,Así lo sabes|Así sabrás,Encantada,Enchanted (2007),,,verified
+DIS112,True Love's Kiss,Amy Adams,2007,disney,intl,El beso del amor verdadero|Beso de amor verdadero,Encantada,Enchanted (2007),,,verified
+DIS113,What Time Is It,High School Musical Cast,2007,disney,intl,¿Qué hora es?|Qué hora es,High School Musical 2,"High School Musical 2 (2007), producción televisiva",,,verified
+DIS114,You Are the Music in Me,Zac Efron,2007,disney,intl,Eres la música en mí|Tú eres la música en mí,High School Musical 2,"High School Musical 2 (2007), producción televisiva",,,verified
+DIS115,Can I Have This Dance,Vanessa Hudgens,2008,disney,intl,¿Me concedes este baile?|Bailas conmigo,High School Musical 3,High School Musical 3: Senior Year (2008),,,verified
+DIS116,Down to Earth,Peter Gabriel,2008,disney,intl,Bajar a la Tierra|Aterriza,WALL-E,WALL-E (2008),,,verified
+DIS117,Now or Never,High School Musical Cast,2008,disney,intl,Ahora o nunca,High School Musical 3,High School Musical 3: Senior Year (2008),,,verified
+DIS118,Play My Music,Jonas Brothers,2008,disney,intl,Toca mi música,Camp Rock,"Camp Rock (2008), producción televisiva",,,verified
+DIS119,This Is Me,Demi Lovato,2008,disney,intl,Esta soy yo|Soy yo,Camp Rock,"Camp Rock (2008), producción televisiva",,,verified
+DIS120,We Rock,Camp Rock Cast,2008,disney,intl,Nosotros rockeamos|Rockeamos,Camp Rock,"Camp Rock (2008), producción televisiva",,,verified
+DIS121,Almost There,Anika Noni Rose,2009,disney,intl,Casi allí|Casi llego,Tiana y el sapo|La princesa y el sapo,The Princess and the Frog (2009),,,verified
+DIS122,Down in New Orleans,Dr. John,2009,disney,intl,Abajo en Nueva Orleans|En Nueva Orleans,Tiana y el sapo|La princesa y el sapo,The Princess and the Frog (2009),,,verified
+DIS123,Friends on the Other Side,Keith David,2009,disney,intl,Amigos del más allá|Amigos al otro lado,Tiana y el sapo|La princesa y el sapo,The Princess and the Frog (2009),,,verified
+DIS124,When We're Human,Anika Noni Rose,2009,disney,intl,Cuando seamos humanos,Tiana y el sapo|La princesa y el sapo,The Princess and the Frog (2009),,,verified
+DIS125,I See the Light,Mandy Moore,2010,disney,intl,Veo la luz|Por fin veo la luz,Enredados,Tangled (2010),,,verified
+DIS126,I've Got a Dream,Brad Garrett,2010,disney,intl,Tengo un sueño|Yo tengo un sueño,Enredados,Tangled (2010),,,verified
+DIS127,Mother Knows Best,Donna Murphy,2010,disney,intl,Mamá sabe más|Madre sabe lo mejor,Enredados,Tangled (2010),,,verified
+DIS128,We Belong Together,Randy Newman,2010,disney,intl,Juntos estamos|Estamos juntos,Toy Story 3,Toy Story 3 (2010),,,verified
+DIS129,When Will My Life Begin,Mandy Moore,2010,disney,intl,¿Cuándo comenzará mi vida?|Cuándo empezará mi vida,Enredados,Tangled (2010),,,verified
+DIS130,Collision of Worlds,Brad Paisley,2011,disney,intl,Colisión de mundos,Cars 2,Cars 2 (2011),,,verified
+DIS131,Into the Open Air,Billy Connolly,2012,disney,intl,Hacia el aire libre|Al aire libre,Brave|Indomable,Brave (2012),,,verified
+DIS132,Learn Me Right,Mumford & Sons,2012,disney,intl,Enséñame bien,Brave|Indomable,Brave (2012),,,verified
+DIS133,Touch the Sky,Julie Fowlis,2012,disney,intl,Toca el cielo,Brave|Indomable,Brave (2012),,,verified
+DIS134,Do You Want to Build a Snowman?,Kristen Bell,2013,disney,intl,¿Quieres construir un muñeco de nieve?|Quieres hacer un muñeco de nieve,Frozen|Frozen: El reino del hielo,Frozen (2013),,,verified
+DIS135,For the First Time in Forever,Kristen Bell,2013,disney,intl,Por primera vez en años|Por primera vez en la vida,Frozen|Frozen: El reino del hielo,Frozen (2013),,,verified
+DIS136,Let It Go,Idina Menzel,2013,disney,intl,Libre soy|Suéltalo|Déjalo ir,Frozen|Frozen: El reino del hielo,Frozen (2013),,,verified
+DIS137,Love Is an Open Door,Kristen Bell,2013,disney,intl,El amor es una puerta abierta,Frozen|Frozen: El reino del hielo,Frozen (2013),,,verified
+DIS138,Immortals,Fall Out Boy,2014,disney,intl,Inmortales,Big Hero 6|Grandes héroes,Big Hero 6 (2014),,,verified
+DIS139,Evil Like Me,Kristin Chenoweth,2015,disney,intl,Malvada como yo,Descendientes,"Descendants (2015), producción televisiva",,,verified
+DIS140,If Only,Dove Cameron,2015,disney,intl,Si al menos,Descendientes,"Descendants (2015), producción televisiva",,,verified
+DIS141,Rotten to the Core,Sofia Carson,2015,disney,intl,Podridos hasta la médula|Malvados hasta el fondo,Descendientes,"Descendants (2015), producción televisiva",,,verified
+DIS142,How Far I'll Go,Auli'i Cravalho,2016,disney,intl,Hasta donde llegaré|Cuánto he de llegar,Vaiana|Moana,Moana (2016),,,verified
+DIS143,Shiny,Jemaine Clement,2016,disney,intl,Brillante,Vaiana|Moana,Moana (2016),,,verified
+DIS144,Try Everything,Shakira,2016,disney,intl,Inténtalo todo,Zootrópolis|Zootopia,Zootopia (2016),,,verified
+DIS145,We Know the Way,Opetaia Foa'i,2016,disney,intl,Sabemos el camino|Conocemos el camino,Vaiana|Moana,Moana (2016),,,verified
+DIS146,You're Welcome,Dwayne Johnson,2016,disney,intl,De nada,Vaiana|Moana,Moana (2016),,,verified
+DIS147,Proud Corazón,Anthony Gonzalez,2017,disney,intl,Orgulloso corazón|Corazón orgulloso,Coco,Coco (2017),,,verified
+DIS148,Remember Me,Benjamin Bratt,2017,disney,intl,Recuérdame,Coco,Coco (2017),,,verified
+DIS149,The World Es Mi Familia,Antonio Sol,2017,disney,intl,El mundo es mi familia,Coco,Coco (2017),,,verified
+DIS150,Un Poco Loco,Anthony Gonzalez,2017,disney,intl,Un poco loco,Coco,Coco (2017),,,verified
+DIS151,Ways to Be Wicked,Dove Cameron,2017,disney,intl,Maneras de ser malvado,Descendientes 2,"Descendants 2 (2017), producción televisiva",,,verified
+DIS152,What's My Name,Dove Cameron,2017,disney,intl,¿Cómo me llamo?|Cuál es mi nombre,Descendientes 2,"Descendants 2 (2017), producción televisiva",,,verified
+DIS153,Can You Imagine That?,Emily Blunt,2018,disney,intl,¿Puedes imaginarlo?|Puedes imaginar eso,El regreso de Mary Poppins,Mary Poppins Returns (2018),,,verified
+DIS154,Trip a Little Light Fantastic,Lin-Manuel Miranda,2018,disney,intl,El paso ligero y fantástico,El regreso de Mary Poppins,Mary Poppins Returns (2018),,,verified
+DIS155,Into the Unknown,Idina Menzel,2019,disney,intl,Hacia lo desconocido,Frozen 2|Frozen II: El reino del hielo,Frozen II (2019),,,verified
+DIS156,Lost in the Woods,Jonathan Groff,2019,disney,intl,Perdido en el bosque,Frozen 2|Frozen II: El reino del hielo,Frozen II (2019),,,verified
+DIS157,Show Yourself,Idina Menzel,2019,disney,intl,Muéstrate,Frozen 2|Frozen II: El reino del hielo,Frozen II (2019),,,verified
+DIS158,Some Things Never Change,Kristen Bell,2019,disney,intl,Algunas cosas nunca cambian|Hay cosas que no cambian,Frozen 2|Frozen II: El reino del hielo,Frozen II (2019),,,verified
+DIS159,Dos Oruguitas,Sebastián Yatra,2021,disney,intl,Dos oruguitas,Encanto,Encanto (2021),,,verified
+DIS160,Surface Pressure,Jessica Darrow,2021,disney,intl,Presión,Encanto,Encanto (2021),,,verified
+DIS161,We Don't Talk About Bruno,Carolina Gaitán - La Gaita,2021,disney,intl,No se habla de Bruno|De Bruno no se habla,Encanto,Encanto (2021),,,verified
+DIS162,What Else Can I Do?,Stephanie Beatriz,2021,disney,intl,¿Qué más puedo hacer?|Qué más puedo hacer,Encanto,Encanto (2021),,,verified
+DIS163,Nobody Like U,4*TOWN,2022,disney,intl,Nadie como tú,Red|Turning Red,Turning Red (2022),,,verified
+DIS164,Knowing What I Know Now,Ariana DeBose,2023,disney,intl,Sabiendo lo que sé ahora,Wish: El poder de los deseos|Wish,Wish (2023),,,verified
+DIS165,This Wish,Ariana DeBose,2023,disney,intl,Este deseo,Wish: El poder de los deseos|Wish,Wish (2023),,,verified
+DIS166,Welcome to Rosas,Ariana DeBose,2023,disney,intl,Bienvenidos a Rosas,Wish: El poder de los deseos|Wish,Wish (2023),,,verified
+DIS167,Beyond,Auli'i Cravalho,2024,disney,intl,Más allá,Vaiana 2|Moana 2,Moana 2 (2024),,,verified
+DIS168,I Always Wanted a Brother,Aaron Pierre,2024,disney,intl,Siempre quise un hermano,Mufasa: El Rey León|Mufasa,Mufasa: The Lion King (2024). duda sobre el intérprete acreditado (Aaron Pierre y Kelvin Harrison Jr.),,,disputed
+DIS169,Tell Me It's You,Mufasa: The Lion King Cast,2024,disney,intl,Dime que eres tú,Mufasa: El Rey León|Mufasa,Mufasa: The Lion King (2024). duda sobre el título exacto y el intérprete acreditado,,,disputed
+DIS170,We're Back,Dwayne Johnson,2024,disney,intl,Hemos vuelto,Vaiana 2|Moana 2,Moana 2 (2024),,,verified

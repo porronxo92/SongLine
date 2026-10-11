@@ -47,7 +47,7 @@ test('en modo app el activo envía título y artista, y ambos móviles ven la va
 
     // Revelación en ambos móviles: la respuesta, el resultado de la validación y «Dar por bueno».
     for (const page of pages) {
-      const result = page.getByTestId('reveal-result');
+      const result = page.getByTestId('reveal-guess');
       await expect(result).toBeVisible({ timeout: 20_000 });
       await expect(result).toContainText(GUESS_TITLE);
       await expect(result).toContainText(GUESS_ARTIST);
@@ -63,7 +63,7 @@ test('en modo app el activo envía título y artista, y ambos móviles ven la va
     // El estado se actualiza en los dos: el botón desaparece y la validación pasa a acierto.
     for (const page of pages) {
       await expect(page.getByRole('button', { name: es.game.acceptGuess })).toBeHidden();
-      const result = page.getByTestId('reveal-result');
+      const result = page.getByTestId('reveal-guess');
       await expect(result.locator('span', { hasText: es.game.guessTitleOk }).locator('svg.lucide-check')).toHaveCount(1);
       await expect(result.locator('span', { hasText: es.game.guessArtistOk }).locator('svg.lucide-check')).toHaveCount(1);
     }

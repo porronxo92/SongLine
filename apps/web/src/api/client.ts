@@ -1,5 +1,6 @@
 import type {
   AuthStatus,
+  CatalogPack,
   CreateRoomRequest,
   CreateRoomResponse,
   RoomInfo,
@@ -76,6 +77,8 @@ export const api = {
   logout: () => authed<undefined>('/api/auth/logout', { method: 'POST' }),
   createRoom: (body: CreateRoomRequest) =>
     authed<CreateRoomResponse>('/api/rooms', { method: 'POST', body: JSON.stringify(body) }),
+  /** Público: no necesita sesión. */
+  packs: () => raw<CatalogPack[]>('/api/catalog/packs', { auth: false }),
   roomInfo: (code: string) => authed<RoomInfo>(`/api/rooms/${encodeURIComponent(code)}`),
   /**
    * Único punto de inicio del login de Spotify. El servidor guarda un nonce en una cookie HttpOnly

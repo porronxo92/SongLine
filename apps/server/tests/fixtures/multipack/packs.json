@@ -1,0 +1,6 @@
+[
+  {"slug": "kids-test", "name": "Kids", "description": "d", "icon": "castle", "sort": 30},
+  {"slug": "mix", "name": "Mix", "description": "d", "icon": "disc-3", "sort": 10},
+  {"slug": "rock-test", "name": "Rock", "description": "d", "icon": "guitar", "sort": 20},
+  {"slug": "empty-test", "name": "Vacio", "description": "d", "icon": "music", "sort": 40}
+]

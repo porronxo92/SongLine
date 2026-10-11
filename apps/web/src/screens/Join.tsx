@@ -59,14 +59,19 @@ export default function Join() {
         {[0, 1, 2, 3].map((i) => (
           <div
             key={i}
-            className="clay year flex h-20 w-16 items-center justify-center text-5xl"
-            style={{ borderColor: i === code.length ? 'var(--color-primary)' : undefined }}
+            className="panel year flex h-20 w-16 items-center justify-center text-5xl"
+            style={{
+              borderColor: i === code.length ? 'var(--color-accent)' : undefined,
+              borderWidth: 2,
+              boxShadow: i === code.length ? 'var(--glow-accent)' : undefined,
+              color: 'var(--color-accent)',
+            }}
           >
             {code[i] ?? ''}
           </div>
         ))}
       </div>
-      <p role="alert" className="min-h-[1.5rem] text-center font-bold text-destructive">
+      <p role="alert" className="min-h-[1.5rem] text-center font-bold text-magenta-light">
         {error}
       </p>
       <div className="mx-auto grid w-full max-w-xs grid-cols-3 gap-3">
@@ -74,7 +79,7 @@ export default function Join() {
           <button
             key={k}
             type="button"
-            className="btn btn-soft year !min-h-[68px] !text-3xl"
+            className="btn btn-secondary year !min-h-[68px] !text-3xl"
             aria-label={es.join.digit(k)}
             onClick={() => {
               press(k);
@@ -86,7 +91,7 @@ export default function Join() {
         <span />
         <button
           type="button"
-          className="btn btn-soft year !min-h-[68px] !text-3xl"
+          className="btn btn-secondary year !min-h-[68px] !text-3xl"
           aria-label={es.join.digit('0')}
           onClick={() => {
             press('0');
@@ -96,7 +101,7 @@ export default function Join() {
         </button>
         <button
           type="button"
-          className="btn btn-soft !min-h-[68px]"
+          className="btn btn-secondary !min-h-[68px]"
           aria-label={es.join.delete}
           onClick={() => {
             setCode((c) => c.slice(0, -1));

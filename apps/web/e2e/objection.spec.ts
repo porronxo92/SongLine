@@ -53,6 +53,9 @@ test('con una ficha se objeta en el turno de otro equipo y la ficha se gasta sie
           await page.getByRole('button', { name: es.timeline.next }).click();
         }
         await expect(gap).not.toContainText(es.timeline.blocked);
+        // Pista de años iguales, una sola vez junto al hueco.
+        await expect(page.getByTestId('equal-hint')).toHaveCount(1);
+        await expect(page.getByTestId('equal-hint')).toContainText(es.explain.equalHint);
         await objectHere.click();
         objection = { slot: i, before };
       } else {
@@ -66,11 +69,7 @@ test('con una ficha se objeta en el turno de otro equipo y la ficha se gasta sie
       const totals = await totalTokens();
       if (!tokenSeen && totals.some((t) => t > 0)) tokenSeen = true;
       if (objection === null) return false;
-      const result = host.getByTestId('reveal-result');
-      if (!(await isShown(result))) return false;
-      const name = NAMES[objection.slot] ?? '';
-      const text = (await result.textContent()) ?? '';
-      objectionVerified = text.includes(es.game.objectionRight(name)) || text.includes(es.game.objectionWrong(name));
+      objectionVerified = await isShown(host.getByTestId('reveal-objection'));
       return objectionVerified;
     };
 
@@ -83,11 +82,25 @@ test('con una ficha se objeta en el turno de otro equipo y la ficha se gasta sie
     const obj = objection as Objection | null;
     if (!obj) throw new Error('unreachable');
     const name = NAMES[obj.slot] ?? '';
-    const reveal = host.getByTestId('reveal-result');
+    const others = NAMES.filter((n) => n !== name);
+    const objectionCard = host.getByTestId('reveal-objection');
+    const headline = host.getByTestId('reveal-headline');
 
-    // La revelación muestra el resultado de la objeción (bien o mal) y que el objetor gasta una ficha.
-    await expect(reveal).toContainText(new RegExp(`${name} objetó (bien|mal)\\.`));
-    await expect(reveal).toContainText(es.game.tokenLost(name));
+    // El mensaje de resolución nombra al objetor y al equipo activo, y la ficha gastada.
+    await expect(objectionCard).toContainText(name);
+    const objText = (await objectionCard.textContent()) ?? '';
+    expect(others.some((n) => objText.includes(n)), 'la tarjeta nombra al otro equipo').toBe(true);
+    await expect(objectionCard).toContainText(es.explain.tokenSpent(name));
+
+    // El titular dice quién se queda la carta (o que se descarta).
+    const headText = ((await headline.textContent()) ?? '').trim();
+    const holders = NAMES.map((n) => [es.explain.keeps(n), es.explain.steals(n)]).flat();
+    expect([...holders, es.explain.discards], `titular: ${headText}`).toContain(headText);
+
+    // Con años iguales los dos huecos pueden valer: el mensaje lo explica en lugar de decir «fallido».
+    if (objText.includes(es.explain.bothValid)) {
+      await expect(objectionCard).toContainText('que la colocó primero');
+    }
 
     // D2: la ficha del objetor se gasta siempre (tokens antes de la objeción menos uno).
     await expect.poll(() => tokensOf(host, obj.slot), { timeout: 10_000 }).toBe(obj.before - 1);

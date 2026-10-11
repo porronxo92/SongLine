@@ -1,0 +1,8 @@
+ID,Cancion,Artista,Anio,Genero,Origen,AliasTitulo,AliasArtista,Nota,SpotifyTrackId,ISRC,Estado
+R001,Rock Uno,Rockers,1975,rock,intl,,,,trR1,,verified
+R002,Rock Dos,Rockers,1979,rock,intl,,,,trR2,,verified
+R003,Rock Tres,Rockers,1983,rock,intl,,,,trR3,,verified
+R004,Rock Cuatro,Rockers,abcd,rock,intl,,,,trR4,,verified
+R005,Rock Cinco,Rockers,1899,rock,intl,,,,trR5,,verified
+R006,Rock Seis,Rockers,1987,rock,intl,,,,trR6,,ambiguous
+R007,SONG ALPHA!,band one,1985,rock,intl,,,,,,verified
