@@ -22,6 +22,7 @@ import sys
 import tempfile
 import time
 import unicodedata
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, Protocol
@@ -66,6 +67,8 @@ _RE_VERSION = re.compile(
 )
 
 VERSION_FLAGS = frozenset({"remaster", "live", "version"})
+SOUNDTRACK_BAD_FLAGS = frozenset({"live", "version"})  # en una banda sonora, remaster no es version distinta
+PROFILES = ("default", "soundtrack")
 
 
 # --------------------------------------------------------------------------
@@ -175,6 +178,7 @@ class Scored:
     flags: tuple[str, ...]
     title_sim: float = 0.0
     artist_sim: float = 0.0
+    film_match: bool = False  # perfil soundtrack: el album menciona la pelicula
 
 
 def parse_track(item: dict) -> Candidate:
@@ -232,6 +236,44 @@ def year_component(album_year: int | None, csv_year: int) -> float:
     return 0.0
 
 
+_RE_FILM_NOTE = re.compile(r"^\s*(.+?)\s*\((?:19|20)\d{2}\)")
+
+
+def film_names(row: dict[str, str]) -> list[str]:
+    """Peliculas de una fila del pack Disney: de `Nota` («Pelicula (1937)») y de `AliasArtista`."""
+    names: list[str] = []
+    m = _RE_FILM_NOTE.match(row.get("Nota", "") or "")
+    if m:
+        names.append(m.group(1))
+    names.extend(split_pipe(row.get("AliasArtista", "")))
+    seen: set[str] = set()
+    return [n for n in names if len(fold(n)) >= 4 and not (fold(n) in seen or seen.add(fold(n)))]
+
+
+def album_mentions_film(album_name: str, films: Sequence[str]) -> bool:
+    album = normalize(album_name)
+    return any(normalize(f) and normalize(f) in album for f in films)
+
+
+def score_soundtrack(
+    candidate: Candidate, t_sim: float, a_sim: float, flags: tuple[str, ...], films: Sequence[str]
+) -> Scored:
+    """Perfil banda sonora. El album se reedita, asi que ni su anio ni «compilation/remaster» cuentan
+    cuando el album menciona la pelicula, y el interprete acreditado puede variar.
+
+    0.55*titulo + 0.25*artista (1.0 si el album menciona la pelicula) + 0.20 de apoyo
+    (la pelicula en el album, o un artista claramente igual). Directos y versiones siguen restando."""
+    film = album_mentions_film(candidate.album_name, films)
+    a_eff = 1.0 if film else a_sim
+    support = 1.0 if (film or a_sim >= 0.85) else 0.0
+    score = 0.55 * t_sim + 0.25 * a_eff + 0.20 * support
+    if SOUNDTRACK_BAD_FLAGS & set(flags):
+        score -= VERSION_PENALTY
+    if "compilation" in flags and not film:
+        score -= COMPILATION_PENALTY
+    return Scored(candidate, round(score, 4), flags, t_sim, a_sim, film)
+
+
 def score_candidate(
     candidate: Candidate,
     title: str,
@@ -239,10 +281,14 @@ def score_candidate(
     csv_year: int,
     alias_titles: list[str] | None = None,
     alias_artists: list[str] | None = None,
+    profile: str = "default",
+    films: Sequence[str] = (),
 ) -> Scored:
     """0.45*sim(titulo) + 0.35*sim(artista) + 0.20*anio, con penalizaciones y bonus."""
     t_sim = title_similarity([title, *(alias_titles or [])], candidate.name)
     a_sim = artist_similarity([artist, *(alias_artists or [])], list(candidate.artists))
+    if profile == "soundtrack":
+        return score_soundtrack(candidate, t_sim, a_sim, detect_flags(candidate, title, csv_year), films)
     y = year_component(candidate.album_year, csv_year)
     score = 0.45 * t_sim + 0.35 * a_sim + 0.20 * y
     flags = detect_flags(candidate, title, csv_year)
@@ -262,6 +308,8 @@ def rank_candidates(
     csv_year: int,
     alias_titles: list[str] | None = None,
     alias_artists: list[str] | None = None,
+    profile: str = "default",
+    films: Sequence[str] = (),
 ) -> list[Scored]:
     seen: set[str] = set()
     scored: list[Scored] = []
@@ -269,7 +317,7 @@ def rank_candidates(
         if not c.track_id or c.track_id in seen:
             continue
         seen.add(c.track_id)
-        scored.append(score_candidate(c, title, artist, csv_year, alias_titles, alias_artists))
+        scored.append(score_candidate(c, title, artist, csv_year, alias_titles, alias_artists, profile, films))
     scored.sort(key=lambda s: s.score, reverse=True)
     return scored
 
@@ -297,7 +345,7 @@ def decide(ranked: list[Scored]) -> Decision:
     reasons: list[str] = []
     if confidence < CONFIDENCE_THRESHOLD:
         reasons.append("low_confidence")
-    if best.artist_sim < ARTIST_MIN_SIM and "low_confidence" not in reasons:
+    if best.artist_sim < ARTIST_MIN_SIM and not best.film_match and "low_confidence" not in reasons:
         reasons.append("low_confidence")
     reasons.extend(f for f in best.flags if f in VERSION_FLAGS | {"compilation"})
     if "year_mismatch" in best.flags:
@@ -342,7 +390,7 @@ def year_status(
     if not strict:
         if flags & {"live", "version"}:
             return "disputed", "directo, version o remix"
-        if best.title_sim < MB_MIN_TITLE_SIM or best.artist_sim < ARTIST_MIN_SIM:
+        if best.title_sim < MB_MIN_TITLE_SIM or (best.artist_sim < ARTIST_MIN_SIM and not best.film_match):
             return "disputed", "titulo o artista no coinciden"
         if decision.confidence < RELAXED_MIN_CONFIDENCE:
             return "disputed", f"confianza {decision.confidence:.2f} < {RELAXED_MIN_CONFIDENCE}"
@@ -616,6 +664,7 @@ def process_rows(
     strict: bool = False,
     skip_ids: frozenset[str] = frozenset(),
     results: list[RowResult] | None = None,
+    profile: str = "default",
 ) -> list[RowResult]:
     """Procesa las filas. `skip_ids`: IDs ya resueltos (p. ej. en la BD) que no se vuelven a buscar.
 
@@ -632,6 +681,7 @@ def process_rows(
         ranked = rank_candidates(
             cands, title, artist, csv_year,
             split_pipe(row.get("AliasTitulo", "")), split_pipe(row.get("AliasArtista", "")),
+            profile, film_names(row) if profile == "soundtrack" else (),
         )
         decision = decide(ranked)
         mb_date = None
@@ -789,6 +839,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--musicbrainz", action="store_true", help="verifica el anio por ISRC")
     p.add_argument("--write-csv", action="store_true",
                    help="reescribe SpotifyTrackId, ISRC y Estado (nunca Anio)")
+    p.add_argument("--profile", choices=PROFILES, default="default",
+                   help="soundtrack: para bandas sonoras; ignora el anio del album y acepta otro interprete "
+                        "si el album menciona la pelicula (columna Nota)")
+    p.add_argument("--reprocess", action="store_true",
+                   help="con --resume: vuelve a buscar tambien las canciones que ya tienen ID")
     p.add_argument("--resume", action="store_true",
                    help="con --write-db: no vuelve a buscar las canciones que ya tienen spotify_track_id en la BD")
     p.add_argument("--strict-years", action="store_true",
@@ -858,7 +913,7 @@ def main(argv: list[str] | None = None, spotify: SpotifyLike | None = None,
         mb = MusicBrainzClient()
     rows = read_songs(args.csv)
     skip_ids: frozenset[str] = frozenset()
-    if args.resume:
+    if args.resume and not args.reprocess:
         load_dotenv(Path(__file__).resolve().parent.parent / ".env")
         skip_ids = ids_resolved_in_db()
         print(f"--resume: {len(skip_ids)} canciones ya resueltas en la BD, se saltan.")
@@ -867,7 +922,7 @@ def main(argv: list[str] | None = None, spotify: SpotifyLike | None = None,
     try:
         process_rows(rows, spotify, mb if args.musicbrainz else None,
                      only_pending=args.only_pending, log=print, strict=args.strict_years,
-                     skip_ids=skip_ids, results=results)
+                     skip_ids=skip_ids, results=results, profile=args.profile)
     except RateLimitError as exc:
         # Spotify corta la ejecucion: se conserva y se guarda lo ya procesado.
         interrupted = exc

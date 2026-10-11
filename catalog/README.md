@@ -51,3 +51,18 @@ Salida en `review/`:
 ```
 
 Incluyen la validación de `songs.csv` (cabecera, 180 filas, distribución por década, máximo 3 por artista) y el importador con respuestas simuladas.
+
+## Cuota de Spotify y reanudación
+
+Spotify limita la cuota de búsqueda de la app y puede bloquearla durante horas (`429`, `Retry-After`). El importador guarda lo
+procesado antes de parar (código de salida 3). Opciones útiles:
+
+- `--resume`: con `--write-db`, no vuelve a buscar las canciones que ya tienen `spotify_track_id` en la BD.
+- `--reprocess`: con `--resume`, las vuelve a buscar igualmente (para aplicar una regla nueva).
+- `--profile soundtrack`: bandas sonoras (pack Disney). Ignora el año del álbum, acepta otro intérprete si el álbum menciona la
+  película (columna `Nota`) y sigue excluyendo directos, karaokes y versiones.
+- `--strict-years`: exige que Spotify o MusicBrainz confirmen el año.
+
+`reevaluate_offline.py` reevalúa un pack con los informes de `catalog/review/<pack>/` **sin llamar a Spotify**
+(`--mode ignore-year` para canciones con título y artista correctos y solo el año del álbum distinto; `--mode soundtrack` para
+Disney). Sin `--write-db` solo simula. El año de juego es siempre el del CSV.

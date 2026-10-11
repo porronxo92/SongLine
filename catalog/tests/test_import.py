@@ -526,3 +526,41 @@ def test_skip_ids_no_vuelve_a_buscar_lo_resuelto():
     sp = _LimitedSpotify(ok=99)
     res = imp.process_rows(rows, sp, None, skip_ids=frozenset({rows[0]["ID"]}))
     assert res[0].skipped and sp.calls == len(rows) - 1
+
+
+# --- perfil soundtrack (pack Disney) ---------------------------------------------------------
+
+def _st(c, title="Give a Little Whistle", artist="Cliff Edwards", year=1940, films=("Pinocchio",)):
+    ranked = imp.rank_candidates([c], title, artist, year, profile="soundtrack", films=films)
+    dec = imp.decide(ranked)
+    return imp.year_status("verified", dec, year, None)[0], dec
+
+
+def test_film_names_sale_de_nota_y_alias():
+    row = {"Nota": "Snow White and the Seven Dwarfs (1937)", "AliasArtista": "Blancanieves|Snow White"}
+    assert imp.film_names(row)[:2] == ["Snow White and the Seven Dwarfs", "Blancanieves"]
+    assert imp.film_names({"Nota": "", "AliasArtista": ""}) == []
+
+
+def test_soundtrack_ignora_el_anio_del_album_si_menciona_la_pelicula():
+    c = cand(name="Give a Little Whistle", artists=("Cliff Edwards",),
+             album="Pinocchio (The Songs from the Original Soundtrack)", date="2002-01-01", isrc="X1")
+    assert _st(c)[0] == "verified"
+    # con el perfil por defecto, el mismo candidato queda fuera por el anio de la reedicion
+    ranked = imp.rank_candidates([c], "Give a Little Whistle", "Cliff Edwards", 1940)
+    assert imp.year_status("verified", imp.decide(ranked), 1940, None)[0] == "disputed"
+
+
+def test_soundtrack_acepta_otro_interprete_si_el_album_menciona_la_pelicula():
+    c = cand(name="Heigh-Ho", artists=("The Dwarfs",), album="Snow White and the Seven Dwarfs (Original Soundtrack)",
+             date="1998-05-01", isrc="X2")
+    st, dec = _st(c, title="Heigh-Ho", artist="Coro de los enanos", year=1937, films=("Snow White and the Seven Dwarfs",))
+    assert st == "verified" and dec.best.film_match
+
+
+def test_soundtrack_sigue_descartando_directos_versiones_y_albumes_sin_la_pelicula():
+    live = cand(name="Give a Little Whistle - Live", artists=("Cliff Edwards",), album="Pinocchio Live in Concert", isrc="X3")
+    karaoke = cand(name="Give a Little Whistle (Karaoke Version)", artists=("Cliff Edwards",), album="Pinocchio Karaoke", isrc="X4")
+    otro = cand(name="Give a Little Whistle", artists=("Alguien Distinto",), album="Greatest Hits", date="2010-01-01", isrc="X5")
+    for c in (live, karaoke, otro):
+        assert _st(c)[0] == "disputed"
