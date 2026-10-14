@@ -5,5 +5,5 @@
   {"slug": "clasicos-espana", "name": "Clásicos españoles", "description": "Los temas que suenan en toda boda y verbena de España.", "icon": "mic-vocal", "sort": 40},
   {"slug": "reggaeton", "name": "Reguetón y urbano", "description": "Perreo, trap y música urbana latina.", "icon": "flame", "sort": 50},
   {"slug": "disney", "name": "Disney y animación", "description": "Canciones de películas de animación, de 1937 a hoy.", "icon": "castle", "sort": 60},
-  {"slug": "indie-espanol", "name": "Indie español", "description": "Indie, pop independiente y rock alternativo hecho en España, de los noventa a hoy.", "icon": "radio", "sort": 70}
+  {"slug": "indie-espanol", "name": "Indie español", "description": "Indie y pop-rock hecho en España, de los noventa a hoy.", "icon": "radio", "sort": 70}
 ]

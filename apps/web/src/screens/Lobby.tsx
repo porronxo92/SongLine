@@ -5,6 +5,7 @@ import { HostControls } from '../components/HostControls';
 import { HowToPlayButton } from '../components/HowToPlay';
 import { IdentityForm } from '../components/IdentityForm';
 import { PackSummary } from '../components/PackPicker';
+import { ShareRoom } from '../components/ShareRoom';
 import { Button, Card, Screen, TeamShape } from '../components/ui';
 import { es } from '../i18n/es';
 import { getVibrateEnabled, setVibrateEnabled } from '../lib/session';
@@ -105,6 +106,7 @@ export function Lobby({ view }: { view: RoomView }) {
           {view.code}
         </p>
         <p className="help">{es.lobby.shareHint}</p>
+        <ShareRoom code={view.code} />
         <p className="mt-2 text-sm font-semibold text-muted-foreground">
           {es.lobby.modeLine(
             view.settings.mode === 'app' ? es.lobby.modeApp : es.lobby.modeVoice,

@@ -1,12 +1,9 @@
 ID,Cancion,Artista,Anio,Genero,Origen,AliasTitulo,AliasArtista,Nota,SpotifyTrackId,ISRC,Estado
-CLE001,Estando contigo,Conchita Bautista,1961,pop,es,,Conchita Bautista,,,,verified
 CLE002,Quince años tiene mi amor,Dúo Dinámico,1961,pop,es,Quince anos tiene mi amor,Duo Dinamico,Dudo entre 1960 y 1961,,,disputed
-CLE003,Llámame,Víctor Balaguer,1962,balada,es,Llamame,Victor Balaguer,,,,verified
 CLE004,Algo prodigioso,José Guardiola,1963,balada,es,,Jose Guardiola,,,,verified
 CLE005,Flamenco,Los Brincos,1964,pop,es,,Brincos,,,,verified
 CLE006,La chica yeyé,Concha Velasco,1965,pop,es,La chica ye-ye,Concha Velasco,,,,verified
 CLE007,Lola,Los Brincos,1965,pop,es,,Brincos,,,,verified
-CLE008,"¡Qué bueno, qué bueno!",Conchita Bautista,1965,pop,es,Que bueno que bueno,Conchita Bautista,,,,verified
 CLE009,Black Is Black,Los Bravos,1966,rock,es,,Bravos,,,,verified
 CLE010,Borracho,Los Brincos,1966,pop,es,,Brincos,,,,verified
 CLE011,Yo soy aquel,Raphael,1966,balada,es,,,,,,verified
@@ -34,7 +31,6 @@ CLE032,Mamy Blue,Pop-Tops,1971,balada,es,Mammy Blue,Pop Tops|The Pop-Tops,,,,ver
 CLE033,Mediterráneo,Joan Manuel Serrat,1971,autor,es,Mediterraneo,Serrat,,,,verified
 CLE034,Soy rebelde,Jeanette,1971,pop,es,,,,,,verified
 CLE035,Yo no soy esa mujer,Mari Trini,1971,autor,es,,Mari Trini,,,,verified
-CLE036,Amanece,Jaime Morey,1972,balada,es,,,,,,verified
 CLE037,Libre,Nino Bravo,1972,balada,es,,,,,,verified
 CLE038,Noelia,Nino Bravo,1972,balada,es,,,,,,verified
 CLE039,Un beso y una flor,Nino Bravo,1972,balada,es,,,,,,verified
@@ -88,7 +84,7 @@ CLE086,Amor eterno,Rocío Dúrcal,1984,balada,es,,Rocio Durcal,,,,verified
 CLE087,Escuela de calor,Radio Futura,1984,pop,es,,,Dudo entre 1983 y 1984,,,disputed
 CLE088,"Lady, Lady",Bravo,1984,pop,es,Lady Lady,,,,,verified
 CLE089,Lobo-hombre en París,La Unión,1984,pop,es,Lobo hombre en Paris,La Union,,,,verified
-CLE090,Ni tú ni nadie,Alaska y Dinarama,1984,pop,es,Ni tu ni nadie,Alaska,Album Deseo carnal 1984; single posiblemente 1985,,,disputed
+CLE090,Ni tú ni nadie,Alaska y Dinarama,1984,pop,es,Ni tu ni nadie,Alaska,"Año revisado a mano: álbum Deseo carnal, mayo de 1984",,,verified
 CLE091,No controles,Olé Olé,1984,pop,es,,Ole Ole,,,,verified
 CLE092,Sobre un vidrio mojado,Los Secretos,1984,pop,es,,,Dudo entre 1983 y 1984,,,disputed
 CLE093,Super Superman,Miguel Bosé,1984,pop,es,,Bose,,,,verified
@@ -99,17 +95,17 @@ CLE097,No hay tregua,Barricada,1985,rock,es,,,,,,verified
 CLE098,Sufre mamón,Hombres G,1985,pop,es,Sufre mamon,,,,,verified
 CLE099,Venezia,Hombres G,1985,pop,es,,,,,,verified
 CLE100,Hijo de la luna,Mecano,1986,pop,es,,,Dudo si 1986 (single) o 1988 (album Descanso dominical),,,disputed
-CLE101,Insurrección,El Último de la Fila,1986,pop,es,Insurreccion,Ultimo de la Fila,Dudo entre 1986 y 1987,,,disputed
+CLE101,Insurrección,El Último de la Fila,1986,pop,es,Insurreccion,Ultimo de la Fila,"Año revisado a mano: álbum Enemigos de lo ajeno, 2-12-1986",,,verified
 CLE102,Valentino,Cadillac,1986,pop,es,,,,,,verified
 CLE103,Visite nuestro bar,Hombres G,1986,pop,es,,,,,,verified
 CLE104,¿A quién le importa?,Alaska y Dinarama,1986,pop,es,A quien le importa,Alaska,,,,verified
-CLE105,Cadillac solitario,Loquillo y los Trogloditas,1987,rock,es,,Loquillo,Dudo entre 1987 y 1988,,,disputed
+CLE105,Cadillac solitario,Loquillo y los Trogloditas,1983,rock,es,,Loquillo,Año revisado a mano: MusicBrainz: primera publicación 1983,,,verified
 CLE106,No estás solo,Patricia Kraus,1987,balada,es,No estas solo,,,,,verified
 CLE107,Pero a tu lado,Los Secretos,1987,pop,es,,,Dudo entre 1986 y 1987,,,disputed
 CLE108,La chica que yo quiero (Made in Spain),La Década Prodigiosa,1988,pop,es,La chica que yo quiero|Made in Spain,Decada Prodigiosa,,,,verified
 CLE109,Resistiré,Dúo Dinámico,1988,pop,es,Resistire,Duo Dinamico,,,,verified
 CLE110,Alma de blues,Presuntos Implicados,1989,pop,es,,,Dudo entre 1988 y 1989,,,disputed
-CLE111,Chiquilla,Seguridad Social,1989,pop,es,,,Dudo entre 1988 y 1989,,,disputed
+CLE111,Chiquilla,Seguridad Social,1991,pop,es,,,"Año revisado a mano: MusicBrainz y Spotify: Que no se extinga la llama, 1991",,,verified
 CLE112,Cien gaviotas,Duncan Dhu,1989,pop,es,,,Dudo si 1989 o 1990,,,disputed
 CLE113,En algún lugar,Duncan Dhu,1989,pop,es,En algun lugar,,,,,verified
 CLE114,Nacida para amar,Nina,1989,pop,es,,,,,,verified
@@ -129,14 +125,11 @@ CLE127,Una rosa es una rosa,Mecano,1991,pop,es,,,,,,verified
 CLE128,Viviendo deprisa,Alejandro Sanz,1991,pop,es,,,,,,verified
 CLE129,Desesperada,Marta Sánchez,1992,pop,es,,Marta Sanchez,Dudo entre 1992 y 1993,,,disputed
 CLE130,No dudaría,Antonio Flores,1992,pop,es,No dudaria,Flores,,,,verified
-CLE131,Todo esto es la música,Serafín Zubiri,1992,pop,es,Todo esto es la musica,Serafin Zubiri,,,,verified
 CLE132,Y nos dieron las diez,Joaquín Sabina,1992,autor,es,,Sabina,,,,verified
 CLE133,Échate un cantecito,Kiko Veneno,1992,autor,es,Echate un cantecito,,,,,verified
-CLE134,Hoy no ha sido un buen día,Eva Santamaría,1993,pop,es,Hoy no ha sido un buen dia,Eva Santamaria,,,,verified
 CLE135,La chispa adecuada,Héroes del Silencio,1993,rock,es,,Heroes,,,,verified
 CLE136,Macarena,Los del Río,1993,pop,es,,Los del Rio,,,,verified
 CLE137,Sin documentos,Los Rodríguez,1993,rock,es,,Los Rodriguez,,,,verified
-CLE138,Ella no es ella,Alejandro Abad,1994,balada,es,,,,,,verified
 CLE139,Avalancha,Héroes del Silencio,1995,rock,es,,Heroes,,,,verified
 CLE140,Experiencia religiosa,Enrique Iglesias,1995,pop,es,,,,,,verified
 CLE141,Si tú te vas,Enrique Iglesias,1995,pop,es,Si tu te vas,,,,,verified
@@ -146,7 +139,7 @@ CLE144,"Ay, qué deseo",Antonio Carbonell,1996,pop,es,Ay que deseo,,,,,verified
 CLE145,Cannabis,Ska-P,1996,rock,es,,,,,,verified
 CLE146,Contigo,Joaquín Sabina,1996,autor,es,,Sabina,,,,verified
 CLE147,Cuando los sapos bailen flamenco,Ella Baila Sola,1996,pop,es,,,,,,verified
-CLE148,El talismán,Rosana,1996,pop,es,El talisman,,Dudo entre 1996 y 1997,,,disputed
+CLE148,El talismán,Rosana,1996,pop,es,El talisman,,"Año revisado a mano: álbum Lunas rotas, 1996",,,verified
 CLE149,El vals del obrero,Ska-P,1996,rock,es,,,,,,verified
 CLE150,Hoy puede ser un gran día,Joan Manuel Serrat,1996,autor,es,Hoy puede ser un gran dia,Serrat,Dudo entre 1996 y 1998,,,disputed
 CLE151,Jesucristo García,Extremoduro,1996,rock,es,Jesucristo Garcia,,,,,verified
@@ -165,8 +158,7 @@ CLE163,Bongo Bong,Manu Chao,1998,pop,es,,,,,,verified
 CLE164,Clandestino,Manu Chao,1998,pop,es,,,,,,verified
 CLE165,Cuídate,La Oreja de Van Gogh,1998,pop,es,Cuidate,LOVG,,,,verified
 CLE166,Depende,Jarabe de Palo,1998,pop,es,,Jarabe,,,,verified
-CLE167,Dime que me quieres,Mikel Herzog,1998,balada,es,,,,,,verified
-CLE168,Soldadito marinero,Fito y Fitipaldis,1998,rock,es,,Fito|Fitipaldis,Dudo entre 1998 y 2001,,,disputed
+CLE168,Soldadito marinero,Fito y Fitipaldis,2003,rock,es,,Fito|Fitipaldis,Año revisado a mano: MusicBrainz 2003-09-01 (Lo más lejos a tu lado),,,verified
 CLE169,19 días y 500 noches,Joaquín Sabina,1999,autor,es,19 dias y 500 noches,Sabina,,,,verified
 CLE170,Bailamos,Enrique Iglesias,1999,pop,es,,,,,,verified
 CLE171,Como Camarón,Estopa,1999,rock,es,Como Camaron,,,,,verified
@@ -175,7 +167,6 @@ CLE173,"Marta, Sebas, Guille y los demás",Amaral,1999,pop,es,Marta Sebas Guille
 CLE174,No quiero escuchar,Lydia,1999,balada,es,,,,,,verified
 CLE175,Tu calorro,Estopa,1999,rock,es,,,,,,verified
 CLE176,Vino tinto,Estopa,1999,rock,es,,,,,,verified
-CLE177,Colgado de un sueño,Serafín Zubiri,2000,pop,es,Colgado de un sueno,Serafin Zubiri,,,,verified
 CLE178,El alma al aire,Alejandro Sanz,2000,pop,es,,,,,,verified
 CLE179,La Lola,Café Quijano,2000,pop,es,La lola,Cafe Quijano,Dudo entre 2000 y 2001,,,disputed
 CLE180,Puedes contar conmigo,La Oreja de Van Gogh,2000,pop,es,,LOVG,,,,verified
@@ -207,7 +198,35 @@ CLE205,Dígale,David Bisbal,2004,pop,es,Digale,Bisbal,,,,verified
 CLE206,Ella,Bebe,2004,pop,es,,,,,,verified
 CLE207,Malo,Bebe,2004,pop,es,,,,,,verified
 CLE208,Me muero,La Quinta Estación,2004,pop,es,,,Dudo entre 2003 y 2004,,,disputed
-CLE209,Para llenarme de ti,Ramón,2004,balada,es,,Ramon,,,,verified
 CLE210,Siempre me quedará,Bebe,2004,pop,es,Siempre me quedara,,,,,verified
 CLE211,Brujería,Son de Sol,2005,pop,es,Brujeria,,,,,verified
 CLE212,El universo sobre mí,Amaral,2005,pop,es,El universo sobre mi,,,,,verified
+CLE213,Por la boca vive el pez,Fito y Fitipaldis,2006,rock,es,,Fito & Fitipaldis|Fito,MusicBrainz: sin coincidencias validas; año revisado a mano,,,verified
+CLE214,La casa por el tejado,Fito y Fitipaldis,2005,rock,es,,Fito & Fitipaldis|Fito,MusicBrainz: sin coincidencias validas; año revisado a mano,,,verified
+CLE215,Como un burro amarrado en la puerta del baile,El Último de la Fila,1993,pop-rock,es,,El Ultimo de la Fila,MusicBrainz: primera publicación 1993; confirmada por lanzamiento oficial de 1993 (otras grabaciones: 2006),,,verified
+CLE216,Aviones plateados,El Último de la Fila,1986,pop-rock,es,,El Ultimo de la Fila,Año revisado a mano: remaster de Enemigos de lo ajeno (1986),,,verified
+CLE217,Dramas y comedias,Fangoria,2013,pop,es,,,MusicBrainz: primera publicación 2013-01-12,,,verified
+CLE218,No sé qué me das,Fangoria,2001,pop,es,No se que me das,,MusicBrainz: primera publicación 2001,,,verified
+CLE219,Retorciendo palabras,Fangoria,2004,pop,es,,,"MusicBrainz: primera publicación 2004; sin álbum, single o EP oficial de 2004 que lo respalde; año revisado a mano",,,verified
+CLE220,Solamente tú,Pablo Alborán,2011,pop,es,Solamente tu,Pablo Alboran,Año revisado a mano: MusicBrainz por ISRC y Spotify: 2011,,,verified
+CLE221,Perdóname,Pablo Alborán,2011,pop,es,Perdoname,Pablo Alboran,MusicBrainz: primera publicación 2011-01-28,,,verified
+CLE222,Saturno,Pablo Alborán,2017,pop,es,,Pablo Alboran,MusicBrainz: primera publicación 2017-11-17; confirmada por lanzamiento oficial de 2017 (otras grabaciones: 2026),,,verified
+CLE223,Tanto la quería,Andy y Lucas,2003,pop,es,Tanto la queria,Andy & Lucas,MusicBrainz: sin coincidencias validas; año revisado a mano,,,verified
+CLE224,Son de amores,Andy y Lucas,2003,pop,es,,Andy & Lucas,MusicBrainz: sin coincidencias validas; año revisado a mano,,,verified
+CLE225,En tu ventana,Andy y Lucas,2004,pop,es,,Andy & Lucas,MusicBrainz: sin coincidencias validas; año revisado a mano,,,verified
+CLE226,Mi gato,Rosario,1992,pop,es,,Rosario Flores,MusicBrainz: primera publicación 1992,,,verified
+CLE227,Qué bonito,Rosario,1996,pop,es,Que bonito,Rosario Flores,MusicBrainz: primera publicación 1996,,,verified
+CLE228,Pájaros de barro,Manolo García,1998,pop-rock,es,Pajaros de barro,Manolo Garcia,MusicBrainz: primera publicación 1998,,,verified
+CLE229,Nunca el tiempo es perdido,Manolo García,2001,pop-rock,es,,Manolo Garcia,"MusicBrainz: primera publicación 2001; sin álbum, single o EP oficial de 2001 que lo respalde; año revisado a mano",,,verified
+CLE230,Agradecido,Rosendo,1985,rock,es,,,MusicBrainz: primera publicación 1985; confirmada por lanzamiento oficial de 1985 (otras grabaciones: 1994),,,verified
+CLE231,Maneras de vivir,Leño,1981,rock,es,,Rosendo,Año revisado a mano: ISRC de la grabación original de 1981,,,verified
+CLE232,A fuego lento,Rosana,1996,pop,es,,,MusicBrainz: primera publicación 1996,,,verified
+CLE233,A gritos de esperanza,Álex Ubago,2001,pop,es,,Alex Ubago,MusicBrainz: primera publicación 2001-09-23; confirmada por lanzamiento oficial de 2001 (otras grabaciones: 2021),,,verified
+CLE234,Azul,Elefantes,2000,pop-rock,es,,,MusicBrainz: primera publicación 2000,,,verified
+CLE235,Que yo no lo sabía,Elefantes,2003,pop-rock,es,Que yo no lo sabia,,MusicBrainz: primera publicación 2003,,,verified
+CLE236,Desátame,Mónica Naranjo,1997,pop,es,Desatame,Monica Naranjo,MusicBrainz: primera publicación 1997-06-10,,,verified
+CLE237,Llamando a la Tierra,M-Clan,1996,rock,es,,M Clan,MusicBrainz: primera publicación 1996-03-15; confirmada por lanzamiento oficial de 1996 (otras grabaciones: 2003),,,verified
+CLE238,20 de abril,Celtas Cortos,1991,folk-rock,es,Veinte de abril,,MusicBrainz: primera publicación 1991-10-21; confirmada por lanzamiento oficial de 1991 (otras grabaciones: 2019),,,verified
+CLE239,Feo fuerte y formal,Loquillo,2001,rock,es,"Feo, fuerte y formal",Loquillo y los Trogloditas,MusicBrainz: primera publicación 2001; confirmada por lanzamiento oficial de 2001 (otras grabaciones: 2025),,,verified
+CLE240,Entre mis recuerdos,Luz Casal,1995,pop,es,,,"MusicBrainz: primera publicación 1995-11; sin álbum, single o EP oficial de 1995 que lo respalde; año revisado a mano",,,verified
+CLE241,Quiero tener tu presencia,Seguridad Social,1993,rock,es,,,MusicBrainz: primera publicación 1993,,,verified

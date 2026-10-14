@@ -1,302 +1,215 @@
 ID,Cancion,Artista,Anio,Genero,Origen,AliasTitulo,AliasArtista,Nota,SpotifyTrackId,ISRC,Estado
-IES001,Pájaros,Mercromina,1995,indie-pop,es,Pajaros,,MusicBrainz: primera publicación 1995; confirmada por lanzamiento oficial de 1995 (otras grabaciones: 1999),,,verified
-IES002,Promesas que no valen nada,Los Piratas,1995,indie-rock,es,,Piratas,MusicBrainz: primera publicación 1995; confirmada por lanzamiento oficial de 1995 (otras grabaciones: 1999),,,verified
-IES003,Zerbina,Le Mans,1995,indie-pop,es,,,"MusicBrainz: primera publicación 1995-07; sin álbum, single o EP oficial de 1995 que lo respalde",,,disputed
-IES004,Estrella fugaz,Surfin' Bichos,1996,indie-rock,es,,Surfin Bichos,MusicBrainz: primera publicación 1996; confirmada por lanzamiento oficial de 1996 (otras grabaciones: 2006),,,verified
 IES005,Devil Came to Me,Dover,1997,indie-rock,es,,,MusicBrainz: primera publicación 1997-04-21; confirmada por lanzamiento oficial de 1997 (otras grabaciones: 2007),,,verified
-IES006,Han caído los dos,Sr. Chinarro,1997,indie,es,Han caido los dos,,MusicBrainz: primera publicación 1997; confirmada por lanzamiento oficial de 1997 (otras grabaciones: 2001),,,verified
-IES007,Lo siento,Christina Rosenvinge,1997,indie-pop,es,,,MusicBrainz: primera publicación 1997; confirmada por lanzamiento oficial de 1997 (otras grabaciones: 2003),,,verified
 IES008,Loli Jackson,Dover,1997,indie-rock,es,,,MusicBrainz: primera publicación 1997-04-21; confirmada por lanzamiento oficial de 1997 (otras grabaciones: 1999),,,verified
-IES009,Mi novela autobiográfica,Le Mans,1997,indie-pop,es,Mi novela autobiografica,,MusicBrainz: primera publicación 1997-09,,,verified
-IES010,Sábado,Christina Rosenvinge,1997,indie-pop,es,Sabado,,MusicBrainz: primera publicación 1997; confirmada por lanzamiento oficial de 1997 (otras grabaciones: 2011),,,verified
-IES011,El Sol,Niños Mutantes,1998,indie-pop,es,,Ninos Mutantes,MusicBrainz: primera publicación 1998,,,verified
 IES012,La copa de Europa,Los Planetas,1998,indie-rock,es,,Planetas,MusicBrainz: primera publicación 1998,,,verified
 IES013,Segundo premio,Los Planetas,1998,indie-rock,es,,Planetas,MusicBrainz: primera publicación 1998,,,verified
-IES014,Serpiente,Niños Mutantes,1998,indie-pop,es,,Ninos Mutantes,MusicBrainz: primera publicación 1998,,,verified
-IES015,Veneno,Niños Mutantes,1998,indie-pop,es,,Ninos Mutantes,MusicBrainz: primera publicación 1998,,,verified
 IES016,Crónico,La Habitación Roja,1999,indie-pop,es,Cronico,,MusicBrainz: primera publicación 1999,,,verified
-IES017,Evolution,Mercromina,1999,indie-pop,es,,,MusicBrainz: primera publicación 1999,,,verified
-IES018,Guillermine,La Buena Vida,1999,indie-pop,es,,,MusicBrainz: primera publicación 1999-04,,,verified
-IES019,Hoy por ayer,Los Piratas,1999,indie-rock,es,,Piratas,"MusicBrainz: primera publicación 1999; sin álbum, single o EP oficial de 1999 que lo respalde",,,disputed
-IES020,Cero en gimnasia,Sr. Chinarro,2000,indie,es,,,MusicBrainz: primera publicación 2000; confirmada por lanzamiento oficial de 2000 (otras grabaciones: 2017),,,verified
 IES021,Ciudad dormitorio,La Habitación Roja,2000,indie-pop,es,,,MusicBrainz: primera publicación 2000,,,verified
-IES022,Elévame,Niños Mutantes,2000,indie-pop,es,Elevame,Ninos Mutantes,MusicBrainz: primera publicación 2000,,,verified
-IES023,Florecer,Niños Mutantes,2000,indie-pop,es,,Ninos Mutantes,MusicBrainz: primera publicación 2000,,,verified
 IES024,Me gustas,La Casa Azul,2000,indie-pop,es,,,MusicBrainz: primera publicación 2000-10-10; confirmada por lanzamiento oficial de 2000 (otras grabaciones: 2006),,,verified
 IES025,Santos que yo te pinte,Los Planetas,2000,indie-rock,es,,Planetas,MusicBrainz: primera publicación 2000-09-18,,,verified
 IES026,Un buen día,Los Planetas,2000,indie-rock,es,Un buen dia,Planetas,MusicBrainz: primera publicación 2000-09-18; confirmada por lanzamiento oficial de 2000 (otras grabaciones: 2009),,,verified
-IES027,Años 80,Los Piratas,2001,indie-rock,es,Anos 80,Piratas,MusicBrainz: primera publicación 2001,,,verified
-IES028,Bailar,Los Piratas,2001,indie-rock,es,,Piratas,MusicBrainz: primera publicación 2001,,,verified
 IES029,King George,Dover,2001,indie-rock,es,,,MusicBrainz: primera publicación 2001-09-17,,,verified
-IES030,Qué nos va a pasar,La Buena Vida,2001,indie-pop,es,Que nos va a pasar,,MusicBrainz: primera publicación 2001-08,,,verified
-IES031,Tú primero,Ellos,2001,indie-rock,es,Tu primero,,MusicBrainz: primera publicación 2001,,,verified
 IES032,Un día perfecto,La Habitación Roja,2001,indie-pop,es,Un dia perfecto,,MusicBrainz: primera publicación 2001,,,verified
 IES033,La edad de oro,La Habitación Roja,2002,indie-pop,es,,,MusicBrainz: primera publicación 2002; confirmada por lanzamiento oficial de 2002 (otras grabaciones: 2004),,,verified
-IES034,Moriría por vos,Amaral,2002,indie-pop,es,Moriria por vos,,MusicBrainz: primera publicación 2002-02-04,,,verified
-IES035,Sin ti no soy nada,Amaral,2002,indie-pop,es,,,MusicBrainz: primera publicación 2002-02-04; confirmada por lanzamiento oficial de 2002 (otras grabaciones: 2012),,,verified
-IES036,Campeón,Ellos,2003,indie-rock,es,Campeon,,MusicBrainz: primera publicación 2003; confirmada por lanzamiento oficial de 2003 (otras grabaciones: 2005),,,verified
 IES037,Duerme,Sidonie,2003,indie-pop,es,,,MusicBrainz: primera publicación 2003-03,,,verified
-IES038,Enjoy the Ride,Marlango,2003,indie-pop,es,,,MusicBrainz: primera publicación 2003,,,verified
-IES039,Hermético,Ellos,2003,indie-rock,es,Hermetico,,MusicBrainz: primera publicación 2003,,,verified
-IES040,La piña conseguida,Sr. Chinarro,2003,indie,es,La pina conseguida,,MusicBrainz: primera publicación 2003-05-05,,,verified
-IES041,Lejos,Cooper,2003,indie-pop,es,,,MusicBrainz: primera publicación 2003,,,verified
-IES042,Los planetas,La Buena Vida,2003,indie-pop,es,,,MusicBrainz: primera publicación 2003,,,verified
 IES043,Superguay,La Casa Azul,2003,indie-pop,es,,,MusicBrainz: primera publicación 2003-11-24; confirmada por lanzamiento oficial de 2003 (otras grabaciones: 2009),,,verified
-IES044,El cumpleaños de Ronaldo,La Costa Brava,2004,indie-pop,es,El cumpleanos de Ronaldo,,MusicBrainz: primera publicación 2004-11-09; confirmada por lanzamiento oficial de 2004 (otras grabaciones: 2006),,,verified
-IES045,Falsos mitos sobre la piel y el cabello,La Costa Brava,2004,indie-pop,es,,,MusicBrainz: primera publicación 2004-11-09; confirmada por lanzamiento oficial de 2004 (otras grabaciones: 2006),,,verified
-IES046,Feliz en tu día,Standstill,2004,indie-rock,es,Feliz en tu dia,,MusicBrainz: primera publicación 2004-05-24,,,verified
-IES047,Floto,El Columpio Asesino,2004,indie-rock,es,,,MusicBrainz: primera publicación 2004,,,verified
-IES048,Hate Yourself,The Sunday Drivers,2004,indie-pop,es,,Sunday Drivers,MusicBrainz: primera publicación 2004,,,verified
-IES049,La venda negra,Nueva Vulcano,2004,indie-rock,es,,,MusicBrainz: primera publicación 2004,,,verified
-IES050,Little Heart Attacks,The Sunday Drivers,2004,indie-pop,es,,Sunday Drivers,MusicBrainz: primera publicación 2004,,,verified
 IES051,Lunar,Dorian,2004,indie-pop,es,,,MusicBrainz: primera publicación 2004-03,,,verified
-IES052,Mi última mujer,La Costa Brava,2004,indie-pop,es,Mi ultima mujer,,MusicBrainz: primera publicación 2004-11-09; confirmada por lanzamiento oficial de 2004 (otras grabaciones: 2009),,,verified
 IES053,Mujer esponja,Lori Meyers,2004,indie-rock,es,,,MusicBrainz: primera publicación 2004; confirmada por lanzamiento oficial de 2004 (otras grabaciones: 2006),,,verified
-IES054,Often,The Sunday Drivers,2004,indie-pop,es,,Sunday Drivers,MusicBrainz: primera publicación 2004,,,verified
-IES055,Once Upon a Time,Marlango,2004,indie-pop,es,,,MusicBrainz: primera publicación 2004-02-16; confirmada por lanzamiento oficial de 2004 (otras grabaciones: 2007),,,verified
-IES056,Rima disonante,Nueva Vulcano,2004,indie-rock,es,,,MusicBrainz: primera publicación 2004,,,verified
-IES057,Robot,Antònia Font,2004,indie-pop,es,,Antonia Font,MusicBrainz: primera publicación 2004,,,verified
 IES058,Todo el mundo quiere ser una estrella del rock,Dorian,2004,indie-pop,es,,,MusicBrainz: primera publicación 2004-03,,,verified
-IES059,Urgencias,Nueva Vulcano,2004,indie-rock,es,,,MusicBrainz: primera publicación 2004,,,verified
 IES060,Valiente,Vetusta Morla,2004,indie-rock,es,,Vetusta,MusicBrainz: primera publicación 2004; confirmada por lanzamiento oficial de 2004 (otras grabaciones: 2008); la curación a mano daba 2008: revisar,,,disputed
-IES061,Vehicle lunar,Antònia Font,2004,indie-pop,es,,Antonia Font,MusicBrainz: primera publicación 2004,,,verified
 IES062,Viaje de estudios,Lori Meyers,2004,indie-rock,es,,,MusicBrainz: primera publicación 2004,,,verified
-IES063,Vitamina Sol,Antònia Font,2004,indie-pop,es,,Antonia Font,MusicBrainz: primera publicación 2004,,,verified
-IES064,Automatic Imperfection,Marlango,2005,indie-pop,es,,,MusicBrainz: primera publicación 2005,,,verified
 IES065,Canciones para el tiempo y la distancia,Iván Ferreiro,2005,indie-rock,es,,Ivan Ferreiro,MusicBrainz: primera publicación 2005-04-01,,,verified
-IES066,Días de verano,Amaral,2005,indie-pop,es,Dias de verano,,MusicBrainz: primera publicación 2005-03-14,,,verified
 IES067,Dilema,Lori Meyers,2005,indie-rock,es,,,MusicBrainz: primera publicación 2005,,,verified
-IES068,El hombre que casi conoció a Michi Panero,Nacho Vegas,2005,indie,es,El hombre que casi conocio a Michi Panero,,MusicBrainz: primera publicación 2005-03-10; confirmada por lanzamiento oficial de 2005 (otras grabaciones: 2007),,,verified
 IES069,Fascinado,Sidonie,2005,indie-pop,es,,,MusicBrainz: primera publicación 2005,,,verified
 IES070,Hostal Pimodán,Lori Meyers,2005,indie-rock,es,Hostal Pimodan,,MusicBrainz: primera publicación 2005,,,verified
-IES071,Huracán,Mercromina,2005,indie-pop,es,Huracan,,MusicBrainz: primera publicación 2005-01-25,,,verified
-IES072,L'ombra feixuga,Mishima,2005,indie-pop,es,,,MusicBrainz: primera publicación 2005-03-18; confirmada por lanzamiento oficial de 2005 (otras grabaciones: 2011),,,verified
 IES073,Mi furia paranoica,Iván Ferreiro,2005,indie-rock,es,,Ivan Ferreiro,MusicBrainz: primera publicación 2005-04-01,,,verified
-IES074,No et fas el llit,Mishima,2005,indie-pop,es,,,MusicBrainz: primera publicación 2005-03-18; confirmada por lanzamiento oficial de 2005 (otras grabaciones: 2011),,,verified
-IES075,"Nuevos planes, idénticas estrategias",Nacho Vegas,2005,indie,es,"Nuevos planes, identicas estrategias",,MusicBrainz: primera publicación 2005-04-10,,,verified
-IES076,Aire,Standstill,2006,indie-rock,es,,,MusicBrainz: primera publicación 2006-11,,,verified
 IES077,Do Ya,Dover,2006,indie-rock,es,,,MusicBrainz: primera publicación 2006-10-02,,,verified
 IES078,Let Me Out,Dover,2006,indie-rock,es,,,MusicBrainz: primera publicación 2006-10-02,,,verified
-IES079,Llévame a dormir,Single,2006,indie-pop,es,Llevame a dormir,,"MusicBrainz: primera publicación 2006; sin álbum, single o EP oficial de 2006 que lo respalde",,,disputed
 IES080,Me toca tirar,Iván Ferreiro,2006,indie-rock,es,,Ivan Ferreiro,MusicBrainz: primera publicación 2006-10-31; confirmada por lanzamiento oficial de 2006 (otras grabaciones: 2011),,,verified
 IES081,Costa Azul,Sidonie,2007,indie-pop,es,,,MusicBrainz: primera publicación 2007-06-19,,,verified
-IES082,Estúpida,Tulsa,2007,indie-rock,es,Estupida,,MusicBrainz: primera publicación 2007,,,verified
 IES083,La niña imantada,Love of Lesbian,2007,indie-pop,es,La nina imantada,LOL,MusicBrainz: primera publicación 2007,,,verified
 IES084,La revolución sexual,La Casa Azul,2007,indie-pop,es,La revolucion sexual,,MusicBrainz: primera publicación 2007-11-03; confirmada por lanzamiento oficial de 2007 (otras grabaciones: 2009),,,verified
-IES085,Maricas,Los Punsetes,2007,indie-rock,es,,Punsetes,MusicBrainz: primera publicación 2007-01-16,,,verified
-IES086,Oviedo,Tulsa,2007,indie-rock,es,,,MusicBrainz: primera publicación 2007,,,verified
-IES087,Sólo me has rozado,Tulsa,2007,indie-rock,es,Solo me has rozado,,MusicBrainz: primera publicación 2007,,,verified
-IES088,Steph,Cooper,2007,indie-pop,es,,,MusicBrainz: primera publicación 2007-06-04; confirmada por lanzamiento oficial de 2007 (otras grabaciones: 2009),,,verified
 IES089,Universos infinitos,Love of Lesbian,2007,indie-pop,es,,LOL,MusicBrainz: primera publicación 2007,,,verified
-IES090,Ya no,La Bien Querida,2007,indie-pop,es,,,"MusicBrainz: primera publicación 2007; sin álbum, single o EP oficial de 2007 que lo respalde",,,disputed
-IES091,Al mar,Manel,2008,indie-pop,es,,,MusicBrainz: primera publicación 2008-11-10,,,verified
 IES092,Ana,Supersubmarina,2008,indie-pop,es,,,MusicBrainz: primera publicación 2008,,,verified
-IES093,Billy el malo,Sexy Zebras,2008,indie-pop,es,,,MusicBrainz: primera publicación 2008-01-01,,,verified
 IES094,Cigarettes,Russian Red,2008,indie-pop,es,,,MusicBrainz: primera publicación 2008,,,verified
 IES095,Copenhague,Vetusta Morla,2008,indie-rock,es,,Vetusta,MusicBrainz: primera publicación 2008,,,verified
-IES096,Hawaii esquimal,Bigott,2008,indie-pop,es,,,MusicBrainz: primera publicación 2008,,,verified
-IES097,Moneria,Bigott,2008,indie-pop,es,,,MusicBrainz: primera publicación 2008,,,verified
-IES098,Nadie como tú,Christina Rosenvinge,2008,indie-pop,es,Nadie como tu,,MusicBrainz: primera publicación 2008; confirmada por lanzamiento oficial de 2008 (otras grabaciones: 2011),,,verified
 IES099,Niebla,Supersubmarina,2008,indie-pop,es,,,MusicBrainz: primera publicación 2008; confirmada por lanzamiento oficial de 2008 (otras grabaciones: 2010),,,verified
 IES100,Ola de calor,Supersubmarina,2008,indie-pop,es,,,MusicBrainz: primera publicación 2008,,,verified
-IES101,Tokio,Egon Soda,2008,indie-pop,es,,,MusicBrainz: primera publicación 2008-04-18,,,verified
-IES102,What a Lovely Day Today,Bigott,2008,indie-pop,es,,,MusicBrainz: primera publicación 2008,,,verified
 IES103,Algunas plantas,Love of Lesbian,2009,indie-pop,es,,LOL,MusicBrainz: primera publicación 2009-03-24,,,verified
 IES104,Allí donde solíamos gritar,Love of Lesbian,2009,indie-pop,es,Alli donde soliamos gritar,LOL,MusicBrainz: primera publicación 2009-03-24; confirmada por lanzamiento oficial de 2009 (otras grabaciones: 2024),,,verified
 IES105,Club de fans de John Boy,Love of Lesbian,2009,indie-pop,es,,LOL,MusicBrainz: primera publicación 2009-03-24,,,verified
 IES106,El incendio,Sidonie,2009,indie-pop,es,,,MusicBrainz: primera publicación 2009,,,verified
 IES107,La canción más fea del mundo,Zahara,2009,indie-pop,es,La cancion mas fea del mundo,,MusicBrainz: primera publicación 2009-05-26,,,verified
 IES108,Merezco,Zahara,2009,indie-pop,es,,,"MusicBrainz: primera publicación 2009; sin álbum, single o EP oficial de 2009 que lo respalde",,,disputed
-IES109,Noche eterna,Joe Crepúsculo,2009,indie-pop,es,,Joe Crepusculo,MusicBrainz: primera publicación 2009,,,verified
 IES110,Paraísos artificiales,Dorian,2009,indie-pop,es,Paraisos artificiales,,"MusicBrainz: primera publicación 2009-08-30; sin álbum, single o EP oficial de 2009 que lo respalde",,,disputed
-IES111,Rodamos,Second,2009,indie-rock,es,,,MusicBrainz: primera publicación 2009,,,verified
 IES112,Tú me llevas,Zahara,2009,indie-pop,es,Tu me llevas,,MusicBrainz: primera publicación 2009-05-26; confirmada por lanzamiento oficial de 2009 (otras grabaciones: 2012),,,verified
-IES113,Yella,Mujeres,2009,indie-rock,es,,,MusicBrainz: primera publicación 2009-11-07; confirmada por lanzamiento oficial de 2009 (otras grabaciones: 2015),,,verified
-IES114,Adelante Bonaparte,Standstill,2010,indie-rock,es,,,MusicBrainz: primera publicación 2010-02-22,,,verified
-IES115,Deixa'm creure,Mishima,2010,indie-pop,es,,,MusicBrainz: primera publicación 2010-04-12,,,verified
 IES116,Desordenada habitación,Iván Ferreiro,2010,indie-rock,es,Desordenada habitacion,Ivan Ferreiro,MusicBrainz: primera publicación 2010-10-26; confirmada por lanzamiento oficial de 2010 (otras grabaciones: 2018),,,verified
-IES117,Diciembre,Depedro,2010,indie,es,,,MusicBrainz: primera publicación 2010-10; confirmada por lanzamiento oficial de 2010 (otras grabaciones: 2018),,,verified
 IES118,Febrero,La Habitación Roja,2010,indie-pop,es,,,MusicBrainz: primera publicación 2010-02-22,,,verified
-IES119,Fotos,Single,2010,indie-pop,es,,,MusicBrainz: primera publicación 2010-09-13,,,verified
-IES120,La cama,Single,2010,indie-pop,es,,,MusicBrainz: primera publicación 2010-09-13,,,verified
-IES121,La fuerza,Kokoshca,2010,indie-rock,es,,,MusicBrainz: primera publicación 2010-02-01; confirmada por lanzamiento oficial de 2010 (otras grabaciones: 2012),,,verified
-IES122,Lava Love,Maika Makovski,2010,indie,es,,,MusicBrainz: primera publicación 2010,,,verified
-IES123,Mi chica preferida,Kokoshca,2010,indie-rock,es,,,MusicBrainz: primera publicación 2010-02-01; confirmada por lanzamiento oficial de 2010 (otras grabaciones: 2012),,,verified
-IES124,Posponías,Single,2010,indie-pop,es,Posponias,,MusicBrainz: primera publicación 2010-09-13,,,verified
-IES125,Tus amigos,Los Punsetes,2010,indie-rock,es,,Punsetes,MusicBrainz: primera publicación 2010-02-22; confirmada por lanzamiento oficial de 2010 (otras grabaciones: 2022),,,verified
-IES126,Benvolgut,Manel,2011,indie-pop,es,,,MusicBrainz: primera publicación 2011-03-15,,,verified
-IES127,Boomerang,Manel,2011,indie-pop,es,,,MusicBrainz: primera publicación 2011-03-15,,,verified
-IES128,Cortometraje,Cooper,2011,indie-pop,es,,,MusicBrainz: primera publicación 2011-11-21,,,verified
 IES129,Destiny,Zahara,2011,indie-pop,es,,,MusicBrainz: primera publicación 2011; confirmada por lanzamiento oficial de 2011 (otras grabaciones: 2014),,,verified
 IES130,Fuerteventura,Russian Red,2011,indie-pop,es,,,MusicBrainz: primera publicación 2011-05-10,,,verified
-IES131,Hoy,La Bien Querida,2011,indie-pop,es,,,MusicBrainz: primera publicación 2011-02-14,,,verified
-IES132,Las cosas del ayer,Joe Crepúsculo,2011,indie-pop,es,,Joe Crepusculo,MusicBrainz: primera publicación 2011,,,verified
 IES133,Maldita dulzura,Vetusta Morla,2011,indie-rock,es,,Vetusta,MusicBrainz: primera publicación 2011-05-03,,,verified
-IES134,Me lo dijo un ángel,Nacho Vegas,2011,indie,es,Me lo dijo un angel,,MusicBrainz: primera publicación 2011,,,verified
-IES135,Mil pedazos,Christina Rosenvinge,2011,indie-pop,es,,,"MusicBrainz: primera publicación 2011-12-06; sin álbum, single o EP oficial de 2011 que lo respalde",,,disputed
-IES136,Moix,Hidrogenesse,2011,indie-pop,es,,,MusicBrainz: primera publicación 2011-03-31,,,verified
 IES137,The Sun the Trees,Russian Red,2011,indie-pop,es,,,MusicBrainz: primera publicación 2011-05-10,,,verified
-IES138,Toro,El Columpio Asesino,2011,indie-rock,es,,,MusicBrainz: primera publicación 2011-01-01,,,verified
-IES139,Christopher,Hidrogenesse,2012,indie-pop,es,,,MusicBrainz: primera publicación 2012-05-08,,,verified
-IES140,Dispara,Juventud Juché,2012,indie-pop,es,,Juventud Juche,MusicBrainz: primera publicación 2012-12-17,,,verified
-IES141,El matrimoni Arnolfini,Els Amics de les Arts,2012,indie-pop,es,,,MusicBrainz: primera publicación 2012-02-14; confirmada por lanzamiento oficial de 2012 (otras grabaciones: 2015),,,verified
-IES142,Ellas se burlaron de mi magia,Triángulo de Amor Bizarro,2012,indie-rock,es,,Triangulo de Amor Bizarro,MusicBrainz: primera publicación 2012-11-19,,,verified
-IES143,Getting Older,Anni B Sweet,2012,indie-pop,es,,,MusicBrainz: primera publicación 2012-04-24,,,verified
-IES144,Gibraltar español,Juventud Juché,2012,indie-pop,es,Gibraltar espanol,Juventud Juche,MusicBrainz: primera publicación 2012-12-17,,,verified
 IES145,Hogueras,Supersubmarina,2012,indie-pop,es,,,MusicBrainz: primera publicación 2012-05-22,,,verified
 IES146,La mujer de verde,Izal,2012,indie-pop,es,,,MusicBrainz: primera publicación 2012-03-12,,,verified
-IES147,Language,Maika Makovski,2012,indie,es,,,MusicBrainz: primera publicación 2012,,,verified
-IES148,Locked in Verses,Anni B Sweet,2012,indie-pop,es,,,MusicBrainz: primera publicación 2012-04-24,,,verified
-IES149,Louisiana o els camps de cotó,Els Amics de les Arts,2012,indie-pop,es,Louisiana o els camps de coto,,MusicBrainz: primera publicación 2012-02-14; confirmada por lanzamiento oficial de 2012 (otras grabaciones: 2015),,,verified
-IES150,Man of Talent,Maika Makovski,2012,indie,es,,,MusicBrainz: primera publicación 2012,,,verified
-IES151,Nena,Kokoshca,2012,indie-rock,es,,,MusicBrainz: primera publicación 2012-01-02,,,verified
-IES152,Ridiculous Games 2060,Anni B Sweet,2012,indie-pop,es,,,MusicBrainz: primera publicación 2012-04-24,,,verified
-IES153,Si tú no estás,Joe Crepúsculo,2012,indie-pop,es,Si tu no estas,Joe Crepusculo,MusicBrainz: primera publicación 2012,,,verified
-IES154,20,Egon Soda,2013,indie-pop,es,,,MusicBrainz: primera publicación 2013-01-29,,,verified
-IES155,Adalides de la nada,Biznaga,2013,indie-rock,es,,,MusicBrainz: primera publicación 2013-04-16,,,verified
-IES156,Defensa,Juventud Juché,2013,indie-pop,es,,Juventud Juche,MusicBrainz: primera publicación 2013-12-21; confirmada por lanzamiento oficial de 2013 (otras grabaciones: 2016),,,verified
 IES157,Despedida,Izal,2013,indie-pop,es,,,MusicBrainz: primera publicación 2013-10-28,,,verified
 IES158,Emborracharme,Lori Meyers,2013,indie-rock,es,,,MusicBrainz: primera publicación 2013-03-05; confirmada por lanzamiento oficial de 2013 (otras grabaciones: 2018),,,verified
-IES159,Estrellas místicas,Triángulo de Amor Bizarro,2013,indie-rock,es,Estrellas misticas,Triangulo de Amor Bizarro,MusicBrainz: primera publicación 2013,,,verified
-IES160,Hombre bueno,Depedro,2013,indie,es,,,MusicBrainz: primera publicación 2013,,,verified
-IES161,Las serpientes,Second,2013,indie-rock,es,,,MusicBrainz: primera publicación 2013-09-03,,,verified
-IES162,Los 7 males,Biznaga,2013,indie-rock,es,,,MusicBrainz: primera publicación 2013-04-16,,,verified
 IES163,Los amigos que perdí,Dorian,2013,indie-pop,es,Los amigos que perdi,,MusicBrainz: primera publicación 2013-03-04; confirmada por lanzamiento oficial de 2013 (otras grabaciones: 2015),,,verified
-IES164,Los requisitos mínimos,Biznaga,2013,indie-rock,es,Los requisitos minimos,,MusicBrainz: primera publicación 2013-04-16,,,verified
-IES165,Mi DNI,Pony Bravo,2013,indie,es,,,MusicBrainz: primera publicación 2013-03-05,,,verified
 IES166,Nos vemos,La Casa Azul,2013,indie-pop,es,,,MusicBrainz: primera publicación 2013-12-03,,,verified
-IES167,Robo tu tiempo,Triángulo de Amor Bizarro,2013,indie-rock,es,,Triangulo de Amor Bizarro,MusicBrainz: primera publicación 2013-02-18,,,verified
-IES168,Sea of Confusion,Belako,2013,indie-rock,es,,,MusicBrainz: primera publicación 2013-02-28,,,verified
-IES169,Ser brigada,León Benavente,2013,indie-rock,es,,Leon Benavente,MusicBrainz: primera publicación 2013,,,verified
-IES170,Teresa Rampell,Manel,2013,indie-pop,es,,,MusicBrainz: primera publicación 2013-03-26; la curación a mano daba 2008: revisar,,,disputed
-IES171,Trece lunas,Fuel Fandango,2013,indie-pop,es,,,"MusicBrainz: primera publicación 2013-04-23; sin álbum, single o EP oficial de 2013 que lo respalde",,,disputed
-IES172,Visitantes,Sexy Zebras,2013,indie-pop,es,,,MusicBrainz: primera publicación 2013-03-12,,,verified
-IES173,Alta tensión,La Bien Querida,2014,indie-pop,es,Alta tension,,MusicBrainz: primera publicación 2014-10-06,,,verified
-IES174,Aquellos ojos,Mujeres,2014,indie-rock,es,,,MusicBrainz: primera publicación 2014-03-20,,,verified
-IES175,Babel,El Columpio Asesino,2014,indie-rock,es,,,MusicBrainz: primera publicación 2014-04-28,,,verified
 IES176,Casper,Russian Red,2014,indie-pop,es,,,MusicBrainz: primera publicación 2014-01-13,,,verified
-IES177,El origen del mundo,La Bien Querida,2014,indie-pop,es,,,MusicBrainz: primera publicación 2014-10-06,,,verified
 IES178,Estáis aquí,Sidonie,2014,indie-pop,es,Estais aqui,,MusicBrainz: primera publicación 2014-03-21,,,verified
-IES179,Fiera,Funambulista,2014,indie-pop,es,,,MusicBrainz: primera publicación 2014-10-21; confirmada por lanzamiento oficial de 2014 (otras grabaciones: 2017),,,verified
-IES180,Fiesta,Varry Brava,2014,indie-pop,es,,,MusicBrainz: primera publicación 2014-09-30,,,verified
 IES181,Golpe maestro,Vetusta Morla,2014,indie-rock,es,,Vetusta,MusicBrainz: primera publicación 2014-04-08,,,verified
 IES182,La ventana del voyeur,Shinova,2014,indie-rock,es,,,MusicBrainz: primera publicación 2014,,,verified
-IES183,Monster,Belako,2014,indie-rock,es,,,MusicBrainz: primera publicación 2014-06; confirmada por lanzamiento oficial de 2014 (otras grabaciones: 2016),,,verified
-IES184,Mum,Belako,2014,indie-rock,es,,,MusicBrainz: primera publicación 2014-06-17; confirmada por lanzamiento oficial de 2014 (otras grabaciones: 2016),,,verified
 IES185,Nadie te devolverá el favor,Viva Suecia,2014,indie-rock,es,Nadie te devolvera el favor,,MusicBrainz: primera publicación 2014; confirmada por lanzamiento oficial de 2014 (otras grabaciones: 2016),,,verified
-IES186,Otitis,Mourn,2014,indie-rock,es,,,MusicBrainz: primera publicación 2014-10-27,,,verified
 IES187,Paisajes,Shinova,2014,indie-rock,es,,,MusicBrainz: primera publicación 2014,,,verified
-IES188,Preferiria no fer-ho,Els Amics de les Arts,2014,indie-pop,es,,,MusicBrainz: primera publicación 2014-04-09,,,verified
-IES189,Quiero que vuelvas,Funambulista,2014,indie-pop,es,,,MusicBrainz: primera publicación 2014-10-21; confirmada por lanzamiento oficial de 2014 (otras grabaciones: 2017),,,verified
 IES190,Samurái,Supersubmarina,2014,indie-pop,es,Samurai,,MusicBrainz: primera publicación 2014-09-22,,,verified
-IES191,Ya verás,Funambulista,2014,indie-pop,es,Ya veras,,MusicBrainz: primera publicación 2014-10-21,,,verified
-IES192,Your Brain Is Made of Candy,Mourn,2014,indie-rock,es,,,MusicBrainz: primera publicación 2014-10-27,,,verified
-IES193,Bamboo,Hinds,2015,indie-rock,es,,,"MusicBrainz: primera publicación 2015; sin álbum, single o EP oficial de 2015 que lo respalde",,,disputed
-IES194,Bikini,Carlos Sadness,2015,indie-pop,es,,,MusicBrainz: primera publicación 2015-02-16,,,verified
 IES195,Copacabana,Izal,2015,indie-pop,es,,,MusicBrainz: primera publicación 2015-09-18,,,verified
-IES196,Descuida,Capitán Cobarde,2015,indie-pop,es,,Capitan Cobarde,MusicBrainz: primera publicación 2015; confirmada por lanzamiento oficial de 2015 (otras grabaciones: 2018),,,verified
-IES197,El Marinero,Capitán Cobarde,2015,indie-pop,es,,Capitan Cobarde,MusicBrainz: primera publicación 2015; confirmada por lanzamiento oficial de 2015 (otras grabaciones: 2018),,,verified
-IES198,El Pisito,Capitán Cobarde,2015,indie-pop,es,,Capitan Cobarde,MusicBrainz: primera publicación 2015; confirmada por lanzamiento oficial de 2015 (otras grabaciones: 2018),,,verified
-IES199,Garden,Hinds,2015,indie-rock,es,,,MusicBrainz: primera publicación 2015-09-25,,,verified
-IES200,Julia Ladouce,Second,2015,indie-rock,es,,,MusicBrainz: primera publicación 2015-10-09,,,verified
-IES201,Miss Honolulu,Carlos Sadness,2015,indie-pop,es,,,MusicBrainz: primera publicación 2015-02-16,,,verified
 IES202,Pequeña gran revolución,Izal,2015,indie-pop,es,Pequena gran revolucion,,MusicBrainz: primera publicación 2015-09-18,,,verified
-IES203,Que plogui,Joan Dausà,2015,indie-pop,es,,Joan Dausa,MusicBrainz: primera publicación 2015-11-24,,,verified
-IES204,San Diego,Hinds,2015,indie-rock,es,,,MusicBrainz: primera publicación 2015-11-09,,,verified
 IES205,A dónde ir,Viva Suecia,2016,indie-rock,es,A donde ir,,MusicBrainz: primera publicación 2016-12-02,,,verified
-IES206,Acuérdate,Depedro,2016,indie,es,Acuerdate,,MusicBrainz: primera publicación 2016-09-23,,,verified
 IES207,Detroit,Miss Caffeina,2016,indie-rock,es,,,MusicBrainz: primera publicación 2016-02-26,,,verified
-IES208,Easy,Hinds,2016,indie-rock,es,,,MusicBrainz: primera publicación 2016,,,verified
-IES209,Espejímero,Cala Vento,2016,indie-rock,es,Espejimero,,MusicBrainz: primera publicación 2016-02-26,,,verified
 IES210,Farsante,Iván Ferreiro,2016,indie-rock,es,,Ivan Ferreiro,MusicBrainz: primera publicación 2016-10-28; confirmada por lanzamiento oficial de 2016 (otras grabaciones: 2019),,,verified
-IES211,Febrero,Cala Vento,2016,indie-rock,es,,,MusicBrainz: primera publicación 2016-02-26,,,verified
-IES212,Gloria,León Benavente,2016,indie-rock,es,,Leon Benavente,MusicBrainz: primera publicación 2016-04-01,,,verified
-IES213,Medina,Fuel Fandango,2016,indie-pop,es,,,MusicBrainz: primera publicación 2016-04-15,,,verified
 IES214,Mira cómo vuelo,Miss Caffeina,2016,indie-rock,es,Mira como vuelo,,MusicBrainz: primera publicación 2016-02-26,,,verified
 IES215,Podría ser peor,La Casa Azul,2016,indie-pop,es,Podria ser peor,,MusicBrainz: primera publicación 2016-10-28,,,verified
-IES216,Rossija,Cala Vento,2016,indie-rock,es,,,MusicBrainz: primera publicación 2016-02-26,,,verified
-IES217,Salvaje,Fuel Fandango,2016,indie-pop,es,,,MusicBrainz: primera publicación 2016-04-15; confirmada por lanzamiento oficial de 2016 (otras grabaciones: 2023),,,verified
-IES218,Sonia y Selena,Varry Brava,2016,indie-pop,es,,,MusicBrainz: primera publicación 2016-11-18,,,verified
 IES219,Titanes,Miss Caffeina,2016,indie-rock,es,,,MusicBrainz: primera publicación 2016-02-26,,,verified
-IES220,Toda la vida,Fuel Fandango,2016,indie-pop,es,,,MusicBrainz: primera publicación 2016-04-15,,,verified
 IES221,Turistas,Miss Caffeina,2016,indie-rock,es,,,MusicBrainz: primera publicación 2016-02-26,,,verified
-IES222,Angines,Mourn,2017,indie-rock,es,,,MusicBrainz: primera publicación 2017-09-08; confirmada por lanzamiento oficial de 2017 (otras grabaciones: 2019),,,verified
 IES223,Aprendemos a nadar,Viva Suecia,2017,indie-rock,es,,,MusicBrainz: primera publicación 2017,,,verified
 IES224,Heartache,Russian Red,2017,indie-pop,es,,,MusicBrainz: primera publicación 2017-05,,,verified
 IES225,Islamabad,Los Planetas,2017,indie-rock,es,,Planetas,MusicBrainz: primera publicación 2017-03-24; la curación a mano daba 2010: revisar,,,disputed
 IES226,"Mismo sitio, distinto lugar",Vetusta Morla,2017,indie-rock,es,Mismo sitio distinto lugar,Vetusta,MusicBrainz: primera publicación 2017-11-10; confirmada por lanzamiento oficial de 2017 (otras grabaciones: 2020),,,verified
-IES227,Over the Edge,Belako,2017,indie-rock,es,,,"MusicBrainz: primera publicación 2017-10-05; sin álbum, single o EP oficial de 2017 que lo respalde",,,disputed
-IES228,Se mueve,León Benavente,2017,indie-rock,es,,Leon Benavente,MusicBrainz: primera publicación 2017-03-10,,,verified
 IES229,Cayetano,Carolina Durante,2018,indie-rock,es,,,MusicBrainz: primera publicación 2018-03-07,,,verified
-IES230,Crush on You,Brigitte Laverne,2018,indie-pop,es,,,MusicBrainz: primera publicación 2018-03-09,,,verified
-IES231,El sitio perfecto,Varry Brava,2018,indie-pop,es,,,MusicBrainz: primera publicación 2018-02-16,,,verified
 IES232,Hoy la bestia cena en casa,Zahara,2018,indie-pop,es,,,MusicBrainz: primera publicación 2018-11-16,,,verified
-IES233,Lungs,Belako,2018,indie-rock,es,,,"MusicBrainz: primera publicación 2018; sin álbum, single o EP oficial de 2018 que lo respalde",,,disputed
-IES234,Matanza,Egon Soda,2018,indie-pop,es,,,MusicBrainz: primera publicación 2018-03-09,,,verified
 IES235,Pausa,Izal,2018,indie-pop,es,,,MusicBrainz: primera publicación 2018-03-09; confirmada por lanzamiento oficial de 2018 (otras grabaciones: 2020),,,verified
 IES236,Perdona,Carolina Durante,2018,indie-rock,es,,,MusicBrainz: primera publicación 2018-11-23,,,verified
 IES237,Señales,Dorian,2018,indie-pop,es,Senales,,MusicBrainz: primera publicación 2018-05-25,,,verified
-IES238,Tanca els ulls,Joan Dausà,2018,indie-pop,es,,Joan Dausa,MusicBrainz: primera publicación 2018-04-13; confirmada por lanzamiento oficial de 2018 (otras grabaciones: 2021),,,verified
-IES239,Te quiero un poco,Carlos Sadness,2018,indie-pop,es,,,MusicBrainz: primera publicación 2018-02-23,,,verified
-IES240,Yours Tonight,Brigitte Laverne,2018,indie-pop,es,,,MusicBrainz: primera publicación 2018-03-09,,,verified
-IES241,Casi Nazi,Pony Bravo,2019,indie,es,,,MusicBrainz: primera publicación 2019-02-22,,,verified
-IES242,Disco China,Brigitte Laverne,2019,indie-pop,es,,,MusicBrainz: primera publicación 2019-04-05,,,verified
 IES243,El milagro,Viva Suecia,2019,indie-rock,es,,,MusicBrainz: primera publicación 2019-10-04; confirmada por lanzamiento oficial de 2019 (otras grabaciones: 2023),,,verified
-IES244,Idiota,Los Punsetes,2019,indie-rock,es,,Punsetes,MusicBrainz: primera publicación 2019-10-04; confirmada por lanzamiento oficial de 2019 (otras grabaciones: 2022),,,verified
-IES245,La clave,Natalia Lacunza,2019,indie-pop,es,,,"MusicBrainz: primera publicación 2019-01-18; sin álbum, single o EP oficial de 2019 que lo respalde",,,disputed
-IES246,Nana triste,Natalia Lacunza,2019,indie-pop,es,,,MusicBrainz: primera publicación 2019-06-14,,,verified
 IES247,Oh Long Johnson,Miss Caffeina,2019,indie-rock,es,,,MusicBrainz: primera publicación 2019-03-01,,,verified
-IES248,Per la bona gent,Manel,2019,indie-pop,es,,,MusicBrainz: primera publicación 2019-10-04,,,verified
-IES249,Tarántula,Natalia Lacunza,2019,indie-pop,es,Tarantula,,MusicBrainz: primera publicación 2019-06-21,,,verified
-IES250,Totomami,Pony Bravo,2019,indie,es,,,MusicBrainz: primera publicación 2019-02-22,,,verified
-IES251,Clap clap,Delaporte,2020,indie-pop,es,,,"MusicBrainz: primera publicación 2020-01-10; sin álbum, single o EP oficial de 2020 que lo respalde",,,disputed
-IES252,Dancehall,Xoel López,2020,indie-rock,es,,Xoel Lopez,MusicBrainz: primera publicación 2020-11-27,,,verified
-IES253,Discoteca en ruinas,Joe Crepúsculo,2020,indie-pop,es,,Joe Crepusculo,"MusicBrainz: primera publicación 2020-04-29; sin álbum, single o EP oficial de 2020 que lo respalde",,,disputed
-IES254,Filtro Valencia,Ginebras,2020,indie-pop,es,,,MusicBrainz: primera publicación 2020-09-25,,,verified
-IES255,Good Bad Times,Hinds,2020,indie-rock,es,,,MusicBrainz: primera publicación 2020-02-04,,,verified
 IES256,In Spain We Call It Soledad,Rigoberta Bandini,2020,indie-pop,es,,,"MusicBrainz: primera publicación 2020; sin álbum, single o EP oficial de 2020 que lo respalde",,,disputed
-IES257,Joana,Xoel López,2020,indie-rock,es,,Xoel Lopez,MusicBrainz: primera publicación 2020-11-27,,,verified
-IES258,Las montañas,Delaporte,2020,indie-pop,es,Las montanas,,MusicBrainz: primera publicación 2020-10-16,,,verified
-IES259,Pinta Malasaña,Niña Polaca,2020,indie-rock,es,Pinta Malasana,Nina Polaca,MusicBrainz: primera publicación 2020-09-25; confirmada por lanzamiento oficial de 2020 (otras grabaciones: 2022),,,verified
-IES260,Si mi rayo te alcanzara,Xoel López,2020,indie-rock,es,,Xoel Lopez,MusicBrainz: primera publicación 2020-11-27,,,verified
-IES261,Universo,Delaporte,2020,indie-pop,es,,,MusicBrainz: primera publicación 2020-10-16,,,verified
-IES262,Wannabe,Niña Polaca,2020,indie-rock,es,,Nina Polaca,MusicBrainz: primera publicación 2020-09-25; confirmada por lanzamiento oficial de 2020 (otras grabaciones: 2022),,,verified
-IES263,Willy,Niña Polaca,2020,indie-rock,es,,Nina Polaca,MusicBrainz: primera publicación 2020-09-25; confirmada por lanzamiento oficial de 2020 (otras grabaciones: 2022),,,verified
 IES264,Ay mamá,Rigoberta Bandini,2021,indie-pop,es,Ay mama,,MusicBrainz: primera publicación 2021-12-23,,,verified
 IES265,Cariño,Arde Bogotá,2021,indie-rock,es,Carino,,MusicBrainz: primera publicación 2021-05-07,,,verified
-IES266,Cuestión de suerte,Natalia Lacunza,2021,indie-pop,es,Cuestion de suerte,,MusicBrainz: primera publicación 2021-10-14,,,verified
-IES267,Desnudarnos otra vez,Delaporte,2021,indie-pop,es,,,"MusicBrainz: primera publicación 2021; sin álbum, single o EP oficial de 2021 que lo respalde",,,disputed
-IES268,Di no a la nostalgia,León Benavente,2021,indie-rock,es,,Leon Benavente,MusicBrainz: primera publicación 2021-12-14,,,verified
-IES269,Iolanda,Joan Dausà,2021,indie-pop,es,,Joan Dausa,MusicBrainz: primera publicación 2021-01-19,,,verified
 IES270,Julio Iglesias,Rigoberta Bandini,2021,indie-pop,es,,,MusicBrainz: primera publicación 2021-10-29,,,verified
-IES271,Líbrame del mal,León Benavente,2021,indie-rock,es,Librame del mal,Leon Benavente,MusicBrainz: primera publicación 2021-11-11,,,verified
-IES272,Máquina de piedad,Depedro,2021,indie,es,Maquina de piedad,,"MusicBrainz: primera publicación 2021-05-07; sin álbum, single o EP oficial de 2021 que lo respalde",,,disputed
-IES273,Narciso,Delaporte,2021,indie-pop,es,,,"MusicBrainz: primera publicación 2021; sin álbum, single o EP oficial de 2021 que lo respalde",,,disputed
 IES274,Perra,Rigoberta Bandini,2021,indie-pop,es,,,MusicBrainz: primera publicación 2021-01-22,,,verified
-IES275,Teletecho,Cala Vento,2021,indie-rock,es,,,"MusicBrainz: primera publicación 2021-11-26; sin álbum, single o EP oficial de 2021 que lo respalde",,,disputed
 IES276,A todos mis amantes,Rigoberta Bandini,2022,indie-pop,es,,,MusicBrainz: primera publicación 2022-06-07,,,verified
 IES277,Famoso en tres calles,Carolina Durante,2022,indie-rock,es,,,MusicBrainz: primera publicación 2022-01-27,,,verified
 IES278,Gracias,Viva Suecia,2022,indie-rock,es,,,MusicBrainz: primera publicación 2022-10-07,,,verified
-IES279,Mi sitio,Natalia Lacunza,2022,indie-pop,es,,,"MusicBrainz: primera publicación 2022-06-09; sin álbum, single o EP oficial de 2022 que lo respalde",,,disputed
 IES280,Minuto 93,Carolina Durante,2022,indie-rock,es,,,MusicBrainz: primera publicación 2022-01-27,,,verified
-IES281,Nena,Sexy Zebras,2022,indie-pop,es,,,MusicBrainz: primera publicación 2022-03-25,,,verified
-IES282,Casa Carreras,Vera Fauna,2023,indie-pop,es,,,MusicBrainz: primera publicación 2023-01-26,,,verified
 IES283,Escorpio y sagitario,Arde Bogotá,2023,indie-rock,es,,,MusicBrainz: primera publicación 2023-05-12,,,verified
 IES284,La salvación,Arde Bogotá,2023,indie-rock,es,La salvacion,,MusicBrainz: primera publicación 2023-05-12,,,verified
 IES285,Los perros,Arde Bogotá,2023,indie-rock,es,,,MusicBrainz: primera publicación 2023-05-12,,,verified
-IES286,Te veo bien,Vera Fauna,2023,indie-pop,es,,,MusicBrainz: primera publicación 2023-01-26,,,verified
 IES287,Veneno,Arde Bogotá,2023,indie-rock,es,,,MusicBrainz: primera publicación 2023-05-12,,,verified
 IES288,Gloria,Shinova,2024,indie-rock,es,,,MusicBrainz: primera publicación 2024-03-01,,,verified
-IES289,La calle elfo,Alcalá Norte,2024,indie-rock,es,,Alcala Norte,MusicBrainz: primera publicación 2024-04-17,,,verified
-IES290,La sangre del pobre,Alcalá Norte,2024,indie-rock,es,,Alcala Norte,MusicBrainz: primera publicación 2024-04-17,,,verified
-IES291,La vida cañón,Alcalá Norte,2024,indie-rock,es,La vida canon,Alcala Norte,MusicBrainz: primera publicación 2024-04-17,,,verified
 IES292,Los días que vendrán,Shinova,2024,indie-rock,es,Los dias que vendran,,MusicBrainz: primera publicación 2024-03-01,,,verified
 IES293,Movimiento,Shinova,2024,indie-rock,es,,,MusicBrainz: primera publicación 2024-03-01,,,verified
-IES294,Reverso,Rufus T. Firefly,2024,indie-rock,es,,,MusicBrainz: primera publicación 2024-02-18,,,verified
 IES295,"Verdes, césped",Carolina Durante,2024,indie-rock,es,"Verdes, cesped",,MusicBrainz: primera publicación 2024-10-24,,,verified
-IES296,El coro del amanecer,Rufus T. Firefly,2025,indie-rock,es,,,MusicBrainz: primera publicación 2025-04-25,,,verified
-IES297,Trueno azul,Rufus T. Firefly,2025,indie-rock,es,,,MusicBrainz: primera publicación 2025-04-25,,,verified
-IES298,Un atraco,Vera Fauna,2025,indie-pop,es,,,MusicBrainz: primera publicación 2025-03-28,,,verified
-IES299,Caen imperios,Mujeres,2026,indie-rock,es,,,MusicBrainz: primera publicación 2026-02-13,,,verified
-IES300,Come aquí,Ginebras,2026,indie-pop,es,Come aqui,,MusicBrainz: primera publicación 2026-03-20,,,verified
-IES301,Intervención,Ginebras,2026,indie-pop,es,Intervencion,,MusicBrainz: primera publicación 2026-03-20,,,verified
+IES302,El fin del mundo,La La Love You,2019,indie-pop,es,,,MusicBrainz: primera publicación 2019-11-29,,,verified
+IES304,El principio de algo,La La Love You,2023,indie-pop,es,,,MusicBrainz: primera publicación 2023-01-27,,,verified
+IES305,"Los ojos, chica, no mienten",La La Love You,2023,indie-pop,es,,,MusicBrainz: primera publicación 2023-05-05,,,verified
+IES306,La mitad de la mitad,La La Love You,2025,indie-pop,es,,,MusicBrainz: primera publicación 2025-11-28,,,verified
+IES307,Una boda en Las Vegas,La La Love You,2025,indie-pop,es,,,MusicBrainz: primera publicación 2025-04-11,,,verified
+IES308,Princesas,Pereza,2005,pop-rock,es,,,Año revisado a mano: MusicBrainz y Spotify coinciden,,,verified
+IES309,Lady Madrid,Pereza,2009,pop-rock,es,,,MusicBrainz: primera publicación 2009-08-25,,,verified
+IES310,Todo,Pereza,2005,pop-rock,es,,,MusicBrainz: primera publicación 2005,,,verified
+IES311,Estrella polar,Pereza,2007,pop-rock,es,,,MusicBrainz: primera publicación 2007-08-28,,,verified
+IES312,Pienso en aquella tarde,Pereza,2003,pop-rock,es,,,Año revisado a mano: MusicBrainz y Spotify coinciden,,,verified
+IES313,Amelie,Pereza,2009,pop-rock,es,,,MusicBrainz: primera publicación 2009-08-25,,,verified
+IES314,Como lo tienes tú,Pereza,2005,pop-rock,es,Como lo tienes tu,,MusicBrainz: primera publicación 2005,,,verified
+IES315,Qué alegría más tonta,Pereza,2005,pop-rock,es,Que alegria mas tonta,,MusicBrainz: primera publicación 2005,,,verified
+IES316,Por mi tripa,Pereza,2007,pop-rock,es,,,MusicBrainz: primera publicación 2007-08-28,,,verified
+IES317,Zapatillas,El Canto del Loco,2005,pop-rock,es,,,MusicBrainz: primera publicación 2005-06-21,,,verified
+IES318,Besos,El Canto del Loco,2005,pop-rock,es,,,MusicBrainz: primera publicación 2005-06-21,,,verified
+IES319,La suerte de mi vida,El Canto del Loco,2008,pop-rock,es,,,MusicBrainz: primera publicación 2008-04-01,,,verified
+IES320,La madre de José,El Canto del Loco,2003,pop-rock,es,La madre de Jose,,MusicBrainz: primera publicación 2003-05-15; confirmada por lanzamiento oficial de 2003 (otras grabaciones: 2007),,,verified
+IES321,Volverá,El Canto del Loco,2005,pop-rock,es,Volvera,,MusicBrainz: primera publicación 2005-06-21; confirmada por lanzamiento oficial de 2005 (otras grabaciones: 2007),,,verified
+IES322,Peter Pan,El Canto del Loco,2008,pop-rock,es,,,MusicBrainz: primera publicación 2008-04-01,,,verified
+IES323,No puedo vivir sin ti,El Canto del Loco,2009,pop-rock,es,,,MusicBrainz: primera publicación 2009-11-24,,,verified
+IES324,Una foto en blanco y negro,El Canto del Loco,2003,pop-rock,es,,,MusicBrainz: primera publicación 2003-05-15; confirmada por lanzamiento oficial de 2003 (otras grabaciones: 2007),,,verified
+IES325,Insoportable,El Canto del Loco,2003,pop-rock,es,,,MusicBrainz: primera publicación 2003-05-15,,,verified
+IES326,Ya nada volverá a ser como antes,El Canto del Loco,2003,pop-rock,es,Ya nada volvera a ser como antes,,MusicBrainz: primera publicación 2003-05-15,,,verified
+IES327,Como si fueras a morir mañana,Leiva,2019,pop-rock,es,,,MusicBrainz: primera publicación 2019-03-22,,,verified
+IES328,Terriblemente cruel,Leiva,2014,pop-rock,es,,,Año revisado a mano: MusicBrainz y Spotify coinciden,,,verified
+IES329,Sincericidio,Leiva,2016,pop-rock,es,,,MusicBrainz: primera publicación 2016-08-26,,,verified
+IES330,El polvo de los días raros,Leiva,2025,pop-rock,es,,,Año revisado a mano: MusicBrainz y Spotify coinciden,,,verified
+IES331,No te preocupes por mí,Leiva,2019,pop-rock,es,No te preocupes por mi,,MusicBrainz: primera publicación 2019-03-22,,,verified
+IES332,Bajo presión,Leiva,2025,pop-rock,es,,,Año revisado a mano: MusicBrainz y Spotify coinciden,,,verified
+IES333,Gigante,Leiva,2025,pop-rock,es,,,Año revisado a mano: MusicBrainz y Spotify coinciden,,,verified
+IES334,Cuarenta mil,Leiva,2025,pop-rock,es,,,Año revisado a mano: MusicBrainz y Spotify coinciden,,,verified
+IES335,Todos los besos,Siloé,2023,indie-pop,es,,Siloe,MusicBrainz: primera publicación 2023-10-27,,,verified
+IES336,"Si me necesitas, llámame",Siloé,2023,indie-pop,es,,Siloe,MusicBrainz: primera publicación 2023-10-27,,,verified
+IES337,Que merezca la pena,Siloé,2023,indie-pop,es,,Siloe,MusicBrainz: primera publicación 2023-10-27,,,verified
+IES338,Esa estrella,Siloé,2023,indie-pop,es,,Siloe,MusicBrainz: primera publicación 2023-10-27,,,verified
+IES339,Amor infinito,Siloé,2026,indie-pop,es,,Siloe,MusicBrainz: primera publicación 2026-02-06,,,verified
+IES340,Reza por mí,Siloé,2024,indie-pop,es,Reza por mi,Siloe,MusicBrainz: primera publicación 2024-11-22,,,verified
+IES341,La oposición,Siloé,2023,indie-pop,es,,Siloe,MusicBrainz: primera publicación 2023-10-27,,,verified
+IES342,Terrorismo emocional,Siloé,2026,indie-pop,es,,Siloe,MusicBrainz: primera publicación 2026-05-08,,,verified
+IES343,Rosas,La Oreja de Van Gogh,2003,pop,es,,,Año revisado a mano: single de 2003 (Lo que te conté mientras te hacías la dormida); MusicBrainz daba 2000,,,verified
+IES344,Puedes contar conmigo,La Oreja de Van Gogh,2003,pop,es,,,MusicBrainz: primera publicación 2003,,,verified
+IES345,La playa,La Oreja de Van Gogh,2000,pop,es,,,MusicBrainz: primera publicación 2000-09-11; confirmada por lanzamiento oficial de 2000 (otras grabaciones: 2004),,,verified
+IES346,20 de enero,La Oreja de Van Gogh,2003,pop,es,Veinte de enero,,MusicBrainz: primera publicación 2003,,,verified
+IES347,Cuídate,La Oreja de Van Gogh,2000,pop,es,,,MusicBrainz: primera publicación 2000-09-11; confirmada por lanzamiento oficial de 2000 (otras grabaciones: 2004),,,verified
+IES348,Jueves,La Oreja de Van Gogh,2008,pop,es,,,MusicBrainz: primera publicación 2008-09-02; confirmada por lanzamiento oficial de 2008 (otras grabaciones: 2010),,,verified
+IES349,Inmortal,La Oreja de Van Gogh,2008,pop,es,,,MusicBrainz: primera publicación 2008-09-02,,,verified
+IES350,Deseos de cosas imposibles,La Oreja de Van Gogh,2003,pop,es,,,MusicBrainz: primera publicación 2003-04-28,,,verified
+IES351,Pop,La Oreja de Van Gogh,2000,pop,es,,,MusicBrainz: primera publicación 2000-09-11; confirmada por lanzamiento oficial de 2000 (otras grabaciones: 2004),,,verified
+IES352,Paseo,Estopa,2005,rumba-rock,es,,,MusicBrainz: primera publicación 2005-11-16,,,verified
+IES353,Como Camarón,Estopa,1999,rumba-rock,es,,,MusicBrainz: primera publicación 1999,,,verified
+IES354,Vino tinto,Estopa,2001,rumba-rock,es,,,MusicBrainz: primera publicación 2001-10-11,,,verified
+IES355,Tu calorro,Estopa,1999,rumba-rock,es,,,MusicBrainz: primera publicación 1999; confirmada por lanzamiento oficial de 1999 (otras grabaciones: 2001),,,verified
+IES356,Por la raja de tu falda,Estopa,1999,rumba-rock,es,La raja de tu falda,,Año revisado a mano: álbum Estopa de 1999; MusicBrainz daba 2016 (reedición),,,verified
+IES357,Tragicomedia,Estopa,2004,rumba-rock,es,,,MusicBrainz: primera publicación 2004-02-24; confirmada por lanzamiento oficial de 2004 (otras grabaciones: 2016),,,verified
+IES358,Me quedaré,Estopa,2011,rumba-rock,es,,,MusicBrainz: primera publicación 2011-11-21,,,verified
+IES359,Vacaciones,Estopa,2005,rumba-rock,es,,,Año revisado a mano: MusicBrainz y Spotify coinciden,,,verified
+IES360,El run run,Estopa,2008,rumba-rock,es,,,MusicBrainz: primera publicación 2008-02-17,,,verified
+IES361,Cacho a cacho,Estopa,1999,rumba-rock,es,,,MusicBrainz: primera publicación 1999; confirmada por lanzamiento oficial de 1999 (otras grabaciones: 2009),,,verified
+IES362,Estoy enfermo,Pignoise,2009,pop-punk,es,,,MusicBrainz: primera publicación 2009-04-06; confirmada por lanzamiento oficial de 2009 (otras grabaciones: 2024),,,verified
+IES363,Te entiendo,Pignoise,2006,pop-punk,es,,,MusicBrainz: primera publicación 2006-04-10,,,verified
+IES364,Nada que perder,Pignoise,2006,pop-punk,es,,,Año revisado a mano: MusicBrainz y Spotify coinciden,,,verified
+IES365,Todo me da igual,Pignoise,2010,pop-punk,es,,,Año revisado a mano: MusicBrainz y Spotify coinciden,,,verified
+IES366,Por verte,Pignoise,2006,pop-punk,es,,,MusicBrainz: primera publicación 2006-04-10,,,verified
+IES367,Quiero,Pignoise,2010,pop-punk,es,,,MusicBrainz: primera publicación 2010-04-27; confirmada por lanzamiento oficial de 2010 (otras grabaciones: 2024),,,verified
+IES368,Nada podrá salvarte,Pignoise,2006,pop-punk,es,,,MusicBrainz: primera publicación 2006-04-10,,,verified
+IES369,Que no,Deluxe,2003,pop-rock,es,¡Que no!,,MusicBrainz: primera publicación 2003-03-04; confirmada por lanzamiento oficial de 2003 (otras grabaciones: 2006),,,verified
+IES370,El amor valiente,Deluxe,2007,pop-rock,es,,,MusicBrainz: primera publicación 2007-03-26,,,verified
+IES371,Tum Rakak,Deluxe,2016,pop-rock,es,,,MusicBrainz: primera publicación 2016-01-22; confirmada por lanzamiento oficial de 2016 (otras grabaciones: 2020),,,verified
+IES372,Reconstrucción,Deluxe,2008,pop-rock,es,Reconstrucción (El mejor momento),,MusicBrainz: primera publicación 2008-03-18,,,verified
+IES373,Historia universal,Deluxe,2008,pop-rock,es,Historia universal (El amor no es lo que piensas),,MusicBrainz: primera publicación 2008-03-18,,,verified
+IES375,El último día de nuestras vidas,Dani Martín,2024,pop-rock,es,,Dani Martin,MusicBrainz: primera publicación 2024-10-03,,,verified
+IES376,Cero,Dani Martín,2013,pop-rock,es,,Dani Martin,MusicBrainz: primera publicación 2013-06-06,,,verified
+IES377,Emocional,Dani Martín,2013,pop-rock,es,,Dani Martin,MusicBrainz: primera publicación 2013-09-16,,,verified
+IES378,Qué bonita la vida,Dani Martín,2013,pop-rock,es,Que bonita la vida,Dani Martin,MusicBrainz: primera publicación 2013-09-16,,,verified
+IES379,Dieciocho,Dani Martín,2018,pop-rock,es,,Dani Martin,MusicBrainz: primera publicación 2018-04-20,,,verified
+IES380,Carpe diem,Dani Martín,2024,pop-rock,es,,Dani Martin,MusicBrainz: primera publicación 2024-11-29,,,verified
+IES381,Veinticinco,Dani Martín,2025,pop-rock,es,,Dani Martin,Año revisado a mano: MusicBrainz y Spotify coinciden,,,verified
+IES382,Me vuelves puto loco,Dani Martín,2024,pop-rock,es,,Dani Martin,MusicBrainz: primera publicación 2024-11-29,,,verified
+IES383,Bailemos,Dani Fernández,2019,pop,es,,Dani Fernandez,MusicBrainz: primera publicación 2019-11-13; confirmada por lanzamiento oficial de 2019 (otras grabaciones: 2022),,,verified
+IES384,Clima tropical,Dani Fernández,2021,pop,es,,Dani Fernandez,MusicBrainz: primera publicación 2021-04-16,,,verified
+IES385,Me has invitado a bailar,Dani Fernández,2024,pop,es,,Dani Fernandez,MusicBrainz: primera publicación 2024-10-25,,,verified
+IES386,¿Y si lo hacemos?,Dani Fernández,2024,pop,es,Y si lo hacemos,Dani Fernandez,MusicBrainz: primera publicación 2024-10-25,,,verified
+IES388,Todo cambia,Dani Fernández,2024,pop,es,,Dani Fernandez,MusicBrainz: primera publicación 2024-01-18,,,verified
+IES389,Supersubmarina,Dani Fernández,2022,pop,es,,Dani Fernandez,MusicBrainz: primera publicación 2022-02-18,,,verified
+IES390,Dile a los demás,Dani Fernández,2022,pop,es,,Dani Fernandez,MusicBrainz: primera publicación 2022-02-18,,,verified
+IES391,Dopamina,Veintiuno,2018,indie-pop,es,,,MusicBrainz: primera publicación 2018-09-21,,,verified
+IES392,La vida moderna,Veintiuno,2022,indie-pop,es,,,MusicBrainz: primera publicación 2022-09-30,,,verified
+IES393,La ruina,Veintiuno,2023,indie-pop,es,,,MusicBrainz: primera publicación 2023-10-06,,,verified
+IES394,Cabezabajo,Veintiuno,2018,indie-pop,es,,,MusicBrainz: primera publicación 2018-09-21,,,verified
+IES395,Estarás,Veintiuno,2025,indie-pop,es,,,MusicBrainz: primera publicación 2025-04-04,,,verified
+IES396,La Toscana,Veintiuno,2023,indie-pop,es,,,MusicBrainz: primera publicación 2023-10-06,,,verified
+IES397,Irremediable,Veintiuno,2025,indie-pop,es,,,MusicBrainz: primera publicación 2025-04-04,,,verified
+IES398,Troleo,Cupido,2026,indie-pop,es,,,MusicBrainz: primera publicación 2026-05-15,,,verified
+IES399,La pared,Cupido,2020,indie-pop,es,,,Año revisado a mano: MusicBrainz y Spotify coinciden,,,verified
+IES400,I'm Good (Blue),Cupido,2022,indie-pop,es,,,MusicBrainz: primera publicación 2022-12-02,,,verified
+IES401,No sabes mentir,Cupido,2019,indie-pop,es,,,MusicBrainz: primera publicación 2019-02-14,,,verified
+IES402,Y te olvidaste,Cupido,2026,indie-pop,es,,,MusicBrainz: primera publicación 2026-06-15,,,verified
+IES403,Calle de la pena,Cupido,2026,indie-pop,es,,,MusicBrainz: primera publicación 2026-06-15,,,verified
+IES404,Si quieres,Cariño,2022,indie-pop,es,,Carino,MusicBrainz: primera publicación 2022-05-06,,,verified
+IES407,Canción de pop de amor,Cariño,2018,indie-pop,es,,Carino,MusicBrainz: primera publicación 2018-06-01,,,verified
+IES408,Te brillan,Cariño,2020,indie-pop,es,,Carino,MusicBrainz: primera publicación 2020-06-19,,,verified
+IES409,Aún me acuerdo de todo,Cariño,2023,indie-pop,es,,Carino,MusicBrainz: primera publicación 2023-05-18,,,verified
+IES410,Bisexual,Cariño,2018,indie-pop,es,,Carino,MusicBrainz: primera publicación 2018-11-09,,,verified
+IES411,No me convengo,Cariño,2022,indie-pop,es,,Carino,MusicBrainz: primera publicación 2022-05-06,,,verified
+IES412,La nieve,Guitarricadelafuente,2026,indie-folk,es,,,MusicBrainz: primera publicación 2026-09-18,,,verified
+IES413,BABIECA!,Guitarricadelafuente,2025,indie-folk,es,Babieca,,MusicBrainz: primera publicación 2025-05-16,,,verified
+IES414,Guantanamera,Guitarricadelafuente,2018,indie-folk,es,,,MusicBrainz: primera publicación 2018,,,verified
+IES415,Full time papi,Guitarricadelafuente,2025,indie-folk,es,,,MusicBrainz: primera publicación 2025-02-05,,,verified
+IES416,Tramuntana,Guitarricadelafuente,2025,indie-folk,es,,,MusicBrainz: primera publicación 2025-05-16,,,verified
+IES417,Calypso,Guitarricadelafuente,2026,indie-folk,es,,,MusicBrainz: primera publicación 2026-06-03,,,verified
+IES418,Conticinio,Guitarricadelafuente,2018,indie-folk,es,,,"MusicBrainz: primera publicación 2018; coincidencia floja (título 0.87, artista 1.00)",,,disputed
+IES419,Futuros amantes,Guitarricadelafuente,2025,indie-folk,es,,,MusicBrainz: primera publicación 2025-05-16,,,verified
+IES420,Port Pelegrí,Guitarricadelafuente,2025,indie-folk,es,,,MusicBrainz: primera publicación 2025-05-16,,,verified
