@@ -70,7 +70,7 @@ export const es = {
     hint: 'Pedid el código de 4 cifras al anfitrión.',
     delete: 'Borrar',
     digit: (d: string) => `Número ${d}`,
-    enter: 'Entrar',
+    enter: 'Entrar en la sala',
     notFound: 'Esa sala no existe. Revisad el código.',
     started: 'La partida ya ha empezado.',
     full: 'La sala está llena.',

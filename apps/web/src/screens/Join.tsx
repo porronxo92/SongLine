@@ -1,8 +1,8 @@
 import { Delete } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ApiError, api } from '../api/client';
-import { Screen } from '../components/ui';
+import { Button, Screen } from '../components/ui';
 import { es } from '../i18n/es';
 
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9'] as const;
@@ -39,6 +39,15 @@ export default function Join() {
     );
   };
 
+  // Enlace compartido (/unirse/1234): entra solo, sin teclear. El ref evita la doble llamada de StrictMode.
+  const autoTried = useRef(false);
+  useEffect(() => {
+    if (autoTried.current || code.length !== 4) return;
+    autoTried.current = true;
+    submit(code);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo al abrir la pantalla
+  }, []);
+
   const press = (d: string) => {
     if (busy || code.length >= 4) return;
     const next = code + d;
@@ -74,6 +83,19 @@ export default function Join() {
       <p role="alert" className="min-h-[1.5rem] text-center font-bold text-magenta-light">
         {error}
       </p>
+      {code.length === 4 ? (
+        <Button
+          xl
+          busy={busy}
+          className="mx-auto w-full max-w-xs"
+          data-testid="join-enter"
+          onClick={() => {
+            submit(code);
+          }}
+        >
+          {es.join.enter}
+        </Button>
+      ) : null}
       <div className="mx-auto grid w-full max-w-xs grid-cols-3 gap-3">
         {KEYS.map((k) => (
           <button
