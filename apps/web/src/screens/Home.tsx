@@ -23,6 +23,17 @@ export default function Home() {
             <img src="/logo/songline-wordmark.svg" alt={es.appName} width={220} height={41} className="mx-auto h-auto w-[220px]" />
           </h1>
           <p className="mb-4 mt-1 max-w-[290px] text-fg-2">{es.home.tagline}</p>
+          <div className="home-strip" aria-hidden>
+            <span className="ycard" style={{ '--dc': 'var(--decade-70)' } as React.CSSProperties}>
+              <span className="y">1978</span>
+              <span className="dec">70s</span>
+            </span>
+            <span className="home-gap">?</span>
+            <span className="ycard" style={{ '--dc': 'var(--decade-00)' } as React.CSSProperties}>
+              <span className="y">2003</span>
+              <span className="dec">00s</span>
+            </span>
+          </div>
           <div className="relative z-[1] flex w-full flex-col gap-3">
             {stored ? (
               <>

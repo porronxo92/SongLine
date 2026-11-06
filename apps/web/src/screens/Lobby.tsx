@@ -131,9 +131,14 @@ export function Lobby({ view }: { view: RoomView }) {
                 ) : (
                   <span className="h-[26px] w-[26px] rounded-full border-2 border-dashed border-border-strong" aria-hidden />
                 )}
-                <span className="flex-1 truncate font-bold">
-                  {t.claimed ? teamName(t) : es.lobby.empty}
-                  {t.slot === view.you.slot ? ` (${es.lobby.youAre.toLowerCase()})` : ''}
+                <span className="flex min-w-0 flex-1 font-bold">
+                  <span className="truncate">
+                    {t.claimed ? teamName(t) : es.lobby.empty}
+                    {t.slot === view.you.slot ? ' ' : ''}
+                  </span>
+                  {t.slot === view.you.slot ? (
+                    <span className="shrink-0 font-medium text-fg-3">({es.lobby.youAre.toLowerCase()})</span>
+                  ) : null}
                 </span>
                 {t.isHost ? (
                   <span className="chip !px-2" title={es.lobby.hostBadge}>

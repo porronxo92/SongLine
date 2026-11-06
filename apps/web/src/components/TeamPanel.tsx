@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Wifi, WifiOff } from 'lucide-react';
+import { User, Wifi, WifiOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { es } from '../i18n/es';
 import { colorFor, teamName } from '../lib/teams';
@@ -50,9 +50,12 @@ export function TeamPanel({
       {active ? <span className="turn-tag">{es.team.turn}</span> : null}
       <div className="flex items-center gap-1.5">
         <TeamShape shape={c.shape} color={c.hex} size={18} />
-        <span className="min-w-0 flex-1 truncate text-sm font-bold">
-          {teamName(team)}
-          {you ? ` (${es.lobby.youAre.toLowerCase()})` : ''}
+        <span className="flex min-w-0 flex-1 text-sm font-bold">
+          <span className="truncate">
+            {teamName(team)}
+            {you ? <span className="sr-only"> ({es.lobby.youAre.toLowerCase()})</span> : null}
+          </span>
+          {you ? <User size={14} className="ml-1 mt-0.5 shrink-0 text-fg-3" aria-hidden /> : null}
         </span>
         <span title={team.connected ? es.team.online : es.team.offline}>
           {team.connected ? (
