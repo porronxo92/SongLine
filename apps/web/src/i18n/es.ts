@@ -15,8 +15,6 @@ export const es = {
     spotifyHelp: 'La conexión con Spotify se configura después, al preparar el audio.',
     noAccount: '¿Primera partida? Crea una cuenta',
     hasAccount: 'Ya tengo cuenta',
-    guest: 'Unirme con un código',
-    play: 'Ir al juego',
     free: 'Plan Free',
     premium: 'Premium',
     freeDetails: 'Hasta 2 equipos, objetivo de hasta 5 cartas contando la inicial y pack Mix variado.',
@@ -39,24 +37,7 @@ export const es = {
     resetInvalid: 'El enlace no es válido o ha caducado. Solicita uno nuevo.',
     recoveryUnavailable: 'La recuperación por correo todavía no está disponible. Inténtalo más tarde.',
   },
-  landing: {
-    tagline: '¿En qué año sonaba?',
-    description: 'Reúne a tus amigos, escuchad una canción y buscadle un hueco en vuestra línea del tiempo.',
-    start: 'Organizar una partida',
-    join: 'Tengo un código',
-    how: 'Una canción. Un hueco. Vuestro turno.',
-    steps: [
-      'El anfitrión prepara la sala y comparte el código.',
-      'Cada equipo juega desde su móvil. La música suena en el del anfitrión.',
-      'Ordenad canciones por año. Usad fichas para pedir pistas u objetar a un rival.',
-    ],
-    freeTitle: 'Empieza con Free',
-    freeCopy: 'Dos equipos, Mix variado y hasta 5 cartas para ganar, incluida la inicial.',
-    premiumTitle: 'Más equipos y más música',
-    premiumCopy: 'Premium y packs adicionales están en preparación. Por ahora no se realizan cobros.',
-    audio:
-      'Para reproducir con Spotify, el anfitrión necesita Spotify Premium. Es independiente de Premium de SongLine.',
-    beta: 'Versión en desarrollo',
+  plans: {
     plansTitle: 'Planes y packs',
     oneTime: 'Compra individual prevista',
     soon: 'Próximamente. Compras desactivadas.',
@@ -85,6 +66,7 @@ export const es = {
   home: {
     tagline: 'Escucha, adivina y ordena la historia de la música. ¿Qué año suena?',
     howTo: 'Cómo se juega',
+    plans: 'Planes',
     create: 'Crear sala',
     join: 'Únete a una sala',
     resume: (code: string) => `Volver a la sala ${code}`,

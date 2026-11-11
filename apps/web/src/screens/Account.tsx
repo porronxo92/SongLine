@@ -28,7 +28,7 @@ export function AccountRequired({ children }: { children: ReactNode }) {
   }, [load]);
   if (loadError)
     return (
-      <Screen title={es.account.title} back="/jugar">
+      <Screen title={es.account.title} back="/">
         <p role="alert">{es.account.unavailable}</p>
         <Button
           onClick={() => {
@@ -75,10 +75,13 @@ export function AccountLogin({ register = false }: { register?: boolean }) {
       '/anfitrion/audio',
       '/anfitrion/equipo',
       '/cuenta',
+      '/',
       '/jugar',
     ].includes(state.returnTo)
-      ? state.returnTo
-      : '/jugar';
+      ? state.returnTo === '/jugar'
+        ? '/'
+        : state.returnTo
+      : '/';
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     setBusy(true);
@@ -93,7 +96,7 @@ export function AccountLogin({ register = false }: { register?: boolean }) {
     }
   };
   return (
-    <Screen title={register ? es.account.register : es.account.login} back="/jugar">
+    <Screen title={register ? es.account.register : es.account.login} back="/">
       <p className="help">{register ? es.account.registerHelp : es.account.loginHelp}</p>
       <Card>
         <form
@@ -164,9 +167,6 @@ export function AccountLogin({ register = false }: { register?: boolean }) {
       <Link className="btn btn-secondary" to={register ? '/login' : '/registro'} state={{ returnTo }}>
         {register ? es.account.hasAccount : es.account.noAccount}
       </Link>
-      <Link className="btn btn-ghost" to="/unirse">
-        {es.account.guest}
-      </Link>
       <p className="help">{es.account.spotifyHelp}</p>
       {!register ? (
         <Link className="btn btn-ghost" to="/recuperar">
@@ -184,7 +184,7 @@ export function Account() {
   const [error, setError] = useState('');
   if (!user) return <Navigate to="/login" replace />;
   return (
-    <Screen title={es.account.title} back="/jugar">
+    <Screen title={es.account.title} back="/">
       <Card className="flex flex-col gap-3">
         <h2>{user.display_name || user.email}</h2>
         <p className="help break-words">{user.email}</p>
@@ -198,9 +198,6 @@ export function Account() {
         <h2>{es.account.purchases}</h2>
         <p className="help">{es.account.noPurchases}</p>
       </Card>
-      <Link className="btn btn-primary" to="/jugar">
-        {es.account.play}
-      </Link>
       <Button
         variant="ghost"
         busy={busy}
@@ -209,7 +206,7 @@ export function Account() {
           setError('');
           void logout()
             .then(() => {
-              navigate('/jugar', { replace: true });
+              navigate('/', { replace: true });
             })
             .catch((err: unknown) => {
               setError(errorMessage(err));

@@ -1,7 +1,7 @@
 import { CircleHelp, Plus, Users } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { HowToPlay, HowToPlayButton } from '../components/HowToPlay';
+import { HowToPlay } from '../components/HowToPlay';
 import { Button, Screen } from '../components/ui';
 import { es } from '../i18n/es';
 import { getStoredRoom, setStoredRoom } from '../lib/session';
@@ -18,12 +18,9 @@ export default function Home() {
       <div className="home-grid" aria-hidden />
       <Screen
         actions={
-          <>
-            <Link className="btn btn-ghost" to="/cuenta">
-              {es.account.title}
-            </Link>
-            <HowToPlayButton />
-          </>
+          <Link className="btn btn-ghost" to="/cuenta">
+            {es.account.title}
+          </Link>
         }
       >
         <div className="home-stage">
@@ -74,6 +71,7 @@ export default function Home() {
             ) : null}
             <Button
               xl
+              variant={stored ? 'secondary' : 'primary'}
               onClick={() => {
                 navigate('/crear');
               }}
@@ -91,16 +89,21 @@ export default function Home() {
               <Users aria-hidden />
               {es.home.join}
             </Button>
-            <Button
-              variant="ghost"
-              data-testid="howto-open"
-              onClick={() => {
-                setRules(true);
-              }}
-            >
-              <CircleHelp aria-hidden />
-              {es.home.howTo}
-            </Button>
+            <div className="flex flex-wrap justify-center gap-2">
+              <Button
+                variant="ghost"
+                data-testid="howto-open"
+                onClick={() => {
+                  setRules(true);
+                }}
+              >
+                <CircleHelp aria-hidden />
+                {es.home.howTo}
+              </Button>
+              <Link className="btn btn-ghost" to="/planes">
+                {es.home.plans}
+              </Link>
+            </div>
           </div>
         </div>
       </Screen>

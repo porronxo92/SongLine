@@ -1,31 +1,15 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Recovery from './screens/Recovery';
-import Landing, { Plans } from './screens/Landing';
+import Plans from './screens/Plans';
 import { Account, AccountLogin, AccountRequired } from './screens/Account';
 import { useAccount } from './lib/account';
-import { getStoredRoom } from './lib/session';
 import Create from './screens/Create';
 import CreateGenres from './screens/CreateGenres';
 import Home from './screens/Home';
 import { HostAudio, HostIdentity, HostLogin } from './screens/HostFlow';
 import Join from './screens/Join';
 import Room from './screens/Room';
-
-let resumed = false;
-
-/** Al recargar en la raíz con una sala guardada, vuelve a ella. */
-function Resume() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  useEffect(() => {
-    if (resumed) return;
-    resumed = true;
-    const code = getStoredRoom();
-    if (code && location.pathname === '/jugar') navigate(`/sala/${code}`, { replace: true });
-  }, [navigate, location.pathname]);
-  return null;
-}
 
 export default function App() {
   const load = useAccount((state) => state.load);
@@ -34,10 +18,9 @@ export default function App() {
   }, [load]);
   return (
     <BrowserRouter>
-      <Resume />
       <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/jugar" element={<Home />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/jugar" element={<Navigate to="/" replace />} />
         <Route path="/recuperar" element={<Recovery />} />
         <Route path="/reset-password" element={<Recovery key="reset" reset />} />
         <Route path="/login" element={<AccountLogin />} />

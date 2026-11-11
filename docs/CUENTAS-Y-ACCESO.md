@@ -1,7 +1,7 @@
 # Cuentas y acceso: primera entrega
 
 SongLine pasa de sesiones de juego anónimas a cuentas persistentes del anfitrión.
-Esta entrega incluye landing, registro, login, cierre de sesión, recuperación por
+Esta entrega incluye un inicio unificado, registro, login, cierre de sesión, recuperación por
 correo configurable y permisos Free aplicados en REST y WebSocket. No activa
 compras, cobros ni importación de listas. La autorización musical sigue pendiente;
 esta entrega no acredita que la integración pueda comercializarse.
@@ -17,6 +17,13 @@ Packs adicionales previstos: 1,99 €. Importación prevista: 2,99 €, hasta 15
 canciones. No hay suscripción. La duración de los derechos y la política de
 selección de packs deben concretarse antes de vender. Los invitados no necesitan
 cuenta. Spotify Premium y SongLine Premium son independientes.
+
+## Navegación
+
+La página `/` muestra el inicio de juego: crear sala y unirse son las dos acciones
+centrales. Cuenta, ayuda y planes tienen accesos secundarios. `/jugar` redirige a
+`/` para conservar los enlaces anteriores. Si hay una sala guardada, el inicio
+ofrece volver a ella sin forzar una redirección automática.
 
 ## Identidades
 

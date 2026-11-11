@@ -10,10 +10,10 @@ test('account registration, Free limits and login', async ({ page }) => {
   );
   const email = `smoke.${String(Date.now())}@example.com`;
   await page.goto('/');
-  await page.getByRole('heading', { name: '¿En qué año sonaba?' }).waitFor();
+  await page.getByRole('heading', { name: 'SongLine' }).waitFor();
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
 
-  await page.getByRole('link', { name: 'Organizar una partida' }).click();
+  await page.getByRole('button', { name: 'Crear sala', exact: true }).click();
   await page.getByRole('heading', { name: 'Iniciar sesión' }).waitFor();
   await page.getByRole('link', { name: '¿Primera partida? Crea una cuenta' }).click();
   await page.getByLabel('Tu nombre').fill('Anfitrión de prueba');
