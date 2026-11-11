@@ -1,7 +1,7 @@
 import type { TeamView } from '../protocol/types';
 import { es } from '../i18n/es';
 
-export type Shape = 'circle' | 'triangle' | 'square' | 'diamond';
+export type Shape = 'circle' | 'triangle' | 'square' | 'diamond' | 'star' | 'hexagon';
 
 export interface TeamColor {
   hex: string;
@@ -9,15 +9,17 @@ export interface TeamColor {
   name: string;
 }
 
-/** Cuatro colores con forma propia (● ▲ ■ ◆): el color nunca es la única señal. */
+/** Seis colores con forma propia (● ▲ ■ ◆): el color nunca es la única señal. */
 export const TEAM_COLORS: readonly TeamColor[] = [
   { hex: '#FF6B4A', shape: 'circle', name: es.identity.colors[0] },
   { hex: '#4D8DFF', shape: 'triangle', name: es.identity.colors[1] },
   { hex: '#4ADE80', shape: 'square', name: es.identity.colors[2] },
   { hex: '#C084FC', shape: 'diamond', name: es.identity.colors[3] },
+  { hex: '#FFD166', shape: 'star', name: es.identity.colors[4] },
+  { hex: '#00E5D4', shape: 'hexagon', name: es.identity.colors[5] },
 ];
 
-const SHAPES: Shape[] = ['circle', 'triangle', 'square', 'diamond'];
+const SHAPES: Shape[] = ['circle', 'triangle', 'square', 'diamond', 'star', 'hexagon'];
 
 const HEX = /^#[0-9a-fA-F]{6}$/;
 
@@ -30,10 +32,10 @@ export function colorFor(team: Pick<TeamView, 'slot' | 'color'>): TeamColor {
   const safe = safeColor(team.color);
   const found = TEAM_COLORS.find((c) => c.hex.toLowerCase() === safe?.toLowerCase());
   if (found) return found;
-  const fallback = TEAM_COLORS[team.slot % 4] ?? TEAM_COLORS[0];
+  const fallback = TEAM_COLORS[team.slot % 6] ?? TEAM_COLORS[0];
   return {
     hex: safe ?? fallback?.hex ?? '#FF6B4A',
-    shape: SHAPES[team.slot % 4] ?? 'circle',
+    shape: SHAPES[team.slot % 6] ?? 'circle',
     name: '',
   };
 }

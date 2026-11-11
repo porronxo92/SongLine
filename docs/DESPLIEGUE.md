@@ -53,3 +53,15 @@ En https://developer.spotify.com/dashboard → tu app → **Settings**:
 - **Límites por IP.** Con `FORWARDED_ALLOW_IPS="*"` el servidor confía en la cabecera `X-Forwarded-For` que pone el proxy de Render (Render no publica un rango fijo de IPs). Las peticiones REST llegan reescritas por Vercel, así que el límite de intentos de código de sala puede quedar compartido o ser menos preciso. Para un juego entre amigos es aceptable; para uso público habría que revisarlo.
 - **CSP.** `apps/web/vercel.json` replica las cabeceras que pone Caddy en Docker Compose, con `connect-src` limitado a la propia web, al WebSocket de Render y a los hosts de Spotify.
 - **Docker Compose sigue funcionando igual:** el Dockerfile usa por defecto el puerto 8000 y la subred de Caddy.
+
+## Cuentas de SongLine
+
+El contenedor aplica `alembic upgrade head` antes de arrancar. La migración 0003
+crea las cuentas, sesiones y tokens de recuperación en Neon. Mantén
+`ENFORCE_PLAN_LIMITS=true` (valor predeterminado). Los anfitriones deben crear
+cuenta; los invitados siguen entrando por código. Los límites Free son dos
+equipos, cinco cartas incluyendo la inicial y el pack «Mix variado».
+
+Registro y login no requieren nuevas claves. La recuperación necesita SMTP y
+`PUBLIC_ORIGIN` correcto. Ver [configuración y límites de esta entrega](CUENTAS-Y-ACCESO.md).
+No hay compras activas ni Stripe en esta entrega.

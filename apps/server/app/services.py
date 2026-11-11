@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 
 import httpx
 
+from app.accounts.repo import PostgresAccounts
 from app.catalog.packs import PackDef, load_pack_defs
 from app.catalog.repo import CsvSongRepository, PostgresSongRepository, SongRepository
 from app.config import AppConfig
@@ -46,6 +47,8 @@ class Services:
     code_limiter: RateLimiter
     auth_limiter: RateLimiter
     signer: SessionSigner
+    accounts: PostgresAccounts
+    account_limiter: RateLimiter
     ws_per_ip: dict[str, int] = field(default_factory=dict)
     songs: list[Song] = field(default_factory=list)
     packs: list[PackDef] = field(default_factory=list)
@@ -95,6 +98,8 @@ def build_services(
     deps = RuntimeDeps(backend=backend, persistence=persistence, clock=clock, timer_scale=timer_scale)
     return Services(
         config=config,
+        accounts=PostgresAccounts(config.database_url),
+        account_limiter=RateLimiter(10),
         manager=RoomManager(deps, idle_ttl_s=config.room_idle_ttl_s),
         auth=auth,
         backend=backend,

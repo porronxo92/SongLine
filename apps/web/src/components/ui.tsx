@@ -1,5 +1,16 @@
 import clsx from 'clsx';
-import { ArrowLeft, Circle, Diamond, Loader2, Minus, Plus, Square, Triangle } from 'lucide-react';
+import {
+  ArrowLeft,
+  Circle,
+  Diamond,
+  Hexagon,
+  Loader2,
+  Minus,
+  Plus,
+  Square,
+  Star,
+  Triangle,
+} from 'lucide-react';
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +26,15 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   busy?: boolean;
 }
 
-export function Button({ variant = 'primary', xl, busy, className, children, disabled, ...rest }: ButtonProps) {
+export function Button({
+  variant = 'primary',
+  xl,
+  busy,
+  className,
+  children,
+  disabled,
+  ...rest
+}: ButtonProps) {
   return (
     <button
       type="button"
@@ -33,7 +52,10 @@ export function Card({
   className,
   children,
   ...rest
-}: { className?: string; children: ReactNode } & HTMLAttributes<HTMLDivElement>) {
+}: {
+  className?: string;
+  children: ReactNode;
+} & HTMLAttributes<HTMLDivElement>) {
   return (
     <div {...rest} className={clsx('panel p-5', className)}>
       {children}
@@ -92,7 +114,14 @@ export function Screen({
   );
 }
 
-const SHAPE_ICON = { circle: Circle, triangle: Triangle, square: Square, diamond: Diamond } as const;
+const SHAPE_ICON = {
+  circle: Circle,
+  triangle: Triangle,
+  square: Square,
+  diamond: Diamond,
+  star: Star,
+  hexagon: Hexagon,
+} as const;
 
 /** Forma de equipo (● ▲ ■ ◆) con el color relleno. */
 export function TeamShape({ shape, color, size = 22 }: { shape: Shape; color: string; size?: number }) {

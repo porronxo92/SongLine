@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { api } from '../api/client';
+import { useAccount } from '../lib/account';
 import { es } from '../i18n/es';
 import type { CatalogPack } from '../protocol/types';
 import { Button } from './ui';
@@ -37,12 +38,10 @@ function packIcon(name: string): LucideIcon {
   return PACK_ICONS[name] ?? Music;
 }
 
-type PacksState =
-  | { status: 'loading' }
-  | { status: 'error' }
-  | { status: 'ready'; packs: CatalogPack[] };
+type PacksState = { status: 'loading' } | { status: 'error' } | { status: 'ready'; packs: CatalogPack[] };
 
 function usePacks(): { state: PacksState; reload: () => void } {
+  const user = useAccount((s) => s.user);
   const [state, setState] = useState<PacksState>({ status: 'loading' });
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
@@ -50,7 +49,11 @@ function usePacks(): { state: PacksState; reload: () => void } {
     setState({ status: 'loading' });
     api.packs().then(
       (packs) => {
-        if (alive) setState({ status: 'ready', packs });
+        if (alive)
+          setState({
+            status: 'ready',
+            packs: packs.filter((p) => (user?.pack_slugs ?? ['mix']).includes(p.slug)),
+          });
       },
       () => {
         if (alive) setState({ status: 'error' });
@@ -59,7 +62,7 @@ function usePacks(): { state: PacksState; reload: () => void } {
     return () => {
       alive = false;
     };
-  }, [attempt]);
+  }, [attempt, user]);
   const reload = useCallback(() => {
     setAttempt((n) => n + 1);
   }, []);
@@ -87,7 +90,13 @@ export function PackPicker({
     if (state.status !== 'ready') return;
     const known = value.filter((s) => state.packs.some((p) => p.slug === s && p.count > 0));
     if (known.length === value.length && known.length > 0) return;
-    const fallback = known.length > 0 ? known : state.packs.filter((p) => p.count > 0).slice(0, 1).map((p) => p.slug);
+    const fallback =
+      known.length > 0
+        ? known
+        : state.packs
+            .filter((p) => p.count > 0)
+            .slice(0, 1)
+            .map((p) => p.slug);
     if (fallback.length > 0) onChange(fallback);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
@@ -119,7 +128,11 @@ export function PackPicker({
       </div>
 
       {state.status === 'loading' ? (
-        <div className={list ? 'flex flex-col gap-3' : 'grid grid-cols-2 gap-3'} role="status" aria-label={es.packs.loading}>
+        <div
+          className={list ? 'flex flex-col gap-3' : 'grid grid-cols-2 gap-3'}
+          role="status"
+          aria-label={es.packs.loading}
+        >
           {[0, 1, 2, 3].map((i) => (
             <div key={i} className="pack-skeleton" />
           ))}
@@ -136,7 +149,11 @@ export function PackPicker({
       ) : null}
 
       {state.status === 'ready' ? (
-        <div role="group" aria-labelledby="packs-legend" className={list ? 'flex flex-col gap-3' : 'grid grid-cols-2 gap-3'}>
+        <div
+          role="group"
+          aria-labelledby="packs-legend"
+          className={list ? 'flex flex-col gap-3' : 'grid grid-cols-2 gap-3'}
+        >
           {state.packs.map((p) => {
             const Icon = packIcon(p.icon);
             const on = value.includes(p.slug);
@@ -183,7 +200,16 @@ export function PackSummary({ slugs }: { slugs: string[] }) {
   const { state } = usePacks();
   const chosen =
     state.status === 'ready'
-      ? slugs.map((s) => state.packs.find((p) => p.slug === s) ?? { slug: s, name: s, icon: '', description: '', count: 0 })
+      ? slugs.map(
+          (s) =>
+            state.packs.find((p) => p.slug === s) ?? {
+              slug: s,
+              name: s,
+              icon: '',
+              description: '',
+              count: 0,
+            },
+        )
       : [];
   return (
     <div className="flex flex-col gap-2" data-testid="pack-summary">

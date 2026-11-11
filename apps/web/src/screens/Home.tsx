@@ -1,6 +1,6 @@
 import { CircleHelp, Plus, Users } from 'lucide-react';
 import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { HowToPlay, HowToPlayButton } from '../components/HowToPlay';
 import { Button, Screen } from '../components/ui';
 import { es } from '../i18n/es';
@@ -16,11 +16,26 @@ export default function Home() {
   return (
     <>
       <div className="home-grid" aria-hidden />
-      <Screen actions={<HowToPlayButton />}>
+      <Screen
+        actions={
+          <>
+            <Link className="btn btn-ghost" to="/cuenta">
+              {es.account.title}
+            </Link>
+            <HowToPlayButton />
+          </>
+        }
+      >
         <div className="home-stage">
           <img className="home-mark" src="/logo/songline-mark.svg" alt="" width={112} height={112} />
           <h1>
-            <img src="/logo/songline-wordmark.svg" alt={es.appName} width={220} height={41} className="mx-auto h-auto w-[220px]" />
+            <img
+              src="/logo/songline-wordmark.svg"
+              alt={es.appName}
+              width={220}
+              height={41}
+              className="mx-auto h-auto w-[220px]"
+            />
           </h1>
           <p className="mb-4 mt-1 max-w-[290px] text-fg-2">{es.home.tagline}</p>
           <div className="home-strip" aria-hidden>

@@ -12,7 +12,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel, Field, ValidationError
 
+from app.api.account import optional_account, public_user
 from app.api.deps import client_ip, get_services, optional_session_hash, session_hash
+from app.entitlements import check_access
 from app.game.models import EDITABLE_SETTINGS, Phase, Settings
 from app.rooms.manager import RoomsFull
 from app.services import Services
@@ -20,7 +22,7 @@ from app.ws.protocol import COLOR_PATTERN
 
 router = APIRouter()
 
-SUGGESTED_COLORS = ["#E63946", "#2A9D8F", "#F4A261", "#7B2CBF"]
+SUGGESTED_COLORS = ["#E63946", "#2A9D8F", "#F4A261", "#7B2CBF", "#E8B931", "#4189E8"]
 
 
 class CreateRoomBody(BaseModel):
@@ -30,11 +32,12 @@ class CreateRoomBody(BaseModel):
 
 
 @router.post("/rooms")
-def create_room(
+async def create_room(
     body: CreateRoomBody,
     request: Request,
     svc: Services = Depends(get_services),
     sh: str = Depends(session_hash),
+    account: dict[str, Any] | None = Depends(optional_account),
 ) -> dict[str, Any]:
     if not svc.room_limiter.allow(client_ip(request)):
         raise HTTPException(status_code=429, detail="rate_limited")
@@ -47,10 +50,21 @@ def create_room(
         raise HTTPException(status_code=422, detail="invalid settings") from e
     if set(settings.packs) - svc.pack_slugs:
         raise HTTPException(status_code=422, detail="invalid settings")
+    access = public_user(account) if account else {"max_teams": 2, "max_cards": 5, "pack_slugs": ["mix"]}
+    if svc.config.enforce_plan_limits:
+        if account is None and not svc.fake:
+            raise HTTPException(status_code=401, detail="account_required")
+        reason = check_access(settings, access["max_teams"], access["max_cards"], access["pack_slugs"])
+        if reason:
+            raise HTTPException(status_code=403, detail=reason)
     try:
         rt = svc.manager.create(sh, (body.name or "").strip() or "Equipo 1", body.color, settings)
     except RoomsFull as e:
         raise HTTPException(status_code=503, detail="rooms_full") from e
+    rt.room.owner_account_id = str(account["id"]) if account else None
+    rt.room.access_max_teams = access["max_teams"]
+    rt.room.access_max_cards = access["max_cards"]
+    rt.room.access_pack_slugs = access["pack_slugs"]
     code = rt.room.code
     ws_origin = svc.config.public_origin.replace("https://", "wss://").replace("http://", "ws://").rstrip("/")
     return {"code": code, "ws_url": f"{ws_origin}/ws/rooms/{code}", "ws_path": f"/ws/rooms/{code}", "slot": 0}

@@ -12,10 +12,12 @@ from contextlib import suppress
 from typing import Any
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
+from app.entitlements import check_access
 from app.game import commands as C
 from app.game.commands import GameError
+from app.game.models import Settings
 from app.rooms.runtime import Conn, RoomRuntime, envelope
 from app.services import Services, hash_token
 from app.ws import protocol as P
@@ -101,7 +103,21 @@ def build_command(
         packs = changes.get("packs")
         if isinstance(packs, list) and not all(isinstance(p, str) and p in svc.pack_slugs for p in packs):
             raise GameError("invalid_settings", "Pack desconocido")
+        if svc.config.enforce_plan_limits and sender == rt.room.host_slot:
+            try:
+                settings = Settings.model_validate({**rt.room.settings.model_dump(), **changes})
+            except ValidationError as e:
+                raise GameError("invalid_settings", "Ajustes no válidos") from e
+            reason = check_access(settings, rt.room.access_max_teams, rt.room.access_max_cards,
+                                  rt.room.access_pack_slugs)
+            if reason:
+                raise GameError(reason, "Esta configuración no está incluida en tu acceso")
         return C.UpdateSettings(sender, changes)
+    if t in {"start_game", "rematch"} and svc.config.enforce_plan_limits and sender == rt.room.host_slot:
+        reason = check_access(rt.room.settings, rt.room.access_max_teams, rt.room.access_max_cards,
+                              rt.room.access_pack_slugs)
+        if reason:
+            raise GameError(reason, "Esta configuración no está incluida en tu acceso")
     if t == "start_game":
         return C.Start(sender, tuple(svc.songs), secrets.randbits(62))
     if t == "play_request":

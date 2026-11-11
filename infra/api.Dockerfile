@@ -30,4 +30,4 @@ HEALTHCHECK --interval=15s --timeout=3s --start-period=20s --retries=3     CMD [
 # --proxy-headers: the real client IP comes from X-Forwarded-For, but only from the peers listed in
 # FORWARDED_ALLOW_IPS. Docker Compose: the fixed subnet of Caddy. Render: its own proxy ("*"),
 # since Render does not publish a fixed range (see docs/DESPLIEGUE.md for the trade-off).
-CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port \"${PORT}\" --workers 1 --no-access-log --ws-max-size 16384 --proxy-headers --forwarded-allow-ips=\"${FORWARDED_ALLOW_IPS}\""]
+CMD ["sh", "-c", "alembic upgrade head && exec uvicorn app.main:app --host 0.0.0.0 --port \"${PORT}\" --workers 1 --no-access-log --ws-max-size 16384 --proxy-headers --forwarded-allow-ips=\"${FORWARDED_ALLOW_IPS}\""]

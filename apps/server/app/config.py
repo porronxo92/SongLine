@@ -33,6 +33,7 @@ def normalize_database_url(url: str) -> str:
 class AppConfig(BaseSettings):
     model_config = SettingsConfigDict(env_file=REPO_ROOT / ".env", extra="ignore", case_sensitive=False)
 
+    enforce_plan_limits: bool = True
     auth_mode: Literal["spotify", "fake"] = "spotify"
     catalog_source: Literal["postgres", "csv"] = "postgres"
     catalog_csv_path: Path = REPO_ROOT / "catalog" / "songs.csv"
@@ -46,6 +47,12 @@ class AppConfig(BaseSettings):
     public_origin: str = "http://localhost:5173"
     admin_token: str = ""  # >= 32 chars, otherwise /api/admin is disabled
     session_secret: str = ""  # HMAC key for session tokens. Ephemeral (with a warning) if empty.
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_username: str = ""
+    smtp_password: str = ""
+    smtp_from: str = ""
+    smtp_starttls: bool = True
     rate_auth_start_per_min: int = 10
     ws_max_conns_per_room: int = 12
     ws_max_conns_per_ip: int = 40

@@ -49,9 +49,9 @@ MAX_PACKS = 20
 
 
 class Settings(BaseModel):
-    team_count: int = Field(default=2, ge=2, le=4)
+    team_count: int = Field(default=2, ge=2, le=6)
     mode: Literal["app", "voice"] = "voice"
-    target_cards: int = Field(default=10, ge=3, le=30)
+    target_cards: int = Field(default=5, ge=3)
     initial_card_counts: Literal[True] = True  # D3
     initial_tokens: int = Field(default=1, ge=0, le=3)  # S2: 1 by default so hints are usable from turn 1
     hints_enabled: bool = True
@@ -220,6 +220,11 @@ class PauseInfo(BaseModel):
 
 
 class Room(BaseModel):
+    # Server-owned access snapshot; never accepted from clients or included in the public view.
+    owner_account_id: str | None = None
+    access_max_teams: int = 2
+    access_max_cards: int | None = 5
+    access_pack_slugs: list[str] = Field(default_factory=lambda: ["mix"])
     code: str
     host_slot: int = 0
     settings: Settings = Field(default_factory=Settings)

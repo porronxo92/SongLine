@@ -21,16 +21,25 @@ export class ApiError extends Error {
   }
 }
 
-async function raw<T>(path: string, init: RequestInit & { auth?: boolean } = {}, retried = false): Promise<T> {
+async function raw<T>(
+  path: string,
+  init: RequestInit & { auth?: boolean } = {},
+  retried = false,
+): Promise<T> {
   const headers = new Headers(init.headers);
   if (init.body !== undefined && init.body !== null) headers.set('Content-Type', 'application/json');
+  const accountToken = localStorage.getItem('songline.account.token');
+  if (init.auth !== false && accountToken) headers.set('X-Account-Token', accountToken);
   const token = getStoredToken();
   if (init.auth !== false && token) headers.set('Authorization', `Bearer ${token}`);
   const res = await fetch(path, { ...init, headers });
   if (!res.ok) {
     if (res.status === 401 && init.auth !== false && token && !retried) {
       // Token no firmado por este servidor (p. ej. reinicio con clave efímera): se pide uno nuevo y se reintenta.
-      const body = (await res.clone().json().catch(() => ({}))) as { detail?: unknown };
+      const body = (await res
+        .clone()
+        .json()
+        .catch(() => ({}))) as { detail?: unknown };
       if (body.detail === 'invalid_session') {
         setStoredToken(null);
         await ensureSession();
@@ -76,7 +85,10 @@ export const api = {
     }),
   logout: () => authed<undefined>('/api/auth/logout', { method: 'POST' }),
   createRoom: (body: CreateRoomRequest) =>
-    authed<CreateRoomResponse>('/api/rooms', { method: 'POST', body: JSON.stringify(body) }),
+    authed<CreateRoomResponse>('/api/rooms', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
   /** Público: no necesita sesión. */
   packs: () => raw<CatalogPack[]>('/api/catalog/packs', { auth: false }),
   roomInfo: (code: string) => authed<RoomInfo>(`/api/rooms/${encodeURIComponent(code)}`),

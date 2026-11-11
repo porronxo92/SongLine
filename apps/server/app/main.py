@@ -6,10 +6,10 @@ import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
-from fastapi import APIRouter, FastAPI
+from fastapi import APIRouter, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import admin, auth, catalog, rooms
+from app.api import account, admin, auth, catalog, rooms
 from app.config import ADMIN_TOKEN_MIN_LEN, AppConfig, check_startup
 from app.services import Services, build_services
 from app.ws.router import router as ws_router
@@ -46,9 +46,18 @@ def create_app(config: AppConfig | None = None, services: Services | None = None
         yield
         await svc.manager.shutdown()
         await svc.http.aclose()
+        await svc.accounts.close()
 
     app = FastAPI(title="SongLine", lifespan=lifespan)
     app.state.services = svc
+
+    @app.middleware("http")
+    async def account_no_store(request: Request, call_next):  # type: ignore[no-untyped-def]
+        response = await call_next(request)
+        if request.url.path.startswith("/api/account/"):
+            response.headers["Cache-Control"] = "no-store"
+        return response
+
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[svc.config.public_origin],
@@ -56,7 +65,7 @@ def create_app(config: AppConfig | None = None, services: Services | None = None
         allow_headers=["*"],
     )
     api = APIRouter(prefix="/api")
-    for r in (auth.router, rooms.router, catalog.router, admin.router):
+    for r in (account.router, auth.router, rooms.router, catalog.router, admin.router):
         api.include_router(r)
     app.include_router(api)
     app.include_router(ws_router)

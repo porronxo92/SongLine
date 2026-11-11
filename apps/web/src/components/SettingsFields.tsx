@@ -1,6 +1,7 @@
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
 import type { EditableSettings } from '../protocol/types';
+import { useAccount } from '../lib/account';
 import { es } from '../i18n/es';
 import { PackPicker } from './PackPicker';
 import { Stepper, Switch } from './ui';
@@ -59,6 +60,7 @@ interface FieldsProps {
 
 /** Ajustes de juego sin géneros: paso 1 de Crear y base de los ajustes del lobby. */
 export function GameSettingsFields({ values, onChange, minTeams = 2, collapseExtras }: FieldsProps) {
+  const user = useAccount((s) => s.user);
   const [moreOpen, setMoreOpen] = useState(false);
   const extras = (
     <>
@@ -99,7 +101,7 @@ export function GameSettingsFields({ values, onChange, minTeams = 2, collapseExt
         label={es.create.teams}
         value={values.team_count}
         min={minTeams}
-        max={4}
+        max={user?.max_teams ?? 2}
         format={es.create.teamsValue}
         onChange={(n) => {
           onChange({ team_count: n });
@@ -109,8 +111,16 @@ export function GameSettingsFields({ values, onChange, minTeams = 2, collapseExt
         legend={es.create.mode}
         value={values.mode}
         options={[
-          { value: 'app', label: es.create.modeApp, hint: es.create.modeAppHint },
-          { value: 'voice', label: es.create.modeVoice, hint: es.create.modeVoiceHint },
+          {
+            value: 'app',
+            label: es.create.modeApp,
+            hint: es.create.modeAppHint,
+          },
+          {
+            value: 'voice',
+            label: es.create.modeVoice,
+            hint: es.create.modeVoiceHint,
+          },
         ]}
         onChange={(mode) => {
           onChange({ mode });
@@ -120,7 +130,7 @@ export function GameSettingsFields({ values, onChange, minTeams = 2, collapseExt
         label={es.create.target}
         value={values.target_cards}
         min={3}
-        max={30}
+        max={user?.max_cards ?? (user?.plan === 'premium' ? Number.MAX_SAFE_INTEGER : 5)}
         onChange={(n) => {
           onChange({ target_cards: n });
         }}
@@ -129,8 +139,16 @@ export function GameSettingsFields({ values, onChange, minTeams = 2, collapseExt
         legend={es.create.audio}
         value={values.audio_source}
         options={[
-          { value: 'spotify', label: es.create.audioSpotify, hint: es.create.audioSpotifyHint },
-          { value: 'preview', label: es.create.audioPreview, hint: es.create.audioPreviewHint },
+          {
+            value: 'spotify',
+            label: es.create.audioSpotify,
+            hint: es.create.audioSpotifyHint,
+          },
+          {
+            value: 'preview',
+            label: es.create.audioPreview,
+            hint: es.create.audioPreviewHint,
+          },
         ]}
         onChange={(audio_source) => {
           onChange({ audio_source });

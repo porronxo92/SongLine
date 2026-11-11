@@ -48,6 +48,7 @@ class ListRepo:
 def make_config(**over: Any) -> AppConfig:
     base: dict[str, Any] = {
         "auth_mode": "fake",
+        "enforce_plan_limits": False,  # Transport/engine fixtures exercise all settings; access tests opt in.
         "catalog_source": "csv",
         "catalog_csv_path": FIXTURES / "songs.csv",
         "persistence": "none",
