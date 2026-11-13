@@ -64,6 +64,7 @@ export const es = {
     unknownError: 'Algo ha fallado. Probad de nuevo.',
   },
   home: {
+    backToLanding: 'SongLine: volver a la página principal',
     play: 'Jugar',
     tagline: 'Escucha, adivina y ordena la historia de la música. ¿Qué año suena?',
     howTo: 'Cómo se juega',

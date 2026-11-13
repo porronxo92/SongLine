@@ -25,16 +25,23 @@ export default function GameHome() {
         }
       >
         <div className="home-stage">
-          <img className="home-mark" src="/logo/songline-mark.svg" alt="" width={112} height={112} />
-          <h1>
-            <img
-              src="/logo/songline-wordmark.svg"
-              alt={es.appName}
-              width={220}
-              height={41}
-              className="mx-auto h-auto w-[220px]"
-            />
-          </h1>
+          <Link
+            to="/"
+            aria-label={es.home.backToLanding}
+            title={es.home.backToLanding}
+            className="flex flex-col items-center gap-3 rounded-2xl"
+          >
+            <img className="home-mark" src="/logo/songline-mark.svg" alt="" width={112} height={112} />
+            <h1>
+              <img
+                src="/logo/songline-wordmark.svg"
+                alt={es.appName}
+                width={220}
+                height={41}
+                className="mx-auto h-auto w-[220px]"
+              />
+            </h1>
+          </Link>
           <p className="mb-4 mt-1 max-w-[290px] text-fg-2">{es.home.tagline}</p>
           <div className="home-strip" aria-hidden>
             <span className="ycard" style={{ '--dc': 'var(--decade-70)' } as React.CSSProperties}>
