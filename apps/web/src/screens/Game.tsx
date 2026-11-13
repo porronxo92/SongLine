@@ -86,7 +86,7 @@ export function Game({ view }: { view: RoomView }) {
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h1 className="text-[22px] font-bold leading-tight" role="status" data-testid="turn-banner">
+        <h1 className="text-[22px] font-bold leading-tight" aria-live="polite" data-testid="turn-banner">
           {myTurn ? es.game.yourTurn : es.game.turnOf(teamName(activeTeam))}
         </h1>
         {phase !== 'reveal' && turn.startedPlaying && view.audio.paused ? (
@@ -545,7 +545,7 @@ function Reveal({ view, turn, activeTeam, myTurn }: BodyProps) {
             activeName: teamName(activeTeam),
             objectorName: objector ? teamName(objector) : null,
             mode: view.settings.mode,
-            honorAnswered: claimed || result.titleOk || result.artistOk,
+            honorAnswered: result.answersConfirmed ?? (claimed || result.titleOk || result.artistOk),
             viewerIsActive: myTurn,
             lineYears: baseYears,
           })
@@ -601,6 +601,7 @@ function Reveal({ view, turn, activeTeam, myTurn }: BodyProps) {
         <HonorClaim
           initialTitle={result.titleOk}
           initialArtist={result.artistOk}
+          confirmed={result.answersConfirmed}
           onClaim={() => {
             setClaimed(true);
           }}

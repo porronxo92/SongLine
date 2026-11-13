@@ -243,3 +243,37 @@ def test_place_cancel_round_trip(make_app: MakeApp, clock: Clock) -> None:
             p.ok("place_confirm", index=1)
         r = p.result(p.send("place_cancel"))
         assert r["payload"]["code"] == "too_many_changes"
+
+
+def test_hint_refund_is_authoritative_for_every_viewer_and_claims_are_idempotent(
+    make_app: MakeApp, clock: Clock
+) -> None:
+    app, svc = make_app(timer_scale=1.0)
+    with TestClient(app) as client, ExitStack() as stack:
+        rt, players, active = begin(client, stack, svc, tokens=2)
+        p = players[active]
+        p.ok("use_hint", kind="artist")
+        p.ok("use_hint", kind="title")
+        p.ok("place_confirm", index=0)
+        p.ok("voice_confirm")
+        for slot, player in enumerate(players):
+            if slot != active:
+                player.ok("objection_pass")
+        pending = p.state(lambda v: v["phase"] == "reveal")
+        assert pending["turn"]["result"]["answersConfirmed"] is False
+        p.ok("honor_claim", title_ok=False, artist_ok=True)
+        for player in players:
+            state = player.state(lambda v: bool(v["turn"] and v["turn"]["result"]
+                                               and v["turn"]["result"]["answersConfirmed"]))
+            assert state["teams"][active]["tokens"] == 1
+            assert state["turn"]["result"]["hintRefunds"] == [
+                {"kind": "artist", "refunded": True}, {"kind": "title", "refunded": False},
+            ]
+            assert state["turn"]["result"]["tokenAwarded"] is False
+            assert state["turn"]["result"]["tokenDelta"] == {str(active): -1}
+        p.ok("honor_claim", title_ok=False, artist_ok=True)
+        assert rt.room.teams[active].tokens == 1
+        p.ok("honor_claim", title_ok=False, artist_ok=False)
+        assert p.state(lambda v: bool(v["turn"] and v["turn"]["result"]
+                                     and v["turn"]["result"]["artistOk"] is False
+                                     and v["turn"]["result"]["answersConfirmed"]))["teams"][active]["tokens"] == 0

@@ -201,6 +201,8 @@ class Turn(BaseModel):
     reveal_at: float | None = None
     result: TurnResult | None = None
     hints_used: list[HintKind] = Field(default_factory=list)  # masked text is derived, never stored
+    hint_refunds: list[HintKind] = Field(default_factory=list)  # credits already applied, persisted for replay
+    honor_claimed: bool = False  # false/false is distinct from an unanswered voice claim
     hint_deadline_ts: float | None = None  # visible "limit to answer"; the timer adds a grace
     audio_commands: int = 0  # audio_control commands accepted this turn (cap per turn)
     audio_paused: bool = False  # last pause/resume intent of the active team

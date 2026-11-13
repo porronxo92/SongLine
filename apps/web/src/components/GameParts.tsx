@@ -181,23 +181,31 @@ function Toggle({
 export function HonorClaim({
   initialTitle,
   initialArtist,
+  confirmed,
   onClaim,
 }: {
   initialTitle: boolean;
   initialArtist: boolean;
+  confirmed?: boolean;
   onClaim?: () => void;
 }) {
   const [titleOk, setTitleOk] = useState(initialTitle);
   const [artistOk, setArtistOk] = useState(initialArtist);
   const send = (t: boolean, a: boolean) => {
-    onClaim?.();
-    void act('honor_claim', { title_ok: t, artist_ok: a });
+    void act('honor_claim', { title_ok: t, artist_ok: a }).then((ok) => {
+      if (ok) onClaim?.();
+    });
   };
   return (
     <Card className="flex flex-col gap-3" data-testid="honor-claim">
       <div>
         <h2 className="h2">{es.game.honorTitle}</h2>
         <p className="help mt-1">{es.game.honorHelp}</p>
+        {confirmed !== undefined ? (
+          <p className="help mt-2" role="status" data-testid="honor-confirmation">
+            {confirmed ? es.game.honorConfirmed : es.game.honorPending}
+          </p>
+        ) : null}
       </div>
       <Toggle
         label={es.game.honorTitleOk}

@@ -8,7 +8,7 @@ import random
 from bisect import bisect_left, bisect_right
 from collections.abc import Sequence
 
-from app.game.models import Card, SlotExplanation, SlotReason, Team
+from app.game.models import Card, SlotExplanation, SlotReason, Team, Turn
 
 MAX_PLACE_CHANGES_PER_TURN = 3
 
@@ -159,3 +159,18 @@ def mask_text(text: str, seed: str | int) -> str:
             revealed.add(i)
     shown = revealed
     return "".join(ch if (not ch.isalpha() or k in shown) else HIDDEN_CHAR for k, ch in enumerate(text))
+
+
+def turn_token_delta(turn: Turn) -> dict[str, int]:
+    """Final net turn movements, including stakes, refunds and the ordinary bonus."""
+    active_delta = -len(turn.hints_used) + len(turn.hint_refunds) + int(turn.token_awarded)
+    delta = {str(turn.team_slot): active_delta}
+    if turn.objection is not None:
+        key = str(turn.objection[0])
+        delta[key] = delta.get(key, 0) - 1
+    return {key: value for key, value in delta.items() if value}
+
+
+def answers_confirmed(turn: Turn, mode: str) -> bool:
+    # Existing snapshots have no honor_claimed flag; positive claims are unambiguous.
+    return (mode == "app" and turn.guessed) or turn.honor_claimed or turn.title_ok or turn.artist_ok

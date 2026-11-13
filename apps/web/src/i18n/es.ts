@@ -154,7 +154,7 @@ export const es = {
     objection: 'Tiempo para objetar',
     moreSettings: 'Más ajustes',
     hints: 'Pistas',
-    hintsHelp: 'Cada pista cuesta una ficha.',
+    hintsHelp: 'Reserváis 1 ficha por pista. La recuperáis si acertáis el dato pedido.',
     initialTokens: 'Fichas iniciales',
     tokensValue: (n: number) => (n === 1 ? '1 ficha' : `${String(n)} fichas`),
     audio: 'Audio',
@@ -325,10 +325,13 @@ export const es = {
     yourAnswer: 'Vuestra respuesta',
     acceptGuess: 'Dar por bueno',
     acceptHint: 'Cualquier equipo puede corregir la respuesta.',
-    honorTitle: 'Ficha: ¿dijisteis bien la canción y el artista?',
-    honorHelp: 'Respondéis por honor. Solo sirve para ganar la ficha.',
+    honorTitle: '¿Dijisteis bien la canción y el artista?',
+    honorHelp:
+      'Respondéis por honor. Cada acierto puede devolver la ficha de su pista. Para ganar la ficha de acierto también debe valer el hueco.',
     honorTitleOk: 'Canción',
     honorArtistOk: 'Artista',
+    honorPending: 'Falta confirmar vuestra respuesta.',
+    honorConfirmed: 'Respuesta confirmada. Podéis corregirla antes de seguir.',
     next: 'Siguiente',
     nextIn: (s: number) => `Siguiente en ${String(s)} s`,
     waitNext: (name: string) => `${name} pulsa Siguiente.`,
@@ -362,11 +365,12 @@ export const es = {
     noTokens: 'Pista: sin fichas',
     noTokensShort: 'Sin fichas',
     chooseTitle: 'Pedir una pista',
-    chooseCost: (n: number) => `Cuesta 1 ficha. Tenéis ${String(n)}.`,
+    chooseCost: (n: number) =>
+      `Reserváis 1 ficha al pedirla. Tenéis ${String(n)}. La recuperáis si acertáis ese dato, aunque falléis el hueco.`,
     artist: 'Artista',
     title: 'Título',
-    artistHint: 'Letras sueltas del artista',
-    titleHint: 'Letras sueltas del título',
+    artistHint: 'Letras del artista. Recuperáis la ficha si acertáis el artista.',
+    titleHint: 'Letras del título. Recuperáis la ficha si acertáis el título.',
     alreadyUsed: 'Ya pedida',
     panelTitle: 'Pistas',
     show: 'Ver pistas',
@@ -521,17 +525,30 @@ export const es = {
       `Con ${String(y)}, ahí no iba: la canción es posterior a ${String(right)}.`,
     noObjection: 'Nadie objetó.',
     tokenWon: (y: string) => `Ficha para ${y}: hueco, canción y artista correctos.`,
-    tokenWrongSlot: (y: string) => `${y} no gana ficha: el hueco era incorrecto.`,
-    tokenTitleApp: (y: string) => `${y} no gana ficha. El hueco valía, pero el título no coincide.`,
-    tokenArtistApp: (y: string) => `${y} no gana ficha. El hueco valía, pero el artista no coincide.`,
-    tokenBothApp: (y: string) => `${y} no gana ficha. El hueco valía, pero fallaron el título y el artista.`,
-    tokenTitleVoice: (y: string) => `${y} no gana ficha. El hueco valía, pero no acertó la canción.`,
-    tokenArtistVoice: (y: string) => `${y} no gana ficha. El hueco valía, pero no acertó el artista.`,
+    tokenWrongSlot: (y: string) => `${y} no gana ficha de acierto: el hueco era incorrecto.`,
+    tokenTitleApp: (y: string) =>
+      `${y} no gana ficha de acierto. El hueco valía, pero el título no coincide.`,
+    tokenArtistApp: (y: string) =>
+      `${y} no gana ficha de acierto. El hueco valía, pero el artista no coincide.`,
+    tokenBothApp: (y: string) =>
+      `${y} no gana ficha de acierto. El hueco valía, pero fallaron el título y el artista.`,
+    tokenTitleVoice: (y: string) =>
+      `${y} no gana ficha de acierto. El hueco valía, pero no acertó la canción.`,
+    tokenArtistVoice: (y: string) =>
+      `${y} no gana ficha de acierto. El hueco valía, pero no acertó el artista.`,
     tokenBothVoice: (y: string) =>
-      `${y} no gana ficha. El hueco valía, pero no acertó ni canción ni artista.`,
+      `${y} no gana ficha de acierto. El hueco valía, pero no acertó ni canción ni artista.`,
     tokenPendingActive: 'Falta que digáis si acertasteis canción y artista.',
     tokenPendingOther: (y: string) => `Falta que ${y} diga si acertó canción y artista.`,
-    tokenLabel: 'Ficha',
+    tokenLabel: 'Ficha de acierto',
+    hintRefundTitle: 'Fichas de las pistas',
+    hintLabel: (kind: 'artist' | 'title') => `Pista de ${kind === 'artist' ? 'artista' : 'título'}`,
+    hintRefunded: (kind: 'artist' | 'title', team: string | null) =>
+      `${team === null ? 'Recuperáis' : `${team} recupera`} 1 ficha por acertar el ${kind === 'artist' ? 'artista' : 'título'}.`,
+    hintLost: (kind: 'artist' | 'title', team: string | null) =>
+      `${team === null ? 'Perdéis' : `${team} pierde`} la ficha de esta pista: ${team === null ? 'no acertasteis' : 'no acertó'} el ${kind === 'artist' ? 'artista' : 'título'}.`,
+    hintPending: (kind: 'artist' | 'title', team: string | null) =>
+      `1 ficha reservada. Falta que ${team === null ? 'confirméis' : `${team} confirme`} si ${team === null ? 'acertasteis' : 'acertó'} el ${kind === 'artist' ? 'artista' : 'título'}.`,
     equalHint: 'Los años iguales valen a ambos lados.',
     equalHintLabel: 'Aviso sobre años iguales',
   },
@@ -613,12 +630,12 @@ export const es = {
           'Ejemplo: la canción es de 2012 y ponéis la carta entre 2012 y 2015. Es correcta, porque 2012 es el mismo año que vuestra carta. Ponerla antes de esa carta de 2012 también valdría. Si otro equipo objeta en el otro hueco, los dos valen y la carta se queda con quien la colocó primero.',
       },
       {
-        title: 'La ficha',
-        body: 'Ganáis una ficha cuando acertáis el hueco, la canción y el artista. Empezáis con las fichas iniciales que elija el anfitrión, una por defecto. Las fichas sirven para objetar y para pedir pistas.',
+        title: 'La ficha de acierto',
+        body: 'Ganáis una ficha cuando acertáis el hueco, la canción y el artista. Podéis ganar como máximo una ficha de acierto por turno; las devoluciones de pistas van aparte. Empezáis con las fichas iniciales que elija el anfitrión, una por defecto. Las fichas sirven para objetar y para pedir pistas.',
       },
       {
         title: 'Las pistas',
-        body: 'Una pista cuesta una ficha. Podéis pedir letras sueltas del artista, del título o de los dos, y solo las veis vosotros. Al pedir la primera tenéis 60 segundos para responder. Si se acaban, se envía lo que haya en pantalla.',
+        body: 'Al pedir una pista reserváis una ficha. Si acertáis el dato de esa pista, la recuperáis aunque falléis el hueco: la del título por acertar el título y la del artista por acertar el artista. Podéis pedir las dos y recuperar cada ficha por separado. Solo vosotros veis las letras. La primera pista activa 60 segundos para responder; al terminar se envía lo que haya en pantalla.',
       },
       {
         title: 'El reproductor',

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 
 from app.api.deps import get_services
 from app.catalog.packs import pack_listing
@@ -25,5 +25,7 @@ def packs(svc: Services = Depends(get_services)) -> list[dict[str, Any]]:
 
 
 @router.get("/healthz")
-def healthz() -> dict[str, str]:
+def healthz(response: Response) -> dict[str, str]:
+    # Operational capability marker: verify that game-rule deployments reached this instance.
+    response.headers["X-SongLine-Hint-Policy"] = "refundable-v1"
     return {"status": "ok"}

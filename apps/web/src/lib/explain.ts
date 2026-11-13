@@ -1,5 +1,5 @@
 import { es } from '../i18n/es';
-import type { Headline, SlotCheck, TurnResult } from '../protocol/types';
+import type { Headline, HintKind, SlotCheck, TurnResult } from '../protocol/types';
 
 export interface ExplainContext {
   activeName: string;
@@ -22,11 +22,20 @@ export interface SlotExplanation {
   lines: string[];
 }
 
+export interface HintRefundExplanation {
+  kind: HintKind;
+  refunded: boolean | null;
+  text: string;
+  tone: Tone;
+}
+
 export interface ResultExplanation {
   headline: { text: string; kind: 'keep' | 'steal' | 'discard' };
   placement: SlotExplanation;
   objection: (SlotExplanation & { bothValid: boolean }) | null;
+  /** Ordinary full-answer bonus, independent of refunds for hint stakes. */
   token: { text: string; tone: Tone };
+  hintRefunds: HintRefundExplanation[] | null;
 }
 
 /** Texto de un hueco a partir de los años de sus vecinos. */
@@ -80,10 +89,16 @@ function explainPlacement(r: TurnResult, ctx: ExplainContext): SlotExplanation {
       lines.push(t.equalTwo(r.songYear), t.equalConclusion(gap));
       break;
     case 'equal_left':
-      lines.push(t.equalOne(r.songYear, cardRef(p.leftYear ?? r.songYear, ctx.viewerIsActive)), t.equalConclusion(gap));
+      lines.push(
+        t.equalOne(r.songYear, cardRef(p.leftYear ?? r.songYear, ctx.viewerIsActive)),
+        t.equalConclusion(gap),
+      );
       break;
     case 'equal_right':
-      lines.push(t.equalOne(r.songYear, cardRef(p.rightYear ?? r.songYear, ctx.viewerIsActive)), t.equalConclusion(gap));
+      lines.push(
+        t.equalOne(r.songYear, cardRef(p.rightYear ?? r.songYear, ctx.viewerIsActive)),
+        t.equalConclusion(gap),
+      );
       break;
     default:
       if (p.leftYear === null && p.rightYear === null) lines.push(t.insideFirst(r.songYear));
@@ -103,7 +118,10 @@ function explainPlacement(r: TurnResult, ctx: ExplainContext): SlotExplanation {
   return { ok: true, title: t.placementOk, lines };
 }
 
-function explainObjection(r: TurnResult, ctx: ExplainContext): (SlotExplanation & { bothValid: boolean }) | null {
+function explainObjection(
+  r: TurnResult,
+  ctx: ExplainContext,
+): (SlotExplanation & { bothValid: boolean }) | null {
   const o = r.objection;
   if (!o) return null;
   const t = es.explain;
@@ -114,7 +132,12 @@ function explainObjection(r: TurnResult, ctx: ExplainContext): (SlotExplanation 
   const spent = t.tokenSpent(x);
 
   if (bothValid) {
-    return { ok: true, bothValid: true, title: t.bothValidTitle, lines: [t.bothValid, t.bothValidKeep(y), spent] };
+    return {
+      ok: true,
+      bothValid: true,
+      title: t.bothValidTitle,
+      lines: [t.bothValid, t.bothValidKeep(y), spent],
+    };
   }
   if (r.headline === 'stolen') {
     const lines = [t.objStolen(x, gap)];
@@ -131,19 +154,47 @@ function explainObjection(r: TurnResult, ctx: ExplainContext): (SlotExplanation 
   return { ok: false, bothValid: false, title: t.objectionWrong, lines: [head, ...why, spent] };
 }
 
+function answersAreConfirmed(r: TurnResult, ctx: ExplainContext): boolean {
+  return r.answersConfirmed ?? (ctx.mode === 'app' || ctx.honorAnswered);
+}
+
+function explainHintRefunds(r: TurnResult, ctx: ExplainContext): HintRefundExplanation[] | null {
+  if (r.hintRefunds === undefined) return null;
+  const confirmed = answersAreConfirmed(r, ctx);
+  return r.hintRefunds.map((hint) => ({
+    kind: hint.kind,
+    refunded: confirmed ? hint.refunded : null,
+    tone: !confirmed ? 'pending' : hint.refunded ? 'good' : 'bad',
+    text: !confirmed
+      ? es.explain.hintPending(hint.kind, ctx.viewerIsActive ? null : ctx.activeName)
+      : hint.refunded
+        ? es.explain.hintRefunded(hint.kind, ctx.viewerIsActive ? null : ctx.activeName)
+        : es.explain.hintLost(hint.kind, ctx.viewerIsActive ? null : ctx.activeName),
+  }));
+}
+
 function explainToken(r: TurnResult, ctx: ExplainContext): { text: string; tone: Tone } {
   const t = es.explain;
   const y = ctx.activeName;
   const reason = r.token.reason;
-  if (reason === 'awarded') return { text: t.tokenWon(y), tone: 'good' };
+  // A wrong position rules out the ordinary bonus, but never a hint refund.
   if (reason === 'wrong_slot') return { text: t.tokenWrongSlot(y), tone: 'bad' };
-  const voice = ctx.mode === 'voice';
-  if (voice && !ctx.honorAnswered && reason === 'title_and_artist_wrong') {
+  if (!answersAreConfirmed(r, ctx)) {
     return { text: ctx.viewerIsActive ? t.tokenPendingActive : t.tokenPendingOther(y), tone: 'pending' };
   }
-  const table = voice
-    ? { title_wrong: t.tokenTitleVoice, artist_wrong: t.tokenArtistVoice, title_and_artist_wrong: t.tokenBothVoice }
-    : { title_wrong: t.tokenTitleApp, artist_wrong: t.tokenArtistApp, title_and_artist_wrong: t.tokenBothApp };
+  if (reason === 'awarded') return { text: t.tokenWon(y), tone: 'good' };
+  const table =
+    ctx.mode === 'voice'
+      ? {
+          title_wrong: t.tokenTitleVoice,
+          artist_wrong: t.tokenArtistVoice,
+          title_and_artist_wrong: t.tokenBothVoice,
+        }
+      : {
+          title_wrong: t.tokenTitleApp,
+          artist_wrong: t.tokenArtistApp,
+          title_and_artist_wrong: t.tokenBothApp,
+        };
   return { text: table[reason](y), tone: 'bad' };
 }
 
@@ -163,5 +214,6 @@ export function explainResult(result: TurnResult, ctx: ExplainContext): ResultEx
     placement,
     objection: explainObjection(result, ctx),
     token: explainToken(result, ctx),
+    hintRefunds: explainHintRefunds(result, ctx),
   };
 }

@@ -26,6 +26,8 @@
 - **Gesto en un dispositivo distinto.** La orden «Reproducir» la pulsa otro móvil, pero el audio arranca en el del anfitrión. En Android Chrome, desbloquear el elemento una vez (`activateElement` en el `AudioGate` del lobby) basta para el resto de la sesión. **En iPhone es probable que haga falta un toque en el móvil del anfitrión por canción.** Mitigación: si en 1,5 s no llega `paused=false` al móvil del anfitrión, este muestra a pantalla completa «🔊 Toca para que suene» (sin metadatos) y el `resume()` se hace dentro de ese gesto. **Recomendación: que el anfitrión use Android o un portátil.** Se valida en H0.
 - **Pantalla del anfitrión.** Debe quedarse en primer plano con la PWA abierta (Wake Lock) para que no aparezcan la pantalla de bloqueo ni la Media Session. Cuando no es su turno, muestra «No es tu turno», como el resto.
 
+**Pistas recuperables (regla vigente).** Cada pista de título o artista aparta una ficha al solicitarse. Al resolver, se recupera si se acierta ese mismo dato, incluso aunque la posición sea incorrecta. Pedir ambas pistas puede devolver ambas fichas, pero D5 continúa concediendo como máximo **una ficha adicional por turno** cuando se aciertan hueco, título y artista. En voz, la devolución espera a la confirmación; en modo app, admite «Dar por bueno». El detalle del contrato y del saldo neto está en `docs/PROTOCOL.md`. Esta regla sustituye el coste no recuperable de versiones anteriores.
+
 ### 0.1 Hechos de Spotify contrastados hoy (10-oct-2026)
 | Hecho | Fuente | Impacto |
 |---|---|---|

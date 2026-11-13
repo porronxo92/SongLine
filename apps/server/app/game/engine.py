@@ -74,11 +74,13 @@ from app.game.models import (
 from app.game.projection import audio_ready, card_public, standings
 from app.game.rules import (
     MAX_PLACE_CHANGES_PER_TURN,
+    answers_confirmed,
     card_count,
     deal_initial,
     explain_slot,
     insert_sorted,
     pick_winners,
+    turn_token_delta,
 )
 from app.game.validate_guess import normalize, validate_guess
 
@@ -324,6 +326,15 @@ def _recompute_token(room: Room) -> None:
     elif not awarded and turn.token_awarded:
         active.tokens -= 1
     turn.token_awarded = awarded
+    # Refund only the corresponding correct answer, independently of card placement.
+    # Reconcile against the persisted ledger so repeated/corrected claims are idempotent.
+    refunded = [
+        kind for kind in turn.hints_used
+        if answers_confirmed(turn, room.settings.mode)
+        and (turn.artist_ok if kind == "artist" else turn.title_ok)
+    ]
+    active.tokens += len(refunded) - len(turn.hint_refunds)
+    turn.hint_refunds = refunded
 
 
 def _reveal(room: Room, fx: Fx, now: float) -> None:
@@ -415,10 +426,7 @@ def _finish_turn(room: Room, fx: Fx, now: float) -> None:
     _cancel_timer(room, fx, "reveal_auto")
     _clear_hint_timer(room, fx)
     _stop_audio(room, fx)
-    delta = {str(turn.team_slot): 1 if turn.token_awarded else 0}
-    if turn.objection is not None:
-        delta[str(turn.objection[0])] = delta.get(str(turn.objection[0]), 0) - 1
-    delta = {k: v for k, v in delta.items() if v != 0}
+    delta = turn_token_delta(turn)
     fx.append(Broadcast("turn_resolved", {"to_slot": turn.result.to_slot, "token_delta": delta}))
     target = room.settings.target_cards
     if any(card_count(t) >= target for t in room.teams):
@@ -517,6 +525,9 @@ def _h_disconnected(room: Room, cmd: Disconnected, now: float, fx: Fx) -> None:
 
 
 def _h_restored(room: Room, cmd: Restored, now: float, fx: Fx) -> None:
+    if room.turn is not None and room.turn.result is not None:
+        # Adopt refund rules for legacy revealed snapshots; persisted ledgers make replay safe.
+        _recompute_token(room)
     for t in room.teams:
         t.connected = False
     _reset_audio(room)
@@ -746,7 +757,7 @@ def _h_use_hint(room: Room, cmd: UseHint, now: float, fx: Fx) -> None:
     team = room.teams[turn.team_slot]
     if team.tokens < 1:
         raise GameError("no_tokens", "No tienes fichas")
-    team.tokens -= 1  # spent immediately, never refunded
+    team.tokens -= 1  # reserve the stake immediately; correct target refunded at reveal
     turn.hints_used.append(kind)
     if "hint" not in room.timers:
         turn.hint_deadline_ts = now + HINT_LIMIT_S
@@ -873,6 +884,7 @@ def _h_honor_claim(room: Room, cmd: HonorClaim, now: float, fx: Fx) -> None:
     turn = _require_active(room, cmd.sender)
     if room.settings.mode != "voice":
         raise GameError("wrong_mode", "Esta sala juega en modo app")
+    turn.honor_claimed = True
     turn.title_ok, turn.artist_ok = cmd.title_ok, cmd.artist_ok
     _recompute_token(room)
 

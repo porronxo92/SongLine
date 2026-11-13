@@ -237,7 +237,7 @@ def test_timer_freezes_in_pause_and_resumes_with_remaining() -> None:
     assert "hint" not in skipped.frozen and "hint" not in skipped.timers
 
 
-def test_tokens_are_not_refunded() -> None:
+def test_voice_hint_stakes_stay_spent_until_answers_are_claimed() -> None:
     room = go(
         placing(), NOW, C.UseHint(0, "artist"), C.UseHint(0, "title"), C.PlaceConfirm(0, 3), C.VoiceConfirm(0)
     )

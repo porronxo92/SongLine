@@ -7,7 +7,7 @@ Las decisiones de esta página prevalecen sobre `docs/DISENO.md` donde lo contra
 
 | Tema | Decisión |
 |---|---|
-| Pistas: coste | **1 ficha por pista.** Dos tipos: artista o título. Se pueden pedir las dos pagando dos. |
+| Pistas: coste | **1 ficha apostada por pista.** Se devuelve al acertar su dato (título o artista), independientemente del hueco. Dos pistas se evalúan por separado. El premio habitual de +1 sigue exigiendo hueco, título y artista. |
 | Pistas: quién las ve | **Solo el equipo del turno** ve el texto enmascarado. Los demás ven «X ha pedido una pista de artista/título». |
 | Pistas: temporizador | **1 minuto para responder** desde que se pide la pista. Si se agota, se confirma lo que haya en pantalla (hueco y respuesta). |
 | Pistas: enmascarado | Calculado en el servidor, letras reveladas en posiciones fijas por turno (pedir de nuevo no destapa más), espacios y signos visibles, siempre quedan letras ocultas. |

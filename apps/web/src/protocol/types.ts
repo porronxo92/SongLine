@@ -89,7 +89,11 @@ export interface TurnResult {
   titleOk: boolean;
   artistOk: boolean;
   tokenAwarded: boolean;
+  /** Final net change: hints spent/refunded, ordinary bonus and objection cost. */
   tokenDelta: Record<string, number>;
+  /** Optional while an older server is still serving the previous result schema. */
+  hintRefunds?: { kind: HintKind; refunded: boolean }[];
+  answersConfirmed?: boolean;
 }
 
 export type HintKind = 'artist' | 'title';

@@ -335,3 +335,163 @@ describe('ficha del equipo activo', () => {
     expect(all(e)).not.toMatch(/undefined|NaN|null/);
   });
 });
+
+describe('fichas reservadas para las pistas', () => {
+  it('devuelve la pista del título aunque el hueco sea incorrecto y el artista falle', () => {
+    const e = explainResult(
+      result({
+        placedOk: false,
+        placement: slot({ ok: false, reason: 'too_early' }),
+        tokenReason: 'wrong_slot',
+        titleOk: true,
+        artistOk: false,
+        answersConfirmed: true,
+        hintRefunds: [{ kind: 'title', refunded: true }],
+        tokenDelta: { '0': 0 },
+      }),
+      ctx({ viewerIsActive: true }),
+    );
+    expect(e.hintRefunds).toEqual([
+      {
+        kind: 'title',
+        refunded: true,
+        tone: 'good',
+        text: 'Recuperáis 1 ficha por acertar el título.',
+      },
+    ]);
+    expect(e.token.tone).toBe('bad');
+    expect(e.token.text).toContain('no gana ficha de acierto: el hueco era incorrecto');
+  });
+
+  it('distingue las dos devoluciones del único bonus de acierto', () => {
+    const e = explainResult(
+      result({
+        answersConfirmed: true,
+        hintRefunds: [
+          { kind: 'artist', refunded: true },
+          { kind: 'title', refunded: true },
+        ],
+        tokenDelta: { '0': 1 },
+      }),
+      ctx({ viewerIsActive: true }),
+    );
+    expect(e.hintRefunds?.map((hint) => hint.text)).toEqual([
+      'Recuperáis 1 ficha por acertar el artista.',
+      'Recuperáis 1 ficha por acertar el título.',
+    ]);
+    expect(e.token).toEqual({ text: 'Ficha para Rojos: hueco, canción y artista correctos.', tone: 'good' });
+  });
+
+  it('no devuelve la pista del título por acertar solo el artista', () => {
+    const e = explainResult(
+      result({
+        tokenReason: 'title_wrong',
+        titleOk: false,
+        artistOk: true,
+        answersConfirmed: true,
+        hintRefunds: [{ kind: 'title', refunded: false }],
+      }),
+      ctx({ viewerIsActive: true }),
+    );
+    expect(e.hintRefunds?.[0]).toEqual({
+      kind: 'title',
+      refunded: false,
+      tone: 'bad',
+      text: 'Perdéis la ficha de esta pista: no acertasteis el título.',
+    });
+  });
+
+  it('resuelve cada una de las dos pistas por separado', () => {
+    const e = explainResult(
+      result({
+        tokenReason: 'artist_wrong',
+        titleOk: true,
+        artistOk: false,
+        answersConfirmed: true,
+        hintRefunds: [
+          { kind: 'title', refunded: true },
+          { kind: 'artist', refunded: false },
+        ],
+      }),
+      ctx(),
+    );
+    expect(e.hintRefunds?.map((hint) => hint.refunded)).toEqual([true, false]);
+    expect(e.hintRefunds?.[0]?.text).toBe('Rojos recupera 1 ficha por acertar el título.');
+    expect(e.hintRefunds?.[1]?.text).toBe('Rojos pierde la ficha de esta pista: no acertó el artista.');
+  });
+
+  it('mantiene pendientes las fichas de voz hasta la confirmación del servidor', () => {
+    const e = explainResult(
+      result({
+        tokenReason: 'title_and_artist_wrong',
+        answersConfirmed: false,
+        hintRefunds: [{ kind: 'title', refunded: false }],
+      }),
+      ctx({ mode: 'voice', honorAnswered: true, viewerIsActive: true }),
+    );
+    expect(e.hintRefunds?.[0]).toEqual({
+      kind: 'title',
+      refunded: null,
+      tone: 'pending',
+      text: '1 ficha reservada. Falta que confirméis si acertasteis el título.',
+    });
+    expect(e.token.tone).toBe('pending');
+  });
+
+  it('no confunde un no/no confirmado con una respuesta pendiente tras reconectar', () => {
+    const e = explainResult(
+      result({
+        tokenReason: 'title_and_artist_wrong',
+        titleOk: false,
+        artistOk: false,
+        answersConfirmed: true,
+        hintRefunds: [
+          { kind: 'artist', refunded: false },
+          { kind: 'title', refunded: false },
+        ],
+      }),
+      ctx({ mode: 'voice', honorAnswered: false, viewerIsActive: true }),
+    );
+    expect(e.hintRefunds?.map((hint) => hint.tone)).toEqual(['bad', 'bad']);
+    expect(e.token.tone).toBe('bad');
+    expect(e.token.text).toContain('no acertó ni canción ni artista');
+  });
+
+  it('con hueco incorrecto cierra el bonus y mantiene pendiente la devolución de voz', () => {
+    const e = explainResult(
+      result({
+        tokenReason: 'wrong_slot',
+        answersConfirmed: false,
+        hintRefunds: [{ kind: 'artist', refunded: false }],
+      }),
+      ctx({ mode: 'voice', honorAnswered: false }),
+    );
+    expect(e.token.tone).toBe('bad');
+    expect(e.hintRefunds?.[0]?.tone).toBe('pending');
+    expect(e.hintRefunds?.[0]?.text).toContain('Falta que Rojos confirme');
+  });
+
+  it('respeta la confirmación autoritativa aunque un snapshot contenga aciertos previos', () => {
+    const e = explainResult(
+      result({
+        answersConfirmed: false,
+        hintRefunds: [{ kind: 'title', refunded: true }],
+      }),
+      ctx({ mode: 'voice', honorAnswered: true }),
+    );
+    expect(e.hintRefunds?.[0]?.refunded).toBeNull();
+    expect(e.token.tone).toBe('pending');
+  });
+
+  it('no inventa devoluciones al recibir el contrato antiguo', () => {
+    const e = explainResult(result({}), ctx());
+    expect(e.hintRefunds).toBeNull();
+    expect(e.token.tone).toBe('good');
+    const pending = explainResult(
+      result({ tokenReason: 'title_and_artist_wrong' }),
+      ctx({ mode: 'voice', honorAnswered: false }),
+    );
+    expect(pending.hintRefunds).toBeNull();
+    expect(pending.token.tone).toBe('pending');
+  });
+});

@@ -12,7 +12,15 @@ from pydantic import BaseModel, ConfigDict, SerializeAsAny
 from pydantic.alias_generators import to_camel
 
 from app.game.models import Card, Phase, Room, Team
-from app.game.rules import MAX_PLACE_CHANGES_PER_TURN, card_count, hint_seed, mask_text, rank_standings
+from app.game.rules import (
+    MAX_PLACE_CHANGES_PER_TURN,
+    answers_confirmed,
+    card_count,
+    hint_seed,
+    mask_text,
+    rank_standings,
+    turn_token_delta,
+)
 
 
 class CamelModel(BaseModel):
@@ -96,6 +104,11 @@ class TokenView(CamelModel):
     reason: str
 
 
+class HintRefundView(CamelModel):
+    kind: Literal["artist", "title"]
+    refunded: bool
+
+
 class ResultView(CamelModel):
     placed_ok: bool
     objection_slot: int | None
@@ -106,6 +119,8 @@ class ResultView(CamelModel):
     artist_ok: bool
     token_awarded: bool
     token_delta: dict[str, int]
+    hint_refunds: list[HintRefundView]
+    answers_confirmed: bool
     song_year: int
     placement: SlotCheckView
     objection: ObjectionCheckView | None
@@ -197,12 +212,7 @@ def token_delta(room: Room) -> dict[str, int]:
     turn = room.turn
     if turn is None:
         return {}
-    delta: dict[str, int] = {}
-    if turn.token_awarded:
-        delta[str(turn.team_slot)] = delta.get(str(turn.team_slot), 0) + 1
-    if turn.objection is not None:
-        delta[str(turn.objection[0])] = delta.get(str(turn.objection[0]), 0) - 1
-    return delta
+    return turn_token_delta(turn)
 
 
 def standings(room: Room) -> list[StandingView]:
@@ -268,6 +278,8 @@ def _turn_view(room: Room, viewer_slot: int | None) -> TurnView | None:
             artist_ok=turn.artist_ok,
             token_awarded=turn.token_awarded,
             token_delta=token_delta(room),
+            hint_refunds=[HintRefundView(kind=kind, refunded=kind in turn.hint_refunds) for kind in turn.hints_used],
+            answers_confirmed=answers_confirmed(turn, room.settings.mode),
             song_year=r.song_year,
             placement=SlotCheckView(**r.placement.model_dump()),
             objection=ObjectionCheckView(**r.objection.model_dump()) if r.objection else None,

@@ -62,7 +62,6 @@ export function RevealExplain({
     >
       <h2
         className={clsx("ex-head", `ex-${ex.headline.kind}`)}
-        role="status"
         aria-live="polite"
         data-testid="reveal-headline"
       >
@@ -114,18 +113,49 @@ export function RevealExplain({
         </div>
       ) : null}
 
-      {hidePending && ex.token.tone === "pending" ? null : (
-        <p
-          className={clsx("ex-token", `ex-token-${ex.token.tone}`)}
-          data-testid="reveal-token"
+      {ex.hintRefunds && ex.hintRefunds.length > 0 ? (
+        <section
+          className="ex-card"
+          aria-label={es.explain.hintRefundTitle}
+          data-testid="reveal-hint-refunds"
+          aria-live="polite"
         >
-          {TokenIcon ? (
-            <TokenIcon size={18} aria-hidden />
-          ) : (
-            <Pick width={16} spent={ex.token.tone !== "good"} />
-          )}
-          <span>{ex.token.text}</span>
-        </p>
+          <h3 className="mb-3 font-bold">{es.explain.hintRefundTitle}</h3>
+          <ul className="flex flex-col gap-3">
+            {ex.hintRefunds.map((hint) => (
+              <li key={hint.kind} data-testid={`reveal-hint-${hint.kind}`}>
+                <p className="mb-1 text-sm font-bold">
+                  {es.explain.hintLabel(hint.kind)}
+                </p>
+                <p className={clsx("ex-token", `ex-token-${hint.tone}`)}>
+                  {hint.tone === "pending" ? (
+                    <Hourglass size={18} aria-hidden />
+                  ) : (
+                    <Pick width={16} spent={!hint.refunded} />
+                  )}
+                  <span>{hint.text}</span>
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {hidePending && ex.token.tone === "pending" ? null : (
+        <div>
+          <h3 className="mb-2 text-sm font-bold">{es.explain.tokenLabel}</h3>
+          <p
+            className={clsx("ex-token", `ex-token-${ex.token.tone}`)}
+            data-testid="reveal-token"
+          >
+            {TokenIcon ? (
+              <TokenIcon size={18} aria-hidden />
+            ) : (
+              <Pick width={16} spent={ex.token.tone !== "good"} />
+            )}
+            <span>{ex.token.text}</span>
+          </p>
+        </div>
       )}
     </section>
   );
