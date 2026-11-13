@@ -161,16 +161,28 @@ function answersAreConfirmed(r: TurnResult, ctx: ExplainContext): boolean {
 function explainHintRefunds(r: TurnResult, ctx: ExplainContext): HintRefundExplanation[] | null {
   if (r.hintRefunds === undefined) return null;
   const confirmed = answersAreConfirmed(r, ctx);
-  return r.hintRefunds.map((hint) => ({
-    kind: hint.kind,
-    refunded: confirmed ? hint.refunded : null,
-    tone: !confirmed ? 'pending' : hint.refunded ? 'good' : 'bad',
-    text: !confirmed
-      ? es.explain.hintPending(hint.kind, ctx.viewerIsActive ? null : ctx.activeName)
-      : hint.refunded
-        ? es.explain.hintRefunded(hint.kind, ctx.viewerIsActive ? null : ctx.activeName)
-        : es.explain.hintLost(hint.kind, ctx.viewerIsActive ? null : ctx.activeName),
-  }));
+  return r.hintRefunds.map((hint) => {
+    // La pista histórica cuesta dos fichas, sin devolución ni confirmación por voz.
+    if (hint.kind === 'year') {
+      return {
+        kind: hint.kind,
+        refunded: false,
+        tone: 'neutral',
+        text: es.explain.yearHintSpent,
+      };
+    }
+    const resolved = confirmed;
+    return {
+      kind: hint.kind,
+      refunded: resolved ? hint.refunded : null,
+      tone: !resolved ? 'pending' : hint.refunded ? 'good' : 'bad',
+      text: !resolved
+        ? es.explain.hintPending(hint.kind, ctx.viewerIsActive ? null : ctx.activeName)
+        : hint.refunded
+          ? es.explain.hintRefunded(hint.kind, ctx.viewerIsActive ? null : ctx.activeName)
+          : es.explain.hintLost(hint.kind, ctx.viewerIsActive ? null : ctx.activeName),
+    };
+  });
 }
 
 function explainToken(r: TurnResult, ctx: ExplainContext): { text: string; tone: Tone } {

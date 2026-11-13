@@ -143,7 +143,7 @@ def test_use_hint_guards() -> None:
     room = go(room, NOW, C.PlayRequest(0))
     assert err(room, C.UseHint(1, "artist")) == "not_your_turn"
     assert err(room, C.UseHint(None, "artist")) == "not_your_turn"
-    assert err(room, C.UseHint(0, "year")) == "bad_payload"
+    assert err(room, C.UseHint(0, "unsupported")) == "bad_payload"
     h = go(room, NOW, C.UseHint(0, "artist"))
     assert err(h, C.UseHint(0, "artist")) == "hint_already_used"
     assert h.teams[0].tokens == 1  # a rejected hint costs nothing
@@ -322,7 +322,7 @@ def test_one_kind_does_not_reveal_the_other() -> None:
 
 def test_hints_view_shape_and_reveal_clears_it() -> None:
     room = placing()
-    assert view_json(room, 1)["turn"]["hints"] == {"deadlineTs": None, "used": []}
+    assert view_json(room, 1)["turn"]["hints"] == {"deadlineTs": None, "used": [], "yearAvailable": None}
     s = view_json(room, 0)["settings"]
     assert s["hintsEnabled"] is True and s["initialTokens"] == 0
     off = room.model_copy(deep=True)

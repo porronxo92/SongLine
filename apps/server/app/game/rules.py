@@ -8,7 +8,7 @@ import random
 from bisect import bisect_left, bisect_right
 from collections.abc import Sequence
 
-from app.game.models import Card, SlotExplanation, SlotReason, Team, Turn
+from app.game.models import Card, HintKind, SlotExplanation, SlotReason, Team, Turn, YearEvent
 
 MAX_PLACE_CHANGES_PER_TURN = 3
 
@@ -113,6 +113,23 @@ def hint_seed(instance_id: str, kind: str) -> str:
     return f"{instance_id}:{kind}"
 
 
+def hint_cost(kind: HintKind) -> int:
+    return 2 if kind == "year" else 1
+
+
+def year_event_for(card: Card) -> YearEvent | None:
+    """Random-looking per card, stable across retry, connection and persisted restore.
+
+    Sorting by ID avoids changes caused by database row order. Candidates live in the
+    snapshot, so editing the catalog cannot change an already purchased clue.
+    """
+    events = sorted((e for e in card.year_events if e.year == card.year), key=lambda e: e.id)
+    if not events:
+        return None
+    digest = hashlib.sha256(hint_seed(card.instance_id, "year").encode()).digest()
+    return events[int.from_bytes(digest, "big") % len(events)]
+
+
 def mask_text(text: str, seed: str | int) -> str:
     """Hide letters (accents and ñ included); everything else stays visible.
 
@@ -163,7 +180,11 @@ def mask_text(text: str, seed: str | int) -> str:
 
 def turn_token_delta(turn: Turn) -> dict[str, int]:
     """Final net turn movements, including stakes, refunds and the ordinary bonus."""
-    active_delta = -len(turn.hints_used) + len(turn.hint_refunds) + int(turn.token_awarded)
+    active_delta = (
+        -sum(hint_cost(kind) for kind in turn.hints_used)
+        + sum(hint_cost(kind) for kind in turn.hint_refunds)
+        + int(turn.token_awarded)
+    )
     delta = {str(turn.team_slot): active_delta}
     if turn.objection is not None:
         key = str(turn.objection[0])

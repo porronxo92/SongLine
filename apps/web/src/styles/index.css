@@ -1988,6 +1988,17 @@
     border-radius: var(--radius-lg);
     padding: 12px 12px 14px;
   }
+  .hint-year-choice {
+    gap: 8px;
+    border-color: var(--color-gold-deep);
+  }
+  .hint-year-event {
+    padding: 14px 16px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+    overflow-wrap: anywhere;
+  }
   .hint-timer {
     font-size: 20px;
     color: var(--color-gold);

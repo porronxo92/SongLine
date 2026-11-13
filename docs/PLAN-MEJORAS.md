@@ -7,8 +7,8 @@ Las decisiones de esta página prevalecen sobre `docs/DISENO.md` donde lo contra
 
 | Tema | Decisión |
 |---|---|
-| Pistas: coste | **1 ficha apostada por pista.** Se devuelve al acertar su dato (título o artista), independientemente del hueco. Dos pistas se evalúan por separado. El premio habitual de +1 sigue exigiendo hueco, título y artista. |
-| Pistas: quién las ve | **Solo el equipo del turno** ve el texto enmascarado. Los demás ven «X ha pedido una pista de artista/título». |
+| Pistas: coste | **1 ficha apostada por pista.** Se devuelve al acertar su dato (título o artista), independientemente del hueco. La pista histórica del año gasta **2 fichas siempre, sin devolución**. Cada devolución se evalúa por separado. El premio habitual de +1 sigue exigiendo hueco, título y artista. |
+| Pistas: quién las ve | **Solo el equipo del turno** ve el contenido comprado (letras o acontecimiento). Los demás ven el tipo de pista, sin el texto. |
 | Pistas: temporizador | **1 minuto para responder** desde que se pide la pista. Si se agota, se confirma lo que haya en pantalla (hueco y respuesta). |
 | Pistas: enmascarado | Calculado en el servidor, letras reveladas en posiciones fijas por turno (pedir de nuevo no destapa más), espacios y signos visibles, siempre quedan letras ocultas. |
 | Audio: inicio | `start_position_ms` pasa de 10 s a **15 s** (el servidor lo envía; el fragmento de Deezer sigue empezando en 0). |
@@ -31,7 +31,7 @@ Las decisiones de esta página prevalecen sobre `docs/DISENO.md` donde lo contra
 - **#4** Segundo 15 y mini reproductor. Mensajes nuevos del equipo del turno al servidor y de este al anfitrión (`audio_control`: seek relativo, pausa/reanudar, reiniciar), solo válidos para el equipo activo y con límite de frecuencia. Verificar en un móvil real que el salto funciona en el reproductor de Spotify.
 
 ### Fase 4: pistas (servidor primero, web después; la más grande) — **servidor hecho, web hecha (pendiente de prueba en móvil real)**
-- **#1** Comando `use_hint {kind: "artist" | "title"}`: cuesta una ficha, exige fase PLACING/GUESSING y equipo activo, y arranca un temporizador de 60 s. Estado en el turno; el texto enmascarado solo se proyecta al equipo activo. Web: botón «Pista» con contador de fichas, ventana con el texto y la cuenta atrás.
+- **#1** Comando `use_hint {kind: "artist" | "title" | "year"}`: título y artista apuestan una ficha recuperable; año cuesta dos fichas siempre. Exige equipo activo, fase PLACING/GUESSING para letras y solo PLACING para año, y arranca un temporizador de 60 s. Estado en el turno; el texto enmascarado solo se proyecta al equipo activo. Web: botón «Pista» con contador de fichas, ventana con el texto y la cuenta atrás.
 - Pruebas obligatorias: antitrampas (los demás equipos y el log no reciben el texto), motor, simulador de bots, E2E.
 - Decisión cerrada: ajuste de sala `initial_tokens` (0 a 3) con **1 por defecto**, y `hints_enabled` (por defecto activado). Contrato en `docs/PROTOCOL.md` (`audio_control`, `use_hint`, `hint_used`, `turn.hints`, `audio.paused`).
 

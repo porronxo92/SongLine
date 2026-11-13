@@ -47,6 +47,7 @@ def create_app(config: AppConfig | None = None, services: Services | None = None
         await svc.manager.shutdown()
         await svc.http.aclose()
         await svc.accounts.close()
+        await svc.year_event_repo.close()
 
     app = FastAPI(title="SongLine", lifespan=lifespan)
     app.state.services = svc

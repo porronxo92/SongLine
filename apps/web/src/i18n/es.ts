@@ -154,7 +154,7 @@ export const es = {
     objection: 'Tiempo para objetar',
     moreSettings: 'Más ajustes',
     hints: 'Pistas',
-    hintsHelp: 'Reserváis 1 ficha por pista. La recuperáis si acertáis el dato pedido.',
+    hintsHelp: 'Título o artista: 1 ficha recuperable al acertar. Año: 2 fichas, sin devolución.',
     initialTokens: 'Fichas iniciales',
     tokensValue: (n: number) => (n === 1 ? '1 ficha' : `${String(n)} fichas`),
     audio: 'Audio',
@@ -366,9 +366,16 @@ export const es = {
     noTokensShort: 'Sin fichas',
     chooseTitle: 'Pedir una pista',
     chooseCost: (n: number) =>
-      `Reserváis 1 ficha al pedirla. Tenéis ${String(n)}. La recuperáis si acertáis ese dato, aunque falléis el hueco.`,
+      `Tenéis ${String(n)} ${n === 1 ? 'ficha' : 'fichas'}. Elegid qué ayuda necesitáis.`,
     artist: 'Artista',
     title: 'Título',
+    year: 'Año',
+    cost: (n: number) => `${String(n)} ${n === 1 ? 'ficha' : 'fichas'}`,
+    needTokens: (n: number) => `Necesitáis ${String(n)} ${n === 1 ? 'ficha' : 'fichas'} para esta pista.`,
+    requestFailed: 'No hemos podido pedir la pista. Probad de nuevo.',
+    yearHint: 'Un acontecimiento del mismo año. Gastáis 2 fichas, aunque acertéis el hueco.',
+    yearTiming: 'Solo antes de confirmar el hueco.',
+    category: (category: string) => ({ sport: 'Deporte', politics: 'Política', music: 'Música', conflict: 'Historia', science: 'Ciencia', culture: 'Cultura', society: 'Sociedad' } as Record<string, string>)[category] ?? 'Acontecimiento',
     artistHint: 'Letras del artista. Recuperáis la ficha si acertáis el artista.',
     titleHint: 'Letras del título. Recuperáis la ficha si acertáis el título.',
     alreadyUsed: 'Ya pedida',
@@ -378,10 +385,10 @@ export const es = {
     timeLeft: (s: number) => `Quedan ${String(s)} s para responder`,
     timeUp: 'Se acabó el tiempo. Enviando lo que hay en pantalla.',
     timeHelp: 'Al llegar a cero se envía lo que haya en pantalla.',
-    usedBy: (team: string, kind: 'artist' | 'title') =>
-      `${team} ${/^Equipo \d+$/.test(team) ? 'ha' : 'han'} pedido una pista de ${kind === 'artist' ? 'artista' : 'título'}`,
+    usedBy: (team: string, kind: 'artist' | 'title' | 'year') =>
+      `${team} ${/^Equipo \d+$/.test(team) ? 'ha' : 'han'} pedido una pista ${kind === 'year' ? 'del año' : `de ${kind === 'artist' ? 'artista' : 'título'}`}`,
     usedLabel: 'Pistas usadas',
-    usedKind: (kind: 'artist' | 'title') => `Pista de ${kind === 'artist' ? 'artista' : 'título'} usada`,
+    usedKind: (kind: 'artist' | 'title' | 'year') => `Pista ${kind === 'year' ? 'del año' : `de ${kind === 'artist' ? 'artista' : 'título'}`} usada`,
     ariaMasked: (kind: 'artist' | 'title', spoken: string) =>
       `Pista del ${kind === 'artist' ? 'artista' : 'título'}: ${spoken}`,
     gap: 'hueco',
@@ -412,7 +419,8 @@ export const es = {
     wrong_mode: 'Eso no se puede hacer en este modo de juego.',
     objection_closed: 'La ventana de objeción ya se ha cerrado.',
     no_token: 'No tenéis fichas para objetar.',
-    no_tokens: 'No tenéis fichas.',
+    no_tokens: 'No tenéis suficientes fichas para esta acción.',
+    hint_unavailable: 'No hay una pista disponible para esta carta.',
     hint_already_used: 'Ya habéis pedido esa pista.',
     hints_disabled: 'En esta sala no hay pistas.',
     rate_limited: 'Más despacio.',
@@ -542,11 +550,10 @@ export const es = {
     tokenPendingOther: (y: string) => `Falta que ${y} diga si acertó canción y artista.`,
     tokenLabel: 'Ficha de acierto',
     hintRefundTitle: 'Fichas de las pistas',
-    hintLabel: (kind: 'artist' | 'title') => `Pista de ${kind === 'artist' ? 'artista' : 'título'}`,
-    hintRefunded: (kind: 'artist' | 'title', team: string | null) =>
-      `${team === null ? 'Recuperáis' : `${team} recupera`} 1 ficha por acertar el ${kind === 'artist' ? 'artista' : 'título'}.`,
-    hintLost: (kind: 'artist' | 'title', team: string | null) =>
-      `${team === null ? 'Perdéis' : `${team} pierde`} la ficha de esta pista: ${team === null ? 'no acertasteis' : 'no acertó'} el ${kind === 'artist' ? 'artista' : 'título'}.`,
+    yearHintSpent: '2 fichas gastadas en la pista del año. No se devuelven.',
+    hintLabel: (kind: 'artist' | 'title' | 'year') => `Pista ${kind === 'year' ? 'del año' : `de ${kind === 'artist' ? 'artista' : 'título'}`}`,
+    hintRefunded: (kind: 'artist' | 'title', team: string | null) => `${team === null ? 'Recuperáis' : `${team} recupera`} 1 ficha por acertar el ${kind === 'artist' ? 'artista' : 'título'}.`,
+    hintLost: (kind: 'artist' | 'title', team: string | null) => `${team === null ? 'Perdéis' : `${team} pierde`} la ficha de esta pista: ${team === null ? 'no acertasteis' : 'no acertó'} el ${kind === 'artist' ? 'artista' : 'título'}.`,
     hintPending: (kind: 'artist' | 'title', team: string | null) =>
       `1 ficha reservada. Falta que ${team === null ? 'confirméis' : `${team} confirme`} si ${team === null ? 'acertasteis' : 'acertó'} el ${kind === 'artist' ? 'artista' : 'título'}.`,
     equalHint: 'Los años iguales valen a ambos lados.',
@@ -635,7 +642,7 @@ export const es = {
       },
       {
         title: 'Las pistas',
-        body: 'Al pedir una pista reserváis una ficha. Si acertáis el dato de esa pista, la recuperáis aunque falléis el hueco: la del título por acertar el título y la del artista por acertar el artista. Podéis pedir las dos y recuperar cada ficha por separado. Solo vosotros veis las letras. La primera pista activa 60 segundos para responder; al terminar se envía lo que haya en pantalla.',
+        body: 'Al pedir letras del título o del artista reserváis una ficha. Si acertáis el dato de esa pista, la recuperáis aunque falléis el hueco: la del título por acertar el título y la del artista por acertar el artista. Podéis pedir las dos y recuperar cada ficha por separado. La pista del año cuenta un acontecimiento de ese año y cuesta 2 fichas que no se devuelven, aunque acertéis. Solo podéis pedirla antes de confirmar el hueco. Solo vosotros veis el contenido de las pistas. La primera pista activa 60 segundos para responder; al terminar se envía lo que haya en pantalla.',
       },
       {
         title: 'El reproductor',

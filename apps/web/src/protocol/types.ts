@@ -96,13 +96,16 @@ export interface TurnResult {
   answersConfirmed?: boolean;
 }
 
-export type HintKind = 'artist' | 'title';
-/** `masked` solo existe para el equipo del turno. */
+export type HintKind = 'artist' | 'title' | 'year';
+/** El texto de cada pista solo existe para el equipo del turno. */
 export interface HintUsed {
   kind: HintKind;
   masked?: string;
+  event?: { text: string; category: string };
 }
 export interface HintsView {
+  /** Opcional para convivir con servidores anteriores; nunca implica revelar el año. */
+  yearAvailable?: boolean | null;
   deadlineTs: number | null;
   used: HintUsed[];
 }

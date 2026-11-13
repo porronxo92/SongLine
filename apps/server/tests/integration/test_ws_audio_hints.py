@@ -163,7 +163,7 @@ def test_use_hint_errors(make_app: MakeApp, clock: Clock) -> None:
         rt, players, active = begin(client, stack, svc, tokens=0)
         p = players[active]
         assert p.result(p.send("use_hint", kind="artist"))["payload"]["code"] == "no_tokens"
-        assert p.result(p.send("use_hint", kind="year"))["payload"]["code"] == "bad_payload"
+        assert p.result(p.send("use_hint", kind="unsupported"))["payload"]["code"] == "bad_payload"
         assert p.result(p.send("use_hint"))["payload"]["code"] == "bad_payload"
         assert rt.room.teams[active].tokens == 0
 
@@ -277,3 +277,56 @@ def test_hint_refund_is_authoritative_for_every_viewer_and_claims_are_idempotent
         assert p.state(lambda v: bool(v["turn"] and v["turn"]["result"]
                                      and v["turn"]["result"]["artistOk"] is False
                                      and v["turn"]["result"]["answersConfirmed"]))["teams"][active]["tokens"] == 0
+
+
+def test_year_hint_is_private_costs_two_and_stays_spent_after_a_correct_turn(
+    make_app: MakeApp, clock: Clock
+) -> None:
+    from bisect import bisect_right
+
+    from app.game.rules import year_event_for
+
+    app, svc = make_app(timer_scale=1.0)
+    with TestClient(app) as client, ExitStack() as stack:
+        rt, players, active = begin(client, stack, svc, tokens=3)
+        p = players[active]
+        turn = rt.room.turn
+        assert turn is not None
+        event = year_event_for(turn.card)
+        assert event is not None
+        assert p.state(lambda v: v["phase"] == "placing")["turn"]["hints"]["yearAvailable"] is True
+        for slot, player in enumerate(players):
+            if slot != active:
+                rejected = player.result(player.send("use_hint", kind="year"))
+                assert rejected["payload"]["code"] == "not_your_turn"
+        p.ok("use_hint", kind="year")
+        mine = p.state(has_hints)
+        assert mine["teams"][active]["tokens"] == 1
+        assert mine["turn"]["hints"]["used"] == [
+            {"kind": "year", "event": {"text": event.text, "category": event.category}},
+        ]
+        assert p.result(p.send("use_hint", kind="year"))["payload"]["code"] == "hint_already_used"
+        for slot, player in enumerate(players):
+            if slot == active:
+                continue
+            public = player.state(has_hints)
+            assert public["turn"]["hints"]["used"] == [{"kind": "year"}]
+            for message in player.seen + player.buffer:
+                assert event.text not in json.dumps(message, ensure_ascii=False)
+                assert event.source_url not in json.dumps(message)
+        right = bisect_right([c.year for c in rt.room.teams[active].timeline], turn.card.year)
+        p.ok("place_confirm", index=right)
+        assert p.result(p.send("use_hint", kind="year"))["payload"]["code"] == "wrong_phase"
+        p.ok("voice_confirm")
+        for slot, player in enumerate(players):
+            if slot != active:
+                player.ok("objection_pass")
+        p.ok("honor_claim", title_ok=True, artist_ok=True)
+        for player in players:
+            state = player.state(lambda v: bool(v["turn"] and v["turn"]["result"]
+                                               and v["turn"]["result"]["answersConfirmed"]))
+            assert state["teams"][active]["tokens"] == 2  # initial3 - year2 + ordinarybonus1
+            assert state["turn"]["result"]["hintRefunds"] == [{"kind": "year", "refunded": False}]
+            assert state["turn"]["result"]["tokenDelta"] == {str(active): -1}
+        p.ok("honor_claim", title_ok=True, artist_ok=True)
+        assert rt.room.teams[active].tokens == 2

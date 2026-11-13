@@ -28,6 +28,8 @@
 
 **Pistas recuperables (regla vigente).** Cada pista de título o artista aparta una ficha al solicitarse. Al resolver, se recupera si se acierta ese mismo dato, incluso aunque la posición sea incorrecta. Pedir ambas pistas puede devolver ambas fichas, pero D5 continúa concediendo como máximo **una ficha adicional por turno** cuando se aciertan hueco, título y artista. En voz, la devolución espera a la confirmación; en modo app, admite «Dar por bueno». El detalle del contrato y del saldo neto está en `docs/PROTOCOL.md`. Esta regla sustituye el coste no recuperable de versiones anteriores.
 
+**Pista histórica del año.** Disponible solo durante la colocación: gasta dos fichas siempre, sin devolución, aunque el hueco sea correcto. El servidor elige un acontecimiento del año de la carta entre los registros habilitados de `year_events`, sin enviar el año ni su fuente al cliente. Cada carta mantiene la misma pista al reconectar. Datos, mantenimiento y despliegue en `docs/PISTAS-DEL-ANIO.md`.
+
 ### 0.1 Hechos de Spotify contrastados hoy (10-oct-2026)
 | Hecho | Fuente | Impacto |
 |---|---|---|

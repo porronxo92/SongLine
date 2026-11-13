@@ -11,7 +11,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, SerializeAsAny
 from pydantic.alias_generators import to_camel
 
-from app.game.models import Card, Phase, Room, Team
+from app.game.models import Card, HintKind, Phase, Room, Team, YearEventCategory
 from app.game.rules import (
     MAX_PLACE_CHANGES_PER_TURN,
     answers_confirmed,
@@ -20,6 +20,7 @@ from app.game.rules import (
     mask_text,
     rank_standings,
     turn_token_delta,
+    year_event_for,
 )
 
 
@@ -105,7 +106,7 @@ class TokenView(CamelModel):
 
 
 class HintRefundView(CamelModel):
-    kind: Literal["artist", "title"]
+    kind: HintKind
     refunded: bool
 
 
@@ -138,9 +139,19 @@ class HintUsedOwn(HintUsedPublic):
     masked: str
 
 
+class YearEventView(CamelModel):
+    text: str
+    category: YearEventCategory
+
+
+class YearHintOwn(HintUsedPublic):
+    event: YearEventView
+
+
 class HintsView(CamelModel):
     deadline_ts: float | None
     used: list[SerializeAsAny[HintUsedPublic]]
+    year_available: bool | None = None
 
 
 class TurnView(CamelModel):
@@ -291,12 +302,21 @@ def _turn_view(room: Room, viewer_slot: int | None) -> TurnView | None:
         own = viewer_slot is not None and viewer_slot == turn.team_slot
         used: list[HintUsedPublic] = []
         for kind in turn.hints_used:
-            if own:
+            if own and kind == "year":
+                event = year_event_for(turn.card)
+                if event is not None:
+                    used.append(YearHintOwn(kind=kind, event=YearEventView(text=event.text, category=event.category)))
+                else:
+                    used.append(HintUsedPublic(kind=kind))
+            elif own:
                 text = turn.card.artist if kind == "artist" else turn.card.title
                 used.append(HintUsedOwn(kind=kind, masked=mask_text(text, hint_seed(turn.card.instance_id, kind))))
             else:
                 used.append(HintUsedPublic(kind=kind))
-        hints = HintsView(deadline_ts=turn.hint_deadline_ts, used=used)
+        hints = HintsView(
+            deadline_ts=turn.hint_deadline_ts, used=used,
+            year_available=year_event_for(turn.card) is not None if own else None,
+        )
     return TurnView(
         team_slot=turn.team_slot,
         card=card,

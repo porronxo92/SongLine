@@ -30,7 +30,8 @@ describe('errorMessage', () => {
 
   it('mensajes clave', () => {
     expect(errorMessage('wrong_phase')).toBe('Ahora no se puede hacer eso.');
-    expect(errorMessage('no_tokens')).toBe('No tenéis fichas.');
+    expect(errorMessage('no_tokens')).toBe('No tenéis suficientes fichas para esta acción.');
+    expect(errorMessage('hint_unavailable')).toBe('No hay una pista disponible para esta carta.');
     expect(errorMessage('rate_limited')).toBe('Más despacio.');
   });
 

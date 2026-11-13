@@ -495,3 +495,46 @@ describe('fichas reservadas para las pistas', () => {
     expect(pending.token.tone).toBe('pending');
   });
 });
+
+
+describe('coste de la pista histórica', () => {
+  it('muestra dos fichas gastadas incluso con hueco correcto y bonus de acierto', () => {
+    const e = explainResult(result({
+      answersConfirmed: true,
+      hintRefunds: [{ kind: 'year', refunded: false }],
+      tokenDelta: { '0': -1 },
+    }), ctx({ viewerIsActive: true }));
+    expect(e.hintRefunds).toEqual([{
+      kind: 'year', refunded: false, tone: 'neutral',
+      text: '2 fichas gastadas en la pista del año. No se devuelven.',
+    }]);
+    expect(e.token.tone).toBe('good');
+  });
+
+  it('resuelve el gasto del año aunque falte la confirmación por voz de las letras', () => {
+    const e = explainResult(result({
+      titleOk: false, artistOk: false,
+      answersConfirmed: false,
+      tokenReason: 'title_and_artist_wrong',
+      hintRefunds: [
+        { kind: 'year', refunded: false },
+        { kind: 'artist', refunded: false },
+      ],
+    }), ctx({ mode: 'voice', honorAnswered: false }));
+    expect(e.hintRefunds?.map((hint) => hint.tone)).toEqual(['neutral', 'pending']);
+    expect(e.hintRefunds?.[0]?.refunded).toBe(false);
+    expect(e.token.tone).toBe('pending');
+  });
+
+  it('explica el mismo coste cuando el hueco era incorrecto', () => {
+    const e = explainResult(result({
+      placedOk: false,
+      placement: slot({ ok: false, reason: 'too_early' }),
+      tokenReason: 'wrong_slot',
+      hintRefunds: [{ kind: 'year', refunded: false }],
+      answersConfirmed: false,
+    }), ctx({ mode: 'voice', honorAnswered: false }));
+    expect(e.hintRefunds?.[0]?.tone).toBe('neutral');
+    expect(e.hintRefunds?.[0]?.text).toBe('2 fichas gastadas en la pista del año. No se devuelven.');
+  });
+});

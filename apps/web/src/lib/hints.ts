@@ -19,7 +19,7 @@ export function maskCells(masked: string): MaskCell[] {
 }
 
 /** Texto para lectores de pantalla: «Pista del artista: A, hueco, hueco, espacio, z». */
-export function maskedAria(kind: HintKind, masked: string): string {
+export function maskedAria(kind: Exclude<HintKind, 'year'>, masked: string): string {
   const spoken = maskCells(masked)
     .map((c) => {
       if (c.type === 'gap') return es.hints.gap;
@@ -70,4 +70,21 @@ export function shouldAutoSend(
 ): boolean {
   if (paused || deadlineTs === null || secondsLeft === null) return false;
   return secondsLeft <= 0 && handled !== deadlineTs;
+}
+
+/** Solo se ofrece la pista histórica antes de confirmar el hueco y con catálogo disponible. */
+export function hintKindsFor(phase: Phase, yearAvailable?: boolean | null): HintKind[] {
+  return phase === 'placing' && yearAvailable === true
+    ? ['artist', 'title', 'year']
+    : ['artist', 'title'];
+}
+
+export function hintCost(kind: HintKind): number {
+  return kind === 'year' ? 2 : 1;
+}
+
+/** Coste de la siguiente pista disponible. null significa que se han pedido todas. */
+export function nextHintCost(phase: Phase, used: HintKind[], yearAvailable?: boolean | null): number | null {
+  const costs = hintKindsFor(phase, yearAvailable).filter((kind) => !used.includes(kind)).map(hintCost);
+  return costs.length > 0 ? Math.min(...costs) : null;
 }

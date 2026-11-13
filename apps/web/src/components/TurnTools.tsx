@@ -1,9 +1,9 @@
 import clsx from 'clsx';
-import { ChevronDown, ChevronUp, FastForward, Lightbulb, Pause, Play, Rewind, RotateCcw } from 'lucide-react';
+import { ChevronDown, ChevronUp, FastForward, History, Lightbulb, Pause, Play, Rewind, RotateCcw } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { es } from '../i18n/es';
-import { maskedAria, maskWords } from '../lib/hints';
-import type { HintKind, HintsView, RoomView } from '../protocol/types';
+import { hintCost, hintKindsFor, maskedAria, maskWords, nextHintCost } from '../lib/hints';
+import type { HintKind, HintsView, Phase, RoomView } from '../protocol/types';
 import { act } from '../store/controller';
 import { Modal } from './Modal';
 import { Button } from './ui';
@@ -102,8 +102,10 @@ export function TurnTools({
   const me = view.you.slot;
   const team = me !== null ? view.teams[me] : undefined;
   const tokens = team?.tokens ?? 0;
-  const used = view.turn?.hints?.used ?? [];
-  const canHint = hints && view.settings.hintsEnabled && used.length < 2;
+  const used = (view.turn?.hints?.used ?? []).map((hint) => hint.kind);
+  const minCost = nextHintCost(view.phase, used, view.turn?.hints?.yearAvailable);
+  const canHint = hints && view.settings.hintsEnabled && minCost !== null;
+  const affordable = minCost !== null && tokens >= minCost;
   const showPlayer = view.turn?.startedPlaying ?? false;
   if (!showPlayer && !canHint) return null;
   return (
@@ -113,13 +115,13 @@ export function TurnTools({
         <button
           type="button"
           className="btn btn-secondary mp-btn mp-hint"
-          disabled={tokens < 1}
-          aria-label={tokens < 1 ? es.hints.noTokens : es.hints.button}
+          disabled={!affordable}
+          aria-label={affordable ? es.hints.button : tokens === 0 ? es.hints.noTokens : es.hints.needTokens(minCost)}
           data-testid="hint-button"
           onClick={onHint}
         >
           <Lightbulb size={20} aria-hidden />
-          <span>{tokens < 1 ? es.hints.noTokensShort : es.hints.button}</span>
+          <span>{affordable ? es.hints.button : tokens === 0 ? es.hints.noTokensShort : es.hints.cost(minCost)}</span>
         </button>
       ) : null}
     </div>
@@ -130,45 +132,70 @@ export function TurnTools({
 export function HintChooser({
   tokens,
   used,
+  phase,
+  yearAvailable,
   onClose,
 }: {
   tokens: number;
   used: HintKind[];
+  phase: Phase;
+  yearAvailable?: boolean | null;
   onClose: () => void;
 }) {
   const [busy, setBusy] = useState<HintKind | null>(null);
+  const [failed, setFailed] = useState(false);
   const options: { kind: HintKind; label: string; hint: string }[] = [
     { kind: 'artist', label: es.hints.artist, hint: es.hints.artistHint },
     { kind: 'title', label: es.hints.title, hint: es.hints.titleHint },
+    { kind: 'year', label: es.hints.year, hint: es.hints.yearHint },
   ];
+  const availableOptions = options.filter((option) => hintKindsFor(phase, yearAvailable).includes(option.kind));
   return (
     <Modal title={es.hints.chooseTitle} labelledBy="hint-title" onClose={onClose} icon={<Lightbulb size={32} className="text-gold" aria-hidden />}>
       <p className="mb-4 text-muted-foreground" data-testid="hint-cost">
         {es.hints.chooseCost(tokens)}
       </p>
       <div className="mb-4 grid grid-cols-2 gap-3">
-        {options.map((o) => {
+        {availableOptions.map((o) => {
           const taken = used.includes(o.kind);
+          const cost = hintCost(o.kind);
+          const tooFew = tokens < cost;
           return (
             <button
               key={o.kind}
               type="button"
-              className="choice"
-              disabled={taken || busy !== null || tokens < 1}
+              className={clsx('choice min-w-0', o.kind === 'year' && 'col-span-2 hint-year-choice')}
+              disabled={taken || busy !== null || tooFew}
+              aria-busy={busy === o.kind}
               data-testid={`hint-choose-${o.kind}`}
               onClick={() => {
                 setBusy(o.kind);
-                void act('use_hint', { kind: o.kind }).then(() => {
-                  onClose();
+                setFailed(false);
+                void act('use_hint', { kind: o.kind }).then((ok) => {
+                  if (ok) onClose();
+                  else setFailed(true);
+                }).catch(() => {
+                  setFailed(true);
+                }).finally(() => {
+                  setBusy(null);
                 });
               }}
             >
-              <span>{o.label}</span>
+              <span className="flex w-full flex-wrap items-center justify-between gap-x-2 gap-y-1">
+                <span className="inline-flex items-center gap-2">
+                  {o.kind === 'year' ? <History size={18} aria-hidden /> : null}
+                  {o.label}
+                </span>
+                <span className="text-sm text-gold">{es.hints.cost(cost)}</span>
+              </span>
               <small>{taken ? es.hints.alreadyUsed : o.hint}</small>
+              {!taken && tooFew ? <small>{es.hints.needTokens(cost)}</small> : null}
+              {o.kind === 'year' && !taken ? <small>{es.hints.yearTiming}</small> : null}
             </button>
           );
         })}
       </div>
+      {failed ? <p role="alert" className="mb-3 text-sm text-magenta-light">{es.hints.requestFailed}</p> : null}
       <Button variant="secondary" className="w-full" onClick={onClose}>
         {es.common.cancel}
       </Button>
@@ -177,7 +204,7 @@ export function HintChooser({
 }
 
 /** Texto enmascarado en cajas: los huecos se ven como casillas vacías y las palabras se separan con claridad. */
-function MaskedText({ kind, masked }: { kind: HintKind; masked: string }) {
+function MaskedText({ kind, masked }: { kind: Exclude<HintKind, 'year'>; masked: string }) {
   return (
     <div className="hint-masked" role="img" aria-label={maskedAria(kind, masked)} data-testid={`hint-masked-${kind}`}>
       {maskWords(masked).map((word, wi) => (
@@ -214,14 +241,14 @@ export function HintPanel({
   paused: boolean;
 }) {
   const [open, setOpen] = useState(true);
-  const shown = hints.used.filter((h) => h.masked !== undefined);
+  const shown = hints.used.filter((h) => h.kind === 'year' ? h.event !== undefined : h.masked !== undefined);
   if (shown.length === 0 && secs === null) return null;
   const urgent = secs !== null && secs <= 10;
   return (
     <section className="hint-panel" aria-label={es.hints.panelTitle} data-paused={paused} data-testid="hint-panel">
       <div className="flex items-center gap-2">
         <Lightbulb size={20} className="flex-none text-gold" aria-hidden />
-        <h3 className="min-w-0 flex-1 text-base font-bold">{es.hints.panelTitle}</h3>
+        <h2 className="min-w-0 flex-1 text-base font-bold">{es.hints.panelTitle}</h2>
         {secs !== null ? (
           <span
             role="timer"
@@ -249,8 +276,13 @@ export function HintPanel({
         <div className="mt-2 flex flex-col gap-3">
           {shown.map((h) => (
             <div key={h.kind}>
-              <p className="overline mb-1">{h.kind === 'artist' ? es.hints.artist : es.hints.title}</p>
-              <MaskedText kind={h.kind} masked={h.masked ?? ''} />
+              <p className="overline mb-1">{h.kind === 'year' ? es.hints.year : h.kind === 'artist' ? es.hints.artist : es.hints.title}</p>
+              {h.kind === 'year' && h.event ? (
+                <div className="hint-year-event" data-testid="hint-year-event">
+                  <p className="mb-2 text-sm font-semibold text-gold">{es.hints.category(h.event.category)}</p>
+                  <p className="text-base leading-relaxed">{h.event.text}</p>
+                </div>
+              ) : h.kind !== 'year' ? <MaskedText kind={h.kind} masked={h.masked ?? ''} /> : null}
             </div>
           ))}
           {secs !== null ? <p className="help">{es.hints.timeHelp}</p> : null}
@@ -268,7 +300,7 @@ export function HintStrip({ hints }: { hints: HintsView }) {
       {hints.used.map((h) => (
         <li key={h.kind} className="chip" aria-label={es.hints.usedKind(h.kind)}>
           <Lightbulb size={14} className="text-gold" aria-hidden />
-          {h.kind === 'artist' ? es.hints.artist : es.hints.title}
+          {h.kind === 'year' ? es.hints.year : h.kind === 'artist' ? es.hints.artist : es.hints.title}
         </li>
       ))}
     </ul>

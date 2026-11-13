@@ -80,7 +80,7 @@ class AudioControlMsg(BaseModel):
 class UseHintMsg(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    kind: Literal["artist", "title"]
+    kind: Literal["artist", "title", "year"]
 
 
 class IndexMsg(BaseModel):
@@ -175,7 +175,7 @@ class HintUsedPayload(BaseModel):
     """Public notice. Never carries the masked text."""
 
     slot: int
-    kind: Literal["artist", "title"]
+    kind: Literal["artist", "title", "year"]
 
 
 class AudioStatusPayload(BaseModel):

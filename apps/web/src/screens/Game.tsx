@@ -292,6 +292,8 @@ function Placing({ activeTeam, turn, myTurn, view }: BodyProps) {
         <HintChooser
           tokens={me !== null ? (view.teams[me]?.tokens ?? 0) : 0}
           used={(hints?.used ?? []).map((h) => h.kind)}
+          phase={view.phase}
+          yearAvailable={hints?.yearAvailable}
           onClose={() => {
             setChooser(false);
           }}
@@ -374,6 +376,8 @@ function Guessing({ activeTeam, turn, myTurn, view }: BodyProps) {
         <HintChooser
           tokens={me !== null ? (view.teams[me]?.tokens ?? 0) : 0}
           used={(hints?.used ?? []).map((h) => h.kind)}
+          phase={view.phase}
+          yearAvailable={hints?.yearAvailable}
           onClose={() => {
             setChooser(false);
           }}

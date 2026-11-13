@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { autoSendFor, maskCells, maskedAria, maskWords, shouldAutoSend } from './hints';
+import { autoSendFor, hintCost, hintKindsFor, maskCells, maskedAria, maskWords, nextHintCost, shouldAutoSend } from './hints';
 
 describe('maskCells', () => {
   it('separa letras, huecos, espacios y signos', () => {
@@ -53,5 +53,40 @@ describe('shouldAutoSend', () => {
   it('no envía en pausa ni sin plazo', () => {
     expect(shouldAutoSend(1000, 0, null, true)).toBe(false);
     expect(shouldAutoSend(null, null, null, false)).toBe(false);
+  });
+});
+
+
+describe('disponibilidad de la pista del año', () => {
+  it('solo ofrece el año al colocar y con datos confirmados por el servidor', () => {
+    expect(hintKindsFor('placing', true)).toEqual(['artist', 'title', 'year']);
+    expect(hintKindsFor('placing', false)).toEqual(['artist', 'title']);
+    expect(hintKindsFor('placing', null)).toEqual(['artist', 'title']);
+    expect(hintKindsFor('placing')).toEqual(['artist', 'title']);
+  });
+
+  it('retira la opción del año después de confirmar el hueco', () => {
+    expect(hintKindsFor('guessing', true)).toEqual(['artist', 'title']);
+  });
+
+  it('cuesta dos fichas frente a una por título o artista', () => {
+    expect(hintCost('year')).toBe(2);
+    expect(hintCost('artist')).toBe(1);
+    expect(hintCost('title')).toBe(1);
+  });
+
+  it('permite la tercera pista y exige su saldo cuando ya se pidieron las letras', () => {
+    expect(nextHintCost('placing', ['artist', 'title'], true)).toBe(2);
+    expect(nextHintCost('placing', ['artist', 'title', 'year'], true)).toBeNull();
+  });
+
+  it('mantiene disponibles las letras después de pedir el año', () => {
+    expect(nextHintCost('placing', ['year'], true)).toBe(1);
+    expect(nextHintCost('placing', ['year', 'artist'], true)).toBe(1);
+  });
+
+  it('no ofrece una tercera pista con servidor antiguo o después de colocar', () => {
+    expect(nextHintCost('placing', ['artist', 'title'])).toBeNull();
+    expect(nextHintCost('guessing', ['artist', 'title'], true)).toBeNull();
   });
 });

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from datetime import date
 from enum import StrEnum
 from typing import Literal
 
@@ -26,6 +27,20 @@ class PauseReason(StrEnum):
     TEAM_OFFLINE = "team_offline"
 
 
+YearEventCategory = Literal["sport", "politics", "music", "conflict", "science", "culture", "society"]
+
+
+class YearEvent(BaseModel, frozen=True):
+    """Curated catalog entry. Metadata stays entirely on the server."""
+
+    id: str = Field(min_length=1, max_length=100, pattern=r"^[a-z0-9][a-z0-9-]*$")
+    year: int = Field(ge=1900, le=2100)
+    category: YearEventCategory
+    text: str = Field(min_length=10, max_length=240)
+    source_url: str = Field(pattern=r"^https://", max_length=1000)
+    occurred_on: date
+
+
 class Song(BaseModel, frozen=True):
     """Catalog entry handed to the engine when a game starts."""
 
@@ -42,6 +57,7 @@ class Song(BaseModel, frozen=True):
     origin: str = ""
     note: str = ""
     pack: str = "mix"  # catalog pack slug; server-only, never projected
+    year_events: tuple[YearEvent, ...] = ()
 
 
 PACK_SLUG_PATTERN = r"^[a-z0-9][a-z0-9-]{0,39}$"
@@ -117,6 +133,7 @@ class Card(BaseModel):
     title_aliases: tuple[str, ...] = ()
     artist_aliases: tuple[str, ...] = ()
     note: str = ""
+    year_events: tuple[YearEvent, ...] = ()  # persisted candidates; never projected directly
 
 
 class Team(BaseModel):
@@ -178,7 +195,7 @@ class TurnResult(BaseModel):
     headline: Headline
 
 
-HintKind = Literal["artist", "title"]
+HintKind = Literal["artist", "title", "year"]
 
 
 class Turn(BaseModel):

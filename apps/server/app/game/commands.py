@@ -149,7 +149,7 @@ class AudioControl:
 @dataclass(frozen=True)
 class UseHint:
     sender: int | None
-    kind: str  # "artist" | "title"
+    kind: str  # "artist" | "title" | "year"
 
 
 @dataclass(frozen=True)

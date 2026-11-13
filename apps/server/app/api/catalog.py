@@ -25,7 +25,9 @@ def packs(svc: Services = Depends(get_services)) -> list[dict[str, Any]]:
 
 
 @router.get("/healthz")
-def healthz(response: Response) -> dict[str, str]:
+def healthz(response: Response, svc: Services = Depends(get_services)) -> dict[str, str]:
     # Operational capability marker: verify that game-rule deployments reached this instance.
     response.headers["X-SongLine-Hint-Policy"] = "refundable-v1"
+    response.headers["X-SongLine-Year-Hint"] = "historical-v1"
+    response.headers["X-SongLine-Year-Events"] = str(len(svc.year_events))
     return {"status": "ok"}

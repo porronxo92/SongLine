@@ -78,9 +78,11 @@ from app.game.rules import (
     card_count,
     deal_initial,
     explain_slot,
+    hint_cost,
     insert_sorted,
     pick_winners,
     turn_token_delta,
+    year_event_for,
 )
 from app.game.validate_guess import normalize, validate_guess
 
@@ -330,10 +332,10 @@ def _recompute_token(room: Room) -> None:
     # Reconcile against the persisted ledger so repeated/corrected claims are idempotent.
     refunded = [
         kind for kind in turn.hints_used
-        if answers_confirmed(turn, room.settings.mode)
+        if kind != "year" and answers_confirmed(turn, room.settings.mode)
         and (turn.artist_ok if kind == "artist" else turn.title_ok)
     ]
-    active.tokens += len(refunded) - len(turn.hint_refunds)
+    active.tokens += sum(hint_cost(k) for k in refunded) - sum(hint_cost(k) for k in turn.hint_refunds)
     turn.hint_refunds = refunded
 
 
@@ -625,6 +627,7 @@ def _h_start(room: Room, cmd: Start, now: float, fx: Fx) -> None:
                 title_aliases=s.title_aliases,
                 artist_aliases=s.artist_aliases,
                 note=s.note,
+                year_events=s.year_events,
             )
         )
     rng.shuffle(cards)
@@ -749,15 +752,20 @@ def _h_use_hint(room: Room, cmd: UseHint, now: float, fx: Fx) -> None:
     turn = _require_active(room, cmd.sender)
     if not room.settings.hints_enabled:
         raise GameError("hints_disabled", "Las pistas estan desactivadas")
-    if cmd.kind not in ("artist", "title"):
+    if cmd.kind not in ("artist", "title", "year"):
         raise GameError("bad_payload", "Tipo de pista no valido")
-    kind: HintKind = "artist" if cmd.kind == "artist" else "title"
+    kind: HintKind = cmd.kind  # type: ignore[assignment]
+    if kind == "year" and room.phase != Phase.PLACING:
+        raise GameError("wrong_phase", "La pista del año se pide antes de confirmar la posición")
     if kind in turn.hints_used:
         raise GameError("hint_already_used", "Esa pista ya se pidio en este turno")
     team = room.teams[turn.team_slot]
-    if team.tokens < 1:
+    if team.tokens < hint_cost(kind):
         raise GameError("no_tokens", "No tienes fichas")
-    team.tokens -= 1  # reserve the stake immediately; correct target refunded at reveal
+    if kind == "year" and year_event_for(turn.card) is None:
+        raise GameError("hint_unavailable", "No hay un acontecimiento disponible para esta carta")
+    # Year hints always cost two; title/artist stakes can be refunded at reveal.
+    team.tokens -= hint_cost(kind)
     turn.hints_used.append(kind)
     if "hint" not in room.timers:
         turn.hint_deadline_ts = now + HINT_LIMIT_S

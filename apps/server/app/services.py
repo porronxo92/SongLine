@@ -13,8 +13,14 @@ import httpx
 from app.accounts.repo import PostgresAccounts
 from app.catalog.packs import PackDef, load_pack_defs
 from app.catalog.repo import CsvSongRepository, PostgresSongRepository, SongRepository
+from app.catalog.year_events import (
+    JsonYearEventRepository,
+    PostgresYearEventRepository,
+    YearEventRepository,
+    attach_year_events,
+)
 from app.config import AppConfig
-from app.game.models import Song
+from app.game.models import Song, YearEvent
 from app.ratelimit import RateLimiter
 from app.rooms.manager import RoomManager
 from app.rooms.runtime import RuntimeDeps
@@ -52,6 +58,8 @@ class Services:
     ws_per_ip: dict[str, int] = field(default_factory=dict)
     songs: list[Song] = field(default_factory=list)
     packs: list[PackDef] = field(default_factory=list)
+    year_event_repo: YearEventRepository = field(default_factory=JsonYearEventRepository)
+    year_events: list[YearEvent] = field(default_factory=list)
 
     @property
     def pack_slugs(self) -> frozenset[str]:
@@ -65,9 +73,16 @@ class Services:
         songs = await self.repo.load_enabled()
         if not self.fake:
             songs = [s for s in songs if s.track_id]  # Spotify needs a track id
-        self.songs = songs
+        # Do not fall back to bundled data in production: enabled DB records are authoritative.
+        try:
+            self.year_events = await self.year_event_repo.load_enabled()
+        except Exception:  # noqa: BLE001
+            # Historical clues are optional: a bad event must not stop existing games.
+            log.exception("could not load year events; year clues unavailable")
+            self.year_events = []
+        self.songs = attach_year_events(songs, self.year_events)
         log.info("catalog loaded: %d songs", len(songs))
-        return songs
+        return self.songs
 
 
 def build_services(
@@ -78,6 +93,7 @@ def build_services(
     persistence: Persistence | None = None,
     clock: Callable[[], float] = time.time,
     timer_scale: float = 1.0,
+    year_event_repo: YearEventRepository | None = None,
 ) -> Services:
     http = http or httpx.AsyncClient(timeout=10.0)
     if repo is None:
@@ -113,4 +129,8 @@ def build_services(
         auth_limiter=RateLimiter(config.rate_auth_start_per_min),
         signer=SessionSigner(config.session_secret),
         packs=load_pack_defs(config.packs_json),
+        year_event_repo=year_event_repo or (
+            JsonYearEventRepository() if config.catalog_source == "csv"
+            else PostgresYearEventRepository(config.database_url)
+        ),
     )

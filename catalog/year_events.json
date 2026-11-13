@@ -1,0 +1,1482 @@
+[
+  {
+    "id": "1937-guernica",
+    "year": 1937,
+    "category": "conflict",
+    "text": "La aviación alemana e italiana bombardea la localidad vasca de Gernika durante la Guerra Civil española.",
+    "source_url": "https://en.wikipedia.org/wiki/Bombing_of_Guernica",
+    "occurred_on": "1937-04-26"
+  },
+  {
+    "id": "1937-hindenburg",
+    "year": 1937,
+    "category": "society",
+    "text": "El dirigible Hindenburg se incendia al intentar aterrizar en Nueva Jersey.",
+    "source_url": "https://en.wikipedia.org/wiki/Hindenburg_disaster",
+    "occurred_on": "1937-05-06"
+  },
+  {
+    "id": "1938-anschluss",
+    "year": 1938,
+    "category": "politics",
+    "text": "Las tropas de la Alemania nazi entran en Austria antes de su anexión al Reich.",
+    "source_url": "https://en.wikipedia.org/wiki/Anschluss",
+    "occurred_on": "1938-03-12"
+  },
+  {
+    "id": "1938-munich-agreement",
+    "year": 1938,
+    "category": "politics",
+    "text": "Se firma el Acuerdo de Múnich, que permite a la Alemania nazi anexionarse los Sudetes checoslovacos.",
+    "source_url": "https://en.wikipedia.org/wiki/Munich_Agreement",
+    "occurred_on": "1938-09-30"
+  },
+  {
+    "id": "1939-spanish-war-end",
+    "year": 1939,
+    "category": "conflict",
+    "text": "El último parte de guerra de Franco anuncia el final de la Guerra Civil española.",
+    "source_url": "https://en.wikipedia.org/wiki/Final_offensive_of_the_Spanish_Civil_War",
+    "occurred_on": "1939-04-01"
+  },
+  {
+    "id": "1939-poland-invasion",
+    "year": 1939,
+    "category": "conflict",
+    "text": "La invasión alemana de Polonia desencadena la Segunda Guerra Mundial en Europa.",
+    "source_url": "https://en.wikipedia.org/wiki/Invasion_of_Poland",
+    "occurred_on": "1939-09-01"
+  },
+  {
+    "id": "1940-france-armistice",
+    "year": 1940,
+    "category": "conflict",
+    "text": "Francia firma un armisticio con la Alemania nazi tras la caída de París.",
+    "source_url": "https://en.wikipedia.org/wiki/Armistice_of_22_June_1940",
+    "occurred_on": "1940-06-22"
+  },
+  {
+    "id": "1940-great-dictator",
+    "year": 1940,
+    "category": "culture",
+    "text": "Charles Chaplin estrena en Nueva York El gran dictador, su sátira contra el fascismo.",
+    "source_url": "https://en.wikipedia.org/wiki/The_Great_Dictator",
+    "occurred_on": "1940-10-15"
+  },
+  {
+    "id": "1941-citizen-kane",
+    "year": 1941,
+    "category": "culture",
+    "text": "Ciudadano Kane, dirigida por Orson Welles, se estrena en Nueva York.",
+    "source_url": "https://en.wikipedia.org/wiki/Citizen_Kane",
+    "occurred_on": "1941-05-01"
+  },
+  {
+    "id": "1941-pearl-harbor",
+    "year": 1941,
+    "category": "conflict",
+    "text": "Japón ataca la base estadounidense de Pearl Harbor, en Hawái.",
+    "source_url": "https://en.wikipedia.org/wiki/Attack_on_Pearl_Harbor",
+    "occurred_on": "1941-12-07"
+  },
+  {
+    "id": "1942-casablanca",
+    "year": 1942,
+    "category": "culture",
+    "text": "Casablanca se estrena en Nueva York con Humphrey Bogart e Ingrid Bergman.",
+    "source_url": "https://en.wikipedia.org/wiki/Casablanca_(film)",
+    "occurred_on": "1942-11-26"
+  },
+  {
+    "id": "1942-chicago-pile",
+    "year": 1942,
+    "category": "science",
+    "text": "El reactor Chicago Pile-1 logra la primera reacción nuclear en cadena controlada y autosostenida.",
+    "source_url": "https://www.archives.gov/milestone-documents/manhattan-project-notebook",
+    "occurred_on": "1942-12-02"
+  },
+  {
+    "id": "1943-stalingrad",
+    "year": 1943,
+    "category": "conflict",
+    "text": "Termina la batalla de Stalingrado con la rendición de las últimas fuerzas alemanas en la ciudad.",
+    "source_url": "https://en.wikipedia.org/wiki/Battle_of_Stalingrad",
+    "occurred_on": "1943-02-02"
+  },
+  {
+    "id": "1943-mussolini-fall",
+    "year": 1943,
+    "category": "politics",
+    "text": "Benito Mussolini es destituido y detenido en Italia.",
+    "source_url": "https://en.wikipedia.org/wiki/Fall_of_the_Fascist_regime_in_Italy",
+    "occurred_on": "1943-07-25"
+  },
+  {
+    "id": "1944-normandy",
+    "year": 1944,
+    "category": "conflict",
+    "text": "Las fuerzas aliadas desembarcan en Normandía durante el Día D.",
+    "source_url": "https://en.wikipedia.org/wiki/Normandy_landings",
+    "occurred_on": "1944-06-06"
+  },
+  {
+    "id": "1944-paris-liberation",
+    "year": 1944,
+    "category": "conflict",
+    "text": "París queda liberada de la ocupación alemana durante la Segunda Guerra Mundial.",
+    "source_url": "https://en.wikipedia.org/wiki/Liberation_of_Paris",
+    "occurred_on": "1944-08-25"
+  },
+  {
+    "id": "1945-victory-europe",
+    "year": 1945,
+    "category": "conflict",
+    "text": "Se celebra en Europa la derrota de la Alemania nazi tras su rendición.",
+    "source_url": "https://en.wikipedia.org/wiki/Victory_in_Europe_Day",
+    "occurred_on": "1945-05-08"
+  },
+  {
+    "id": "1945-un-founded",
+    "year": 1945,
+    "category": "politics",
+    "text": "Entra en vigor la Carta de las Naciones Unidas y nace oficialmente la ONU.",
+    "source_url": "https://www.un.org/en/about-us/un-charter",
+    "occurred_on": "1945-10-24"
+  },
+  {
+    "id": "1946-first-un-assembly",
+    "year": 1946,
+    "category": "politics",
+    "text": "La primera Asamblea General de las Naciones Unidas se reúne en Londres.",
+    "source_url": "https://en.wikipedia.org/wiki/United_Nations_General_Assembly",
+    "occurred_on": "1946-01-10"
+  },
+  {
+    "id": "1946-unicef-founded",
+    "year": 1946,
+    "category": "society",
+    "text": "La Asamblea General de la ONU crea UNICEF para ayudar a la infancia.",
+    "source_url": "https://www.unicef.org/documents/un-resolution-establishing-unicef",
+    "occurred_on": "1946-12-11"
+  },
+  {
+    "id": "1947-india-independence",
+    "year": 1947,
+    "category": "politics",
+    "text": "La India alcanza la independencia del dominio británico.",
+    "source_url": "https://en.wikipedia.org/wiki/Indian_Independence_Act_1947",
+    "occurred_on": "1947-08-15"
+  },
+  {
+    "id": "1947-sound-barrier",
+    "year": 1947,
+    "category": "science",
+    "text": "Chuck Yeager supera la velocidad del sonido en vuelo nivelado con el avión Bell X-1.",
+    "source_url": "https://en.wikipedia.org/wiki/Chuck_Yeager",
+    "occurred_on": "1947-10-14"
+  },
+  {
+    "id": "1948-israel-independence",
+    "year": 1948,
+    "category": "politics",
+    "text": "David Ben-Gurión proclama la independencia del Estado de Israel.",
+    "source_url": "https://en.wikipedia.org/wiki/Israeli_Declaration_of_Independence",
+    "occurred_on": "1948-05-14"
+  },
+  {
+    "id": "1948-human-rights",
+    "year": 1948,
+    "category": "society",
+    "text": "La ONU adopta en París la Declaración Universal de los Derechos Humanos.",
+    "source_url": "https://en.wikipedia.org/wiki/Universal_Declaration_of_Human_Rights",
+    "occurred_on": "1948-12-10"
+  },
+  {
+    "id": "1949-nato-founded",
+    "year": 1949,
+    "category": "politics",
+    "text": "Doce países firman el Tratado del Atlántico Norte y fundan la OTAN.",
+    "source_url": "https://en.wikipedia.org/wiki/North_Atlantic_Treaty",
+    "occurred_on": "1949-04-04"
+  },
+  {
+    "id": "1949-china-proclamation",
+    "year": 1949,
+    "category": "politics",
+    "text": "Mao Zedong proclama en Pekín la República Popular China.",
+    "source_url": "https://en.wikipedia.org/wiki/Proclamation_of_the_People%27s_Republic_of_China",
+    "occurred_on": "1949-10-01"
+  },
+  {
+    "id": "1950-korean-war",
+    "year": 1950,
+    "category": "conflict",
+    "text": "Corea del Norte invade Corea del Sur y comienza la guerra de Corea.",
+    "source_url": "https://en.wikipedia.org/wiki/Korean_War",
+    "occurred_on": "1950-06-25"
+  },
+  {
+    "id": "1950-maracanazo",
+    "year": 1950,
+    "category": "sport",
+    "text": "Uruguay derrota a Brasil en Maracaná y se proclama campeón del mundo de fútbol.",
+    "source_url": "https://en.wikipedia.org/wiki/Uruguay_v_Brazil_(1950_FIFA_World_Cup)",
+    "occurred_on": "1950-07-16"
+  },
+  {
+    "id": "1951-cbs-color",
+    "year": 1951,
+    "category": "science",
+    "text": "CBS emite en Estados Unidos su primer programa comercial de televisión en color.",
+    "source_url": "https://www.paramountpressexpress.com/cbs-entertainment/releases/view?id=5134",
+    "occurred_on": "1951-06-25"
+  },
+  {
+    "id": "1951-alice-film",
+    "year": 1951,
+    "category": "culture",
+    "text": "Se estrena en Nueva York la película animada Alicia en el país de las maravillas, de Disney.",
+    "source_url": "https://disneyanimation.com/films/alice-in-wonderland/",
+    "occurred_on": "1951-07-28"
+  },
+  {
+    "id": "1952-elizabeth-accession",
+    "year": 1952,
+    "category": "politics",
+    "text": "Isabel II se convierte en reina del Reino Unido tras la muerte de Jorge VI.",
+    "source_url": "https://www.royal.uk/the-queens-accession-and-coronation",
+    "occurred_on": "1952-02-06"
+  },
+  {
+    "id": "1952-great-smog",
+    "year": 1952,
+    "category": "society",
+    "text": "Comienza el Gran Smog de Londres, una grave crisis de contaminación atmosférica.",
+    "source_url": "https://en.wikipedia.org/wiki/Great_Smog_of_London",
+    "occurred_on": "1952-12-05"
+  },
+  {
+    "id": "1953-dna-double-helix",
+    "year": 1953,
+    "category": "science",
+    "text": "Nature publica el artículo de Watson y Crick que describe la doble hélice del ADN.",
+    "source_url": "https://en.wikipedia.org/wiki/Molecular_Structure_of_Nucleic_Acids:_A_Structure_for_Deoxyribose_Nucleic_Acid",
+    "occurred_on": "1953-04-25"
+  },
+  {
+    "id": "1953-everest-summit",
+    "year": 1953,
+    "category": "sport",
+    "text": "Edmund Hillary y Tenzing Norgay alcanzan la cima del Everest.",
+    "source_url": "https://en.wikipedia.org/wiki/1953_British_Mount_Everest_expedition",
+    "occurred_on": "1953-05-29"
+  },
+  {
+    "id": "1954-miracle-bern",
+    "year": 1954,
+    "category": "sport",
+    "text": "Alemania Occidental derrota a Hungría en la final del Mundial, conocida como el Milagro de Berna.",
+    "source_url": "https://en.wikipedia.org/wiki/1954_FIFA_World_Cup_final",
+    "occurred_on": "1954-07-04"
+  },
+  {
+    "id": "1954-fellowship-ring",
+    "year": 1954,
+    "category": "culture",
+    "text": "Se publica La comunidad del anillo, el primer volumen de El Señor de los Anillos.",
+    "source_url": "https://en.wikipedia.org/wiki/The_Fellowship_of_the_Ring",
+    "occurred_on": "1954-07-29"
+  },
+  {
+    "id": "1955-warsaw-pact",
+    "year": 1955,
+    "category": "politics",
+    "text": "La Unión Soviética y sus aliados de Europa oriental firman el Pacto de Varsovia.",
+    "source_url": "https://en.wikipedia.org/wiki/Warsaw_Pact",
+    "occurred_on": "1955-05-14"
+  },
+  {
+    "id": "1955-rosa-parks",
+    "year": 1955,
+    "category": "society",
+    "text": "Rosa Parks es detenida en Montgomery tras negarse a ceder su asiento en un autobús segregado.",
+    "source_url": "https://en.wikipedia.org/wiki/Rosa_Parks",
+    "occurred_on": "1955-12-01"
+  },
+  {
+    "id": "1956-first-eurovision",
+    "year": 1956,
+    "category": "music",
+    "text": "Lugano acoge la primera edición del Festival de Eurovisión.",
+    "source_url": "https://www.eurovision.com/eurovision-song-contest/lugano-1956/",
+    "occurred_on": "1956-05-24"
+  },
+  {
+    "id": "1956-hungarian-uprising",
+    "year": 1956,
+    "category": "politics",
+    "text": "Una manifestación en Budapest da comienzo a la revolución húngara contra el régimen prosoviético.",
+    "source_url": "https://en.wikipedia.org/wiki/Hungarian_Revolution_of_1956",
+    "occurred_on": "1956-10-23"
+  },
+  {
+    "id": "1956-suez-crisis",
+    "year": 1956,
+    "category": "conflict",
+    "text": "La invasión israelí de la península del Sinaí abre la fase militar de la crisis de Suez.",
+    "source_url": "https://en.wikipedia.org/wiki/Suez_Crisis",
+    "occurred_on": "1956-10-29"
+  },
+  {
+    "id": "1957-treaty-rome",
+    "year": 1957,
+    "category": "politics",
+    "text": "Se firma el Tratado de Roma que crea la Comunidad Económica Europea.",
+    "source_url": "https://en.wikipedia.org/wiki/Treaty_of_Rome",
+    "occurred_on": "1957-03-25"
+  },
+  {
+    "id": "1957-sputnik",
+    "year": 1957,
+    "category": "science",
+    "text": "La Unión Soviética lanza el Sputnik 1, primer satélite artificial de la Tierra.",
+    "source_url": "https://en.wikipedia.org/wiki/Sputnik_1",
+    "occurred_on": "1957-10-04"
+  },
+  {
+    "id": "1958-brazil-first-world-cup",
+    "year": 1958,
+    "category": "sport",
+    "text": "Brasil gana su primer Mundial de fútbol al derrotar a Suecia en la final.",
+    "source_url": "https://en.wikipedia.org/wiki/1958_FIFA_World_Cup_final",
+    "occurred_on": "1958-06-29"
+  },
+  {
+    "id": "1958-nasa-founded",
+    "year": 1958,
+    "category": "science",
+    "text": "Estados Unidos aprueba la ley que crea la NASA.",
+    "source_url": "https://en.wikipedia.org/wiki/National_Aeronautics_and_Space_Act",
+    "occurred_on": "1958-07-29"
+  },
+  {
+    "id": "1959-cuban-revolution",
+    "year": 1959,
+    "category": "politics",
+    "text": "Fulgencio Batista huye de Cuba y triunfa la revolución encabezada por Fidel Castro.",
+    "source_url": "https://en.wikipedia.org/wiki/Cuban_Revolution",
+    "occurred_on": "1959-01-01"
+  },
+  {
+    "id": "1959-barbie-debut",
+    "year": 1959,
+    "category": "culture",
+    "text": "La muñeca Barbie se presenta en la feria del juguete de Nueva York.",
+    "source_url": "https://en.wikipedia.org/wiki/Barbie",
+    "occurred_on": "1959-03-09"
+  },
+  {
+    "id": "1960-first-laser",
+    "year": 1960,
+    "category": "science",
+    "text": "Theodore Maiman hace funcionar el primer láser en los laboratorios Hughes.",
+    "source_url": "https://en.wikipedia.org/wiki/Theodore_Maiman",
+    "occurred_on": "1960-05-16"
+  },
+  {
+    "id": "1960-rome-olympics",
+    "year": 1960,
+    "category": "sport",
+    "text": "Se inauguran en Roma los Juegos Olímpicos de verano.",
+    "source_url": "https://en.wikipedia.org/wiki/1960_Summer_Olympics",
+    "occurred_on": "1960-08-25"
+  },
+  {
+    "id": "1961-gagarin-space",
+    "year": 1961,
+    "category": "science",
+    "text": "Yuri Gagarin se convierte en el primer ser humano en viajar al espacio.",
+    "source_url": "https://en.wikipedia.org/wiki/Vostok_1",
+    "occurred_on": "1961-04-12"
+  },
+  {
+    "id": "1961-berlin-wall-built",
+    "year": 1961,
+    "category": "politics",
+    "text": "Comienza la construcción del muro que divide Berlín.",
+    "source_url": "https://en.wikipedia.org/wiki/Berlin_Wall",
+    "occurred_on": "1961-08-13"
+  },
+  {
+    "id": "1962-telstar",
+    "year": 1962,
+    "category": "science",
+    "text": "Se lanza Telstar 1, satélite pionero de las telecomunicaciones transatlánticas.",
+    "source_url": "https://en.wikipedia.org/wiki/Telstar_1",
+    "occurred_on": "1962-07-10"
+  },
+  {
+    "id": "1962-cuban-missiles",
+    "year": 1962,
+    "category": "conflict",
+    "text": "Kennedy es informado de los misiles soviéticos en Cuba y comienza la fase decisiva de la crisis.",
+    "source_url": "https://en.wikipedia.org/wiki/Cuban_Missile_Crisis",
+    "occurred_on": "1962-10-16"
+  },
+  {
+    "id": "1963-i-have-dream",
+    "year": 1963,
+    "category": "society",
+    "text": "Martin Luther King pronuncia su discurso «I have a dream» durante la Marcha sobre Washington.",
+    "source_url": "https://en.wikipedia.org/wiki/I_Have_a_Dream",
+    "occurred_on": "1963-08-28"
+  },
+  {
+    "id": "1963-kennedy-assassination",
+    "year": 1963,
+    "category": "politics",
+    "text": "El presidente estadounidense John F. Kennedy es asesinado en Dallas.",
+    "source_url": "https://en.wikipedia.org/wiki/Assassination_of_John_F._Kennedy",
+    "occurred_on": "1963-11-22"
+  },
+  {
+    "id": "1964-civil-rights-act",
+    "year": 1964,
+    "category": "society",
+    "text": "Estados Unidos aprueba una ley histórica contra la segregación y la discriminación racial.",
+    "source_url": "https://en.wikipedia.org/wiki/Civil_Rights_Act_of_1964",
+    "occurred_on": "1964-07-02"
+  },
+  {
+    "id": "1964-tokyo-olympics",
+    "year": 1964,
+    "category": "sport",
+    "text": "Tokio inaugura los primeros Juegos Olímpicos celebrados en Asia.",
+    "source_url": "https://en.wikipedia.org/wiki/1964_Summer_Olympics",
+    "occurred_on": "1964-10-10"
+  },
+  {
+    "id": "1965-first-spacewalk",
+    "year": 1965,
+    "category": "science",
+    "text": "Alexéi Leónov realiza el primer paseo espacial de la historia.",
+    "source_url": "https://en.wikipedia.org/wiki/Voskhod_2",
+    "occurred_on": "1965-03-18"
+  },
+  {
+    "id": "1965-singapore-independence",
+    "year": 1965,
+    "category": "politics",
+    "text": "Singapur se independiza de Malasia y se convierte en una república soberana.",
+    "source_url": "https://en.wikipedia.org/wiki/Proclamation_of_Singapore",
+    "occurred_on": "1965-08-09"
+  },
+  {
+    "id": "1966-england-world-cup",
+    "year": 1966,
+    "category": "sport",
+    "text": "Inglaterra gana su primer Mundial de fútbol en la final disputada en Wembley.",
+    "source_url": "https://en.wikipedia.org/wiki/1966_FIFA_World_Cup_final",
+    "occurred_on": "1966-07-30"
+  },
+  {
+    "id": "1966-star-trek-debut",
+    "year": 1966,
+    "category": "culture",
+    "text": "La serie original de Star Trek empieza a emitirse en la televisión estadounidense.",
+    "source_url": "https://en.wikipedia.org/wiki/Star_Trek:_The_Original_Series",
+    "occurred_on": "1966-09-08"
+  },
+  {
+    "id": "1967-six-day-war",
+    "year": 1967,
+    "category": "conflict",
+    "text": "Comienza la guerra de los Seis Días entre Israel y varios países árabes.",
+    "source_url": "https://en.wikipedia.org/wiki/Six-Day_War",
+    "occurred_on": "1967-06-05"
+  },
+  {
+    "id": "1967-heart-transplant",
+    "year": 1967,
+    "category": "science",
+    "text": "Christiaan Barnard realiza en Ciudad del Cabo el primer trasplante de corazón de humano a humano.",
+    "source_url": "https://en.wikipedia.org/wiki/Christiaan_Barnard",
+    "occurred_on": "1967-12-03"
+  },
+  {
+    "id": "1968-king-assassination",
+    "year": 1968,
+    "category": "society",
+    "text": "Martin Luther King es asesinado en Memphis.",
+    "source_url": "https://en.wikipedia.org/wiki/Assassination_of_Martin_Luther_King_Jr.",
+    "occurred_on": "1968-04-04"
+  },
+  {
+    "id": "1968-spain-first-eurovision",
+    "year": 1968,
+    "category": "music",
+    "text": "España gana por primera vez el Festival de Eurovisión, en una edición celebrada en Londres.",
+    "source_url": "https://en.wikipedia.org/wiki/Eurovision_Song_Contest_1968",
+    "occurred_on": "1968-04-06"
+  },
+  {
+    "id": "1968-mexico-olympics",
+    "year": 1968,
+    "category": "sport",
+    "text": "Ciudad de México inaugura los primeros Juegos Olímpicos celebrados en América Latina.",
+    "source_url": "https://en.wikipedia.org/wiki/1968_Summer_Olympics",
+    "occurred_on": "1968-10-12"
+  },
+  {
+    "id": "1969-moon-landing",
+    "year": 1969,
+    "category": "science",
+    "text": "El módulo lunar del Apolo 11 aterriza en la Luna con Neil Armstrong y Buzz Aldrin a bordo.",
+    "source_url": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_11a_Summary.htm",
+    "occurred_on": "1969-07-20"
+  },
+  {
+    "id": "1969-woodstock",
+    "year": 1969,
+    "category": "music",
+    "text": "Comienza el festival de Woodstock, convertido en símbolo de la contracultura y la música en directo.",
+    "source_url": "https://en.wikipedia.org/wiki/Woodstock",
+    "occurred_on": "1969-08-15"
+  },
+  {
+    "id": "1970-apollo-13",
+    "year": 1970,
+    "category": "science",
+    "text": "Una explosión obliga a cancelar el alunizaje del Apolo 13 y convierte la misión en un rescate espacial.",
+    "source_url": "https://en.wikipedia.org/wiki/Apollo_13",
+    "occurred_on": "1970-04-13"
+  },
+  {
+    "id": "1970-first-earth-day",
+    "year": 1970,
+    "category": "society",
+    "text": "Se celebra el primer Día de la Tierra, con grandes movilizaciones medioambientales en Estados Unidos.",
+    "source_url": "https://en.wikipedia.org/wiki/Earth_Day",
+    "occurred_on": "1970-04-22"
+  },
+  {
+    "id": "1970-first-glastonbury",
+    "year": 1970,
+    "category": "music",
+    "text": "Se celebra la primera edición del festival que acabará conociéndose como Glastonbury.",
+    "source_url": "https://www.glastonburyfestivals.co.uk/history/history-1970/",
+    "occurred_on": "1970-09-19"
+  },
+  {
+    "id": "1971-greenpeace-voyage",
+    "year": 1971,
+    "category": "society",
+    "text": "El barco que da origen a Greenpeace parte de Vancouver para protestar contra ensayos nucleares.",
+    "source_url": "https://www.greenpeace.org/international/story/46686/amchitka-the-founding-voyage/",
+    "occurred_on": "1971-09-15"
+  },
+  {
+    "id": "1971-intel-4004",
+    "year": 1971,
+    "category": "science",
+    "text": "Intel anuncia su primer microprocesador comercial, un hito en la miniaturización de los ordenadores.",
+    "source_url": "https://timeline.intel.com/1971/the-first-programmable-microprocessor%3A-the-4004",
+    "occurred_on": "1971-11-15"
+  },
+  {
+    "id": "1972-munich-massacre",
+    "year": 1972,
+    "category": "conflict",
+    "text": "Un grupo armado ataca a la delegación israelí durante los Juegos Olímpicos de Múnich.",
+    "source_url": "https://en.wikipedia.org/wiki/Munich_massacre",
+    "occurred_on": "1972-09-05"
+  },
+  {
+    "id": "1972-apollo-17",
+    "year": 1972,
+    "category": "science",
+    "text": "Despega el Apolo 17, la última misión tripulada del programa Apolo que viaja a la Luna.",
+    "source_url": "https://en.wikipedia.org/wiki/Apollo_17",
+    "occurred_on": "1972-12-07"
+  },
+  {
+    "id": "1973-chile-coup",
+    "year": 1973,
+    "category": "politics",
+    "text": "Un golpe militar derroca al gobierno de Salvador Allende en Chile.",
+    "source_url": "https://en.wikipedia.org/wiki/1973_Chilean_coup_d%27%C3%A9tat",
+    "occurred_on": "1973-09-11"
+  },
+  {
+    "id": "1973-oil-embargo",
+    "year": 1973,
+    "category": "society",
+    "text": "Los países árabes exportadores de petróleo anuncian un embargo que agrava la crisis del petróleo.",
+    "source_url": "https://en.wikipedia.org/wiki/1973_oil_crisis",
+    "occurred_on": "1973-10-17"
+  },
+  {
+    "id": "1974-carnation-revolution",
+    "year": 1974,
+    "category": "politics",
+    "text": "La Revolución de los Claveles pone fin a la dictadura portuguesa.",
+    "source_url": "https://en.wikipedia.org/wiki/Carnation_Revolution",
+    "occurred_on": "1974-04-25"
+  },
+  {
+    "id": "1974-nixon-resignation",
+    "year": 1974,
+    "category": "politics",
+    "text": "Richard Nixon deja la presidencia de Estados Unidos tras el escándalo Watergate.",
+    "source_url": "https://www.nixonlibrary.gov/president-richard-nixon",
+    "occurred_on": "1974-08-09"
+  },
+  {
+    "id": "1975-saigon-fall",
+    "year": 1975,
+    "category": "conflict",
+    "text": "La caída de Saigón marca el final de la guerra de Vietnam.",
+    "source_url": "https://en.wikipedia.org/wiki/Fall_of_Saigon",
+    "occurred_on": "1975-04-30"
+  },
+  {
+    "id": "1975-franco-death",
+    "year": 1975,
+    "category": "politics",
+    "text": "Muere Francisco Franco tras casi cuatro décadas de dictadura en España.",
+    "source_url": "https://en.wikipedia.org/wiki/Death_of_Francisco_Franco",
+    "occurred_on": "1975-11-20"
+  },
+  {
+    "id": "1976-montreal-olympics",
+    "year": 1976,
+    "category": "sport",
+    "text": "Se inauguran los Juegos Olímpicos de Montreal.",
+    "source_url": "https://en.wikipedia.org/wiki/1976_Summer_Olympics",
+    "occurred_on": "1976-07-17"
+  },
+  {
+    "id": "1976-viking-mars",
+    "year": 1976,
+    "category": "science",
+    "text": "La sonda Viking 1 aterriza en Marte y transmite imágenes desde su superficie.",
+    "source_url": "https://en.wikipedia.org/wiki/Viking_1",
+    "occurred_on": "1976-07-20"
+  },
+  {
+    "id": "1977-star-wars-release",
+    "year": 1977,
+    "category": "culture",
+    "text": "La primera película de Star Wars llega a los cines de Estados Unidos.",
+    "source_url": "https://en.wikipedia.org/wiki/Star_Wars_(film)",
+    "occurred_on": "1977-05-25"
+  },
+  {
+    "id": "1977-spain-democratic-election",
+    "year": 1977,
+    "category": "politics",
+    "text": "España celebra sus primeras elecciones generales democráticas después de la dictadura franquista.",
+    "source_url": "https://en.wikipedia.org/wiki/1977_Spanish_general_election",
+    "occurred_on": "1977-06-15"
+  },
+  {
+    "id": "1978-first-ivf-baby",
+    "year": 1978,
+    "category": "science",
+    "text": "Nace Louise Brown, la primera persona concebida mediante fecundación in vitro.",
+    "source_url": "https://en.wikipedia.org/wiki/Louise_Brown",
+    "occurred_on": "1978-07-25"
+  },
+  {
+    "id": "1978-spain-constitution",
+    "year": 1978,
+    "category": "politics",
+    "text": "La ciudadanía española aprueba en referéndum la Constitución democrática.",
+    "source_url": "https://en.wikipedia.org/wiki/1978_Spanish_constitutional_referendum",
+    "occurred_on": "1978-12-06"
+  },
+  {
+    "id": "1979-thatcher-prime-minister",
+    "year": 1979,
+    "category": "politics",
+    "text": "Margaret Thatcher se convierte en la primera mujer al frente del Gobierno británico.",
+    "source_url": "https://en.wikipedia.org/wiki/Premiership_of_Margaret_Thatcher",
+    "occurred_on": "1979-05-04"
+  },
+  {
+    "id": "1979-walkman-launch",
+    "year": 1979,
+    "category": "music",
+    "text": "Sony pone a la venta en Japón el primer Walkman, que populariza escuchar música en movimiento.",
+    "source_url": "https://en.wikipedia.org/wiki/Walkman",
+    "occurred_on": "1979-07-01"
+  },
+  {
+    "id": "1980-pacman-release",
+    "year": 1980,
+    "category": "culture",
+    "text": "Pac-Man se prueba por primera vez con público en el distrito de Shibuya, en Tokio.",
+    "source_url": "https://www.pacman.com/en/history/",
+    "occurred_on": "1980-05-22"
+  },
+  {
+    "id": "1980-solidarity-agreement",
+    "year": 1980,
+    "category": "politics",
+    "text": "Los acuerdos de Gdansk abren el camino al sindicato independiente Solidaridad en Polonia.",
+    "source_url": "https://en.wikipedia.org/wiki/Gda%C5%84sk_Agreement",
+    "occurred_on": "1980-08-31"
+  },
+  {
+    "id": "1981-spain-coup-attempt",
+    "year": 1981,
+    "category": "politics",
+    "text": "Antonio Tejero irrumpe en el Congreso durante un intento de golpe de Estado en España.",
+    "source_url": "https://en.wikipedia.org/wiki/1981_Spanish_coup_attempt",
+    "occurred_on": "1981-02-23"
+  },
+  {
+    "id": "1981-mtv-launch",
+    "year": 1981,
+    "category": "music",
+    "text": "MTV comienza sus emisiones en Estados Unidos como canal dedicado a los vídeos musicales.",
+    "source_url": "https://en.wikipedia.org/wiki/MTV",
+    "occurred_on": "1981-08-01"
+  },
+  {
+    "id": "1982-et-release",
+    "year": 1982,
+    "category": "culture",
+    "text": "E.T., el extraterrestre llega a los cines de Estados Unidos.",
+    "source_url": "https://en.wikipedia.org/wiki/E.T._the_Extra-Terrestrial",
+    "occurred_on": "1982-06-11"
+  },
+  {
+    "id": "1982-spain-world-cup-opening",
+    "year": 1982,
+    "category": "sport",
+    "text": "España inaugura su Mundial de fútbol con el partido entre Argentina y Bélgica en el Camp Nou.",
+    "source_url": "https://en.wikipedia.org/wiki/1982_FIFA_World_Cup",
+    "occurred_on": "1982-06-13"
+  },
+  {
+    "id": "1983-internet-tcp-ip",
+    "year": 1983,
+    "category": "science",
+    "text": "ARPANET adopta TCP/IP, un paso fundamental para la Internet moderna.",
+    "source_url": "https://www.internetsociety.org/internet/history-internet/brief-history-internet/",
+    "occurred_on": "1983-01-01"
+  },
+  {
+    "id": "1983-dynatac-approval",
+    "year": 1983,
+    "category": "science",
+    "text": "El Motorola DynaTAC, primer teléfono móvil portátil comercial, recibe autorización en Estados Unidos.",
+    "source_url": "https://www.motorolasolutions.com/en_us/about/history/explore-motorola-heritage/cell-phone-development.html",
+    "occurred_on": "1983-09-21"
+  },
+  {
+    "id": "1984-macintosh-launch",
+    "year": 1984,
+    "category": "science",
+    "text": "Apple presenta el Macintosh, un ordenador personal con interfaz gráfica y ratón.",
+    "source_url": "https://en.wikipedia.org/wiki/Macintosh_128K",
+    "occurred_on": "1984-01-24"
+  },
+  {
+    "id": "1984-los-angeles-olympics",
+    "year": 1984,
+    "category": "sport",
+    "text": "Se inauguran los Juegos Olímpicos de Los Ángeles, marcados por el boicot de la Unión Soviética.",
+    "source_url": "https://en.wikipedia.org/wiki/1984_Summer_Olympics",
+    "occurred_on": "1984-07-28"
+  },
+  {
+    "id": "1985-first-rock-in-rio",
+    "year": 1985,
+    "category": "music",
+    "text": "Arranca la primera edición de Rock in Rio, uno de los grandes festivales de música de Brasil.",
+    "source_url": "https://en.wikipedia.org/wiki/Rock_in_Rio",
+    "occurred_on": "1985-01-11"
+  },
+  {
+    "id": "1985-schengen-agreement",
+    "year": 1985,
+    "category": "politics",
+    "text": "Cinco países europeos firman el Acuerdo de Schengen para avanzar hacia fronteras interiores sin controles.",
+    "source_url": "https://en.wikipedia.org/wiki/Schengen_Agreement",
+    "occurred_on": "1985-06-14"
+  },
+  {
+    "id": "1985-live-aid",
+    "year": 1985,
+    "category": "music",
+    "text": "Los conciertos Live Aid reúnen a grandes estrellas en Londres y Filadelfia para recaudar ayuda contra el hambre.",
+    "source_url": "https://en.wikipedia.org/wiki/Live_Aid",
+    "occurred_on": "1985-07-13"
+  },
+  {
+    "id": "1986-chernobyl",
+    "year": 1986,
+    "category": "science",
+    "text": "Una explosión en la central nuclear de Chernóbil provoca un grave accidente radiactivo.",
+    "source_url": "https://en.wikipedia.org/wiki/Chernobyl_disaster",
+    "occurred_on": "1986-04-26"
+  },
+  {
+    "id": "1986-argentina-world-cup",
+    "year": 1986,
+    "category": "sport",
+    "text": "La Argentina de Maradona gana el Mundial de México al derrotar a Alemania Occidental en la final.",
+    "source_url": "https://en.wikipedia.org/wiki/1986_FIFA_World_Cup_final",
+    "occurred_on": "1986-06-29"
+  },
+  {
+    "id": "1987-erasmus-established",
+    "year": 1987,
+    "category": "society",
+    "text": "La Comunidad Europea aprueba Erasmus, el programa de intercambio de estudiantes universitarios.",
+    "source_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A31987D0327",
+    "occurred_on": "1987-06-15"
+  },
+  {
+    "id": "1987-black-monday",
+    "year": 1987,
+    "category": "society",
+    "text": "Las bolsas internacionales sufren el desplome conocido como Lunes Negro.",
+    "source_url": "https://en.wikipedia.org/wiki/Black_Monday_(1987)",
+    "occurred_on": "1987-10-19"
+  },
+  {
+    "id": "1988-seoul-olympics",
+    "year": 1988,
+    "category": "sport",
+    "text": "Se inauguran los Juegos Olímpicos de Seúl.",
+    "source_url": "https://en.wikipedia.org/wiki/1988_Summer_Olympics",
+    "occurred_on": "1988-09-17"
+  },
+  {
+    "id": "1988-lockerbie",
+    "year": 1988,
+    "category": "conflict",
+    "text": "Un atentado destruye un avión de Pan Am sobre la localidad escocesa de Lockerbie.",
+    "source_url": "https://en.wikipedia.org/wiki/Pan_Am_Flight_103",
+    "occurred_on": "1988-12-21"
+  },
+  {
+    "id": "1989-tiananmen-crackdown",
+    "year": 1989,
+    "category": "conflict",
+    "text": "El Ejército chino reprime las protestas de la plaza de Tiananmén en Pekín.",
+    "source_url": "https://en.wikipedia.org/wiki/1989_Tiananmen_Square_protests_and_massacre",
+    "occurred_on": "1989-06-04"
+  },
+  {
+    "id": "1989-berlin-wall-fall",
+    "year": 1989,
+    "category": "politics",
+    "text": "Se abren los pasos del Muro de Berlín, símbolo de la división de la Guerra Fría.",
+    "source_url": "https://en.wikipedia.org/wiki/Fall_of_the_Berlin_Wall",
+    "occurred_on": "1989-11-09"
+  },
+  {
+    "id": "1990-mandela-release",
+    "year": 1990,
+    "category": "politics",
+    "text": "Nelson Mandela sale de prisión después de 27 años encarcelado.",
+    "source_url": "https://en.wikipedia.org/wiki/Nelson_Mandela",
+    "occurred_on": "1990-02-11"
+  },
+  {
+    "id": "1990-german-reunification",
+    "year": 1990,
+    "category": "politics",
+    "text": "Alemania vuelve a ser un solo país tras la reunificación de sus dos Estados.",
+    "source_url": "https://en.wikipedia.org/wiki/German_reunification",
+    "occurred_on": "1990-10-03"
+  },
+  {
+    "id": "1991-web-public",
+    "year": 1991,
+    "category": "science",
+    "text": "Tim Berners-Lee anuncia públicamente el proyecto World Wide Web en un grupo de noticias de Internet.",
+    "source_url": "https://en.wikipedia.org/wiki/History_of_the_World_Wide_Web",
+    "occurred_on": "1991-08-06"
+  },
+  {
+    "id": "1991-soviet-dissolution",
+    "year": 1991,
+    "category": "politics",
+    "text": "La Unión Soviética se disuelve formalmente tras la declaración de su Soviet de las Repúblicas.",
+    "source_url": "https://en.wikipedia.org/wiki/Dissolution_of_the_Soviet_Union",
+    "occurred_on": "1991-12-26"
+  },
+  {
+    "id": "1992-maastricht-treaty",
+    "year": 1992,
+    "category": "politics",
+    "text": "Se firma el Tratado de Maastricht, que sienta las bases de la Unión Europea.",
+    "source_url": "https://en.wikipedia.org/wiki/Maastricht_Treaty",
+    "occurred_on": "1992-02-07"
+  },
+  {
+    "id": "1992-barcelona-olympics",
+    "year": 1992,
+    "category": "sport",
+    "text": "Barcelona inaugura sus Juegos Olímpicos con el encendido del pebetero mediante una flecha.",
+    "source_url": "https://en.wikipedia.org/wiki/1992_Summer_Olympics",
+    "occurred_on": "1992-07-25"
+  },
+  {
+    "id": "1993-jurassic-park-release",
+    "year": 1993,
+    "category": "culture",
+    "text": "Jurassic Park se estrena en Estados Unidos y lleva los dinosaurios digitales al gran público.",
+    "source_url": "https://en.wikipedia.org/wiki/Jurassic_Park_(film)",
+    "occurred_on": "1993-06-11"
+  },
+  {
+    "id": "1993-eu-established",
+    "year": 1993,
+    "category": "politics",
+    "text": "Entra en vigor el Tratado de Maastricht y nace oficialmente la Unión Europea.",
+    "source_url": "https://en.wikipedia.org/wiki/Maastricht_Treaty",
+    "occurred_on": "1993-11-01"
+  },
+  {
+    "id": "1994-channel-tunnel",
+    "year": 1994,
+    "category": "science",
+    "text": "Se inaugura el túnel del canal de la Mancha, que conecta por ferrocarril Francia y el Reino Unido.",
+    "source_url": "https://en.wikipedia.org/wiki/Channel_Tunnel",
+    "occurred_on": "1994-05-06"
+  },
+  {
+    "id": "1994-mandela-president",
+    "year": 1994,
+    "category": "politics",
+    "text": "Nelson Mandela toma posesión como primer presidente negro de Sudáfrica.",
+    "source_url": "https://en.wikipedia.org/wiki/Presidency_of_Nelson_Mandela",
+    "occurred_on": "1994-05-10"
+  },
+  {
+    "id": "1995-windows-95",
+    "year": 1995,
+    "category": "science",
+    "text": "Microsoft lanza Windows 95 con el botón Inicio como una de sus novedades.",
+    "source_url": "https://en.wikipedia.org/wiki/Windows_95",
+    "occurred_on": "1995-08-24"
+  },
+  {
+    "id": "1995-toy-story-release",
+    "year": 1995,
+    "category": "culture",
+    "text": "Toy Story llega a los cines de Estados Unidos como primer largometraje animado íntegramente por ordenador.",
+    "source_url": "https://en.wikipedia.org/wiki/Toy_Story",
+    "occurred_on": "1995-11-22"
+  },
+  {
+    "id": "1996-dolly-born",
+    "year": 1996,
+    "category": "science",
+    "text": "Nace Dolly, la oveja clonada a partir de una célula adulta.",
+    "source_url": "https://en.wikipedia.org/wiki/Dolly_(sheep)",
+    "occurred_on": "1996-07-05"
+  },
+  {
+    "id": "1996-atlanta-olympics",
+    "year": 1996,
+    "category": "sport",
+    "text": "Atlanta inaugura los Juegos Olímpicos del centenario de los Juegos modernos.",
+    "source_url": "https://en.wikipedia.org/wiki/1996_Summer_Olympics",
+    "occurred_on": "1996-07-19"
+  },
+  {
+    "id": "1997-deep-blue-victory",
+    "year": 1997,
+    "category": "science",
+    "text": "Deep Blue derrota a Garri Kaspárov en un encuentro de ajedrez a seis partidas.",
+    "source_url": "https://en.wikipedia.org/wiki/Deep_Blue_versus_Garry_Kasparov",
+    "occurred_on": "1997-05-11"
+  },
+  {
+    "id": "1997-diana-death",
+    "year": 1997,
+    "category": "society",
+    "text": "Diana de Gales muere tras un accidente de tráfico en París.",
+    "source_url": "https://en.wikipedia.org/wiki/Death_of_Diana,_Princess_of_Wales",
+    "occurred_on": "1997-08-31"
+  },
+  {
+    "id": "1998-france-first-world-cup",
+    "year": 1998,
+    "category": "sport",
+    "text": "Francia gana su primer Mundial de fútbol al derrotar a Brasil en Saint-Denis.",
+    "source_url": "https://en.wikipedia.org/wiki/1998_FIFA_World_Cup_final",
+    "occurred_on": "1998-07-12"
+  },
+  {
+    "id": "1998-google-founded",
+    "year": 1998,
+    "category": "science",
+    "text": "Larry Page y Serguéi Brin constituyen la empresa Google.",
+    "source_url": "https://en.wikipedia.org/wiki/Google",
+    "occurred_on": "1998-09-04"
+  },
+  {
+    "id": "1999-euro-introduction",
+    "year": 1999,
+    "category": "society",
+    "text": "El euro empieza a utilizarse como moneda para operaciones electrónicas y contables en once países.",
+    "source_url": "https://en.wikipedia.org/wiki/History_of_the_euro",
+    "occurred_on": "1999-01-01"
+  },
+  {
+    "id": "1999-matrix-release",
+    "year": 1999,
+    "category": "culture",
+    "text": "Matrix se estrena en Estados Unidos y populariza su estética de realidad simulada y efectos de cámara lenta.",
+    "source_url": "https://en.wikipedia.org/wiki/The_Matrix",
+    "occurred_on": "1999-03-31"
+  },
+  {
+    "id": "1999-first-coachella",
+    "year": 1999,
+    "category": "music",
+    "text": "Se celebra en California la primera edición del festival de música Coachella.",
+    "source_url": "https://en.wikipedia.org/wiki/Coachella",
+    "occurred_on": "1999-10-09"
+  },
+  {
+    "id": "2000-sydney-olympics",
+    "year": 2000,
+    "category": "sport",
+    "text": "Sídney inaugura sus Juegos Olímpicos con Cathy Freeman encendiendo el pebetero.",
+    "source_url": "https://en.wikipedia.org/wiki/2000_Summer_Olympics",
+    "occurred_on": "2000-09-15"
+  },
+  {
+    "id": "2000-iss-first-crew",
+    "year": 2000,
+    "category": "science",
+    "text": "La Estación Espacial Internacional recibe a su primera tripulación de larga duración.",
+    "source_url": "https://en.wikipedia.org/wiki/Expedition_1",
+    "occurred_on": "2000-11-02"
+  },
+  {
+    "id": "2001-wikipedia-launch",
+    "year": 2001,
+    "category": "science",
+    "text": "Wikipedia empieza a funcionar como enciclopedia colaborativa en Internet.",
+    "source_url": "https://en.wikipedia.org/wiki/Wikipedia",
+    "occurred_on": "2001-01-15"
+  },
+  {
+    "id": "2001-september-attacks",
+    "year": 2001,
+    "category": "conflict",
+    "text": "Los atentados contra las Torres Gemelas y el Pentágono conmocionan Estados Unidos.",
+    "source_url": "https://en.wikipedia.org/wiki/September_11_attacks",
+    "occurred_on": "2001-09-11"
+  },
+  {
+    "id": "2002-euro-cash",
+    "year": 2002,
+    "category": "society",
+    "text": "Los billetes y monedas de euro entran en circulación en doce países, entre ellos España.",
+    "source_url": "https://en.wikipedia.org/wiki/History_of_the_euro",
+    "occurred_on": "2002-01-01"
+  },
+  {
+    "id": "2002-brazil-fifth-world-cup",
+    "year": 2002,
+    "category": "sport",
+    "text": "Brasil conquista su quinto Mundial de fútbol al vencer a Alemania en Yokohama.",
+    "source_url": "https://en.wikipedia.org/wiki/2002_FIFA_World_Cup_final",
+    "occurred_on": "2002-06-30"
+  },
+  {
+    "id": "2003-iraq-invasion",
+    "year": 2003,
+    "category": "conflict",
+    "text": "Una coalición encabezada por Estados Unidos inicia la invasión de Irak.",
+    "source_url": "https://en.wikipedia.org/wiki/2003_invasion_of_Iraq",
+    "occurred_on": "2003-03-20"
+  },
+  {
+    "id": "2003-human-genome-complete",
+    "year": 2003,
+    "category": "science",
+    "text": "Se anuncia la finalización del Proyecto Genoma Humano.",
+    "source_url": "https://en.wikipedia.org/wiki/Human_Genome_Project",
+    "occurred_on": "2003-04-14"
+  },
+  {
+    "id": "2004-facebook-launch",
+    "year": 2004,
+    "category": "science",
+    "text": "Nace en Harvard la red social que acabará llamándose Facebook.",
+    "source_url": "https://en.wikipedia.org/wiki/History_of_Facebook",
+    "occurred_on": "2004-02-04"
+  },
+  {
+    "id": "2004-madrid-attacks",
+    "year": 2004,
+    "category": "conflict",
+    "text": "Una serie de atentados en trenes de Cercanías causa una masacre en Madrid.",
+    "source_url": "https://en.wikipedia.org/wiki/2004_Madrid_train_bombings",
+    "occurred_on": "2004-03-11"
+  },
+  {
+    "id": "2005-kyoto-effective",
+    "year": 2005,
+    "category": "politics",
+    "text": "Entra en vigor el Protocolo de Kioto para reducir las emisiones de gases de efecto invernadero.",
+    "source_url": "https://en.wikipedia.org/wiki/Kyoto_Protocol",
+    "occurred_on": "2005-02-16"
+  },
+  {
+    "id": "2005-first-youtube-video",
+    "year": 2005,
+    "category": "culture",
+    "text": "Se publica Me at the zoo, el primer vídeo subido a YouTube.",
+    "source_url": "https://en.wikipedia.org/wiki/Me_at_the_zoo",
+    "occurred_on": "2005-04-23"
+  },
+  {
+    "id": "2006-first-tweet",
+    "year": 2006,
+    "category": "science",
+    "text": "Jack Dorsey publica el primer mensaje de la plataforma Twitter.",
+    "source_url": "https://en.wikipedia.org/wiki/Twitter",
+    "occurred_on": "2006-03-21"
+  },
+  {
+    "id": "2006-pluto-dwarf",
+    "year": 2006,
+    "category": "science",
+    "text": "La Unión Astronómica Internacional reclasifica Plutón como planeta enano.",
+    "source_url": "https://en.wikipedia.org/wiki/IAU_definition_of_planet",
+    "occurred_on": "2006-08-24"
+  },
+  {
+    "id": "2007-eu-bulgaria-romania",
+    "year": 2007,
+    "category": "politics",
+    "text": "Bulgaria y Rumanía se incorporan a la Unión Europea.",
+    "source_url": "https://en.wikipedia.org/wiki/2007_enlargement_of_the_European_Union",
+    "occurred_on": "2007-01-01"
+  },
+  {
+    "id": "2007-iphone-on-sale",
+    "year": 2007,
+    "category": "science",
+    "text": "Apple pone a la venta el primer iPhone en Estados Unidos.",
+    "source_url": "https://en.wikipedia.org/wiki/IPhone_(1st_generation)",
+    "occurred_on": "2007-06-29"
+  },
+  {
+    "id": "2008-spain-euro-victory",
+    "year": 2008,
+    "category": "sport",
+    "text": "España gana la Eurocopa con un gol de Fernando Torres en la final ante Alemania.",
+    "source_url": "https://en.wikipedia.org/wiki/UEFA_Euro_2008_final",
+    "occurred_on": "2008-06-29"
+  },
+  {
+    "id": "2008-lehman-bankruptcy",
+    "year": 2008,
+    "category": "society",
+    "text": "La quiebra de Lehman Brothers agrava la crisis financiera internacional.",
+    "source_url": "https://en.wikipedia.org/wiki/Bankruptcy_of_Lehman_Brothers",
+    "occurred_on": "2008-09-15"
+  },
+  {
+    "id": "2009-bitcoin-genesis",
+    "year": 2009,
+    "category": "science",
+    "text": "Se mina el bloque génesis de Bitcoin, el primero de su cadena de bloques.",
+    "source_url": "https://en.wikipedia.org/wiki/Bitcoin",
+    "occurred_on": "2009-01-03"
+  },
+  {
+    "id": "2009-h1n1-pandemic",
+    "year": 2009,
+    "category": "society",
+    "text": "La OMS declara una pandemia de gripe A causada por el virus H1N1.",
+    "source_url": "https://en.wikipedia.org/wiki/2009_swine_flu_pandemic",
+    "occurred_on": "2009-06-11"
+  },
+  {
+    "id": "2010-burj-khalifa",
+    "year": 2010,
+    "category": "science",
+    "text": "Se inaugura en Dubái el Burj Khalifa, el edificio más alto del mundo.",
+    "source_url": "https://en.wikipedia.org/wiki/Burj_Khalifa",
+    "occurred_on": "2010-01-04"
+  },
+  {
+    "id": "2010-spain-world-cup",
+    "year": 2010,
+    "category": "sport",
+    "text": "España gana su primer Mundial de fútbol con un gol de Iniesta en la prórroga ante Países Bajos.",
+    "source_url": "https://en.wikipedia.org/wiki/2010_FIFA_World_Cup_final",
+    "occurred_on": "2010-07-11"
+  },
+  {
+    "id": "2011-fukushima",
+    "year": 2011,
+    "category": "science",
+    "text": "Un terremoto y un tsunami en Japón desencadenan el accidente nuclear de Fukushima.",
+    "source_url": "https://en.wikipedia.org/wiki/Fukushima_nuclear_accident",
+    "occurred_on": "2011-03-11"
+  },
+  {
+    "id": "2011-south-sudan-independence",
+    "year": 2011,
+    "category": "politics",
+    "text": "Sudán del Sur se convierte en un Estado independiente.",
+    "source_url": "https://en.wikipedia.org/wiki/South_Sudan",
+    "occurred_on": "2011-07-09"
+  },
+  {
+    "id": "2012-higgs-announcement",
+    "year": 2012,
+    "category": "science",
+    "text": "El CERN anuncia el descubrimiento de una partícula compatible con el bosón de Higgs.",
+    "source_url": "https://en.wikipedia.org/wiki/Higgs_boson",
+    "occurred_on": "2012-07-04"
+  },
+  {
+    "id": "2012-london-olympics",
+    "year": 2012,
+    "category": "sport",
+    "text": "Londres inaugura sus terceros Juegos Olímpicos de verano.",
+    "source_url": "https://en.wikipedia.org/wiki/2012_Summer_Olympics",
+    "occurred_on": "2012-07-27"
+  },
+  {
+    "id": "2013-francis-elected",
+    "year": 2013,
+    "category": "politics",
+    "text": "Jorge Mario Bergoglio es elegido papa y adopta el nombre de Francisco.",
+    "source_url": "https://en.wikipedia.org/wiki/2013_papal_conclave",
+    "occurred_on": "2013-03-13"
+  },
+  {
+    "id": "2013-prism-revelation",
+    "year": 2013,
+    "category": "society",
+    "text": "Se publica la investigación sobre el programa PRISM a partir de documentos filtrados por Edward Snowden.",
+    "source_url": "https://en.wikipedia.org/wiki/PRISM",
+    "occurred_on": "2013-06-06"
+  },
+  {
+    "id": "2014-germany-fourth-world-cup",
+    "year": 2014,
+    "category": "sport",
+    "text": "Alemania gana el Mundial de Brasil con un gol de Mario Götze ante Argentina.",
+    "source_url": "https://en.wikipedia.org/wiki/2014_FIFA_World_Cup_final",
+    "occurred_on": "2014-07-13"
+  },
+  {
+    "id": "2014-philae-comet",
+    "year": 2014,
+    "category": "science",
+    "text": "La sonda Philae aterriza sobre un cometa tras separarse de Rosetta.",
+    "source_url": "https://en.wikipedia.org/wiki/Philae_(spacecraft)",
+    "occurred_on": "2014-11-12"
+  },
+  {
+    "id": "2015-new-horizons-pluto",
+    "year": 2015,
+    "category": "science",
+    "text": "New Horizons realiza el primer sobrevuelo de Plutón y envía imágenes detalladas.",
+    "source_url": "https://en.wikipedia.org/wiki/New_Horizons",
+    "occurred_on": "2015-07-14"
+  },
+  {
+    "id": "2015-paris-agreement",
+    "year": 2015,
+    "category": "politics",
+    "text": "Se adopta el Acuerdo de París para combatir el cambio climático.",
+    "source_url": "https://en.wikipedia.org/wiki/Paris_Agreement",
+    "occurred_on": "2015-12-12"
+  },
+  {
+    "id": "2016-brexit-referendum",
+    "year": 2016,
+    "category": "politics",
+    "text": "El Reino Unido vota en referéndum a favor de salir de la Unión Europea.",
+    "source_url": "https://en.wikipedia.org/wiki/2016_United_Kingdom_European_Union_membership_referendum",
+    "occurred_on": "2016-06-23"
+  },
+  {
+    "id": "2016-rio-olympics",
+    "year": 2016,
+    "category": "sport",
+    "text": "Río de Janeiro inaugura los primeros Juegos Olímpicos celebrados en Sudamérica.",
+    "source_url": "https://en.wikipedia.org/wiki/2016_Summer_Olympics",
+    "occurred_on": "2016-08-05"
+  },
+  {
+    "id": "2017-cassini-finale",
+    "year": 2017,
+    "category": "science",
+    "text": "La misión Cassini termina al entrar en la atmósfera de Saturno.",
+    "source_url": "https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens",
+    "occurred_on": "2017-09-15"
+  },
+  {
+    "id": "2017-catalonia-referendum",
+    "year": 2017,
+    "category": "politics",
+    "text": "Se celebra en Cataluña un referéndum de independencia suspendido por el Tribunal Constitucional.",
+    "source_url": "https://en.wikipedia.org/wiki/2017_Catalan_independence_referendum",
+    "occurred_on": "2017-10-01"
+  },
+  {
+    "id": "2018-france-second-world-cup",
+    "year": 2018,
+    "category": "sport",
+    "text": "Francia gana su segundo Mundial de fútbol al derrotar a Croacia en Moscú.",
+    "source_url": "https://en.wikipedia.org/wiki/2018_FIFA_World_Cup_final",
+    "occurred_on": "2018-07-15"
+  },
+  {
+    "id": "2018-insight-mars",
+    "year": 2018,
+    "category": "science",
+    "text": "La misión InSight aterriza en Marte para estudiar el interior del planeta.",
+    "source_url": "https://en.wikipedia.org/wiki/InSight",
+    "occurred_on": "2018-11-26"
+  },
+  {
+    "id": "2019-first-black-hole-image",
+    "year": 2019,
+    "category": "science",
+    "text": "Se presenta la primera imagen de la sombra de un agujero negro, situado en la galaxia M87.",
+    "source_url": "https://en.wikipedia.org/wiki/Event_Horizon_Telescope",
+    "occurred_on": "2019-04-10"
+  },
+  {
+    "id": "2019-notre-dame-fire",
+    "year": 2019,
+    "category": "culture",
+    "text": "Un incendio destruye la aguja y gran parte de la cubierta de Notre Dame de París.",
+    "source_url": "https://en.wikipedia.org/wiki/Notre-Dame_fire",
+    "occurred_on": "2019-04-15"
+  },
+  {
+    "id": "2020-covid-pandemic",
+    "year": 2020,
+    "category": "society",
+    "text": "La OMS caracteriza la COVID-19 como pandemia.",
+    "source_url": "https://en.wikipedia.org/wiki/COVID-19_pandemic",
+    "occurred_on": "2020-03-11"
+  },
+  {
+    "id": "2020-crew-dragon-launch",
+    "year": 2020,
+    "category": "science",
+    "text": "SpaceX lanza su primera misión tripulada, con dos astronautas de la NASA rumbo a la estación espacial.",
+    "source_url": "https://en.wikipedia.org/wiki/Crew_Dragon_Demo-2",
+    "occurred_on": "2020-05-30"
+  },
+  {
+    "id": "2021-perseverance-mars",
+    "year": 2021,
+    "category": "science",
+    "text": "El rover Perseverance aterriza en Marte, en el cráter Jezero.",
+    "source_url": "https://en.wikipedia.org/wiki/Perseverance_(rover)",
+    "occurred_on": "2021-02-18"
+  },
+  {
+    "id": "2021-tokyo-delayed-olympics",
+    "year": 2021,
+    "category": "sport",
+    "text": "Tokio inaugura los Juegos Olímpicos que se habían aplazado por la pandemia.",
+    "source_url": "https://en.wikipedia.org/wiki/2020_Summer_Olympics",
+    "occurred_on": "2021-07-23"
+  },
+  {
+    "id": "2022-ukraine-invasion",
+    "year": 2022,
+    "category": "conflict",
+    "text": "Rusia inicia la invasión de Ucrania a gran escala.",
+    "source_url": "https://en.wikipedia.org/wiki/Russian_invasion_of_Ukraine",
+    "occurred_on": "2022-02-24"
+  },
+  {
+    "id": "2022-elizabeth-death",
+    "year": 2022,
+    "category": "politics",
+    "text": "Muere Isabel II y Carlos III se convierte en rey del Reino Unido.",
+    "source_url": "https://en.wikipedia.org/wiki/Death_and_state_funeral_of_Elizabeth_II",
+    "occurred_on": "2022-09-08"
+  },
+  {
+    "id": "2023-spain-women-world-cup",
+    "year": 2023,
+    "category": "sport",
+    "text": "España gana por primera vez el Mundial femenino de fútbol al vencer a Inglaterra en Sídney.",
+    "source_url": "https://en.wikipedia.org/wiki/2023_FIFA_Women%27s_World_Cup_final",
+    "occurred_on": "2023-08-20"
+  },
+  {
+    "id": "2023-chandrayaan-moon",
+    "year": 2023,
+    "category": "science",
+    "text": "La misión india Chandrayaan-3 logra aterrizar cerca del polo sur de la Luna.",
+    "source_url": "https://en.wikipedia.org/wiki/Chandrayaan-3",
+    "occurred_on": "2023-08-23"
+  },
+  {
+    "id": "2024-north-america-eclipse",
+    "year": 2024,
+    "category": "science",
+    "text": "Un eclipse total de Sol cruza México, Estados Unidos y Canadá.",
+    "source_url": "https://en.wikipedia.org/wiki/Solar_eclipse_of_April_8,_2024",
+    "occurred_on": "2024-04-08"
+  },
+  {
+    "id": "2024-paris-seine-opening",
+    "year": 2024,
+    "category": "sport",
+    "text": "París inaugura los Juegos Olímpicos con una ceremonia en el río Sena.",
+    "source_url": "https://en.wikipedia.org/wiki/2024_Summer_Olympics_opening_ceremony",
+    "occurred_on": "2024-07-26"
+  },
+  {
+    "id": "2025-osaka-expo",
+    "year": 2025,
+    "category": "culture",
+    "text": "La Exposición Universal de Osaka abre sus puertas al público en la isla artificial de Yumeshima.",
+    "source_url": "https://www.the-expo.org/site/en/2025-osaka?layout=bieparis%3Aexpo&view=bieexpo",
+    "occurred_on": "2025-04-13"
+  },
+  {
+    "id": "2025-francis-death",
+    "year": 2025,
+    "category": "politics",
+    "text": "Muere el papa Francisco, primer pontífice latinoamericano.",
+    "source_url": "https://www.vatican.va/content/vatican/en/special/sede-vacante/sede-vacante-2025/20250421-denuncia-morte-francesco.html",
+    "occurred_on": "2025-04-21"
+  },
+  {
+    "id": "2026-milano-cortina-opening",
+    "year": 2026,
+    "category": "sport",
+    "text": "Se inauguran los Juegos Olímpicos de invierno de Milán-Cortina con una ceremonia en varias sedes italianas.",
+    "source_url": "https://newsroom.olympics.com/record/3531",
+    "occurred_on": "2026-02-06"
+  },
+  {
+    "id": "2026-oscars-one-battle",
+    "year": 2026,
+    "category": "culture",
+    "text": "Una batalla tras otra gana el Óscar a la mejor película en la ceremonia celebrada en Los Ángeles.",
+    "source_url": "https://www.oscars.org/oscars/ceremonies/2026",
+    "occurred_on": "2026-03-15"
+  }
+]
