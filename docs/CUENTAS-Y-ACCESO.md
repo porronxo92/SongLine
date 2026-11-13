@@ -20,10 +20,12 @@ cuenta. Spotify Premium y SongLine Premium son independientes.
 
 ## Navegación
 
-La página `/` muestra el inicio de juego: crear sala y unirse son las dos acciones
-centrales. Cuenta, ayuda y planes tienen accesos secundarios. `/jugar` redirige a
-`/` para conservar los enlaces anteriores. Si hay una sala guardada, el inicio
-ofrece volver a ella sin forzar una redirección automática.
+La página `/` es el escaparate de SongLine: una demo de colocación sin audio,
+explicaciones visuales del juego y un único grupo para crear sala o unirse.
+Cuenta, ayuda y planes tienen accesos secundarios. `/jugar` redirige a `/` para
+conservar los enlaces anteriores. Si hay una sala guardada, el inicio ofrece
+volver a ella sin forzar una redirección automática. La demo es independiente de
+las partidas reales y no desbloquea productos ni reproduce música.
 
 ## Identidades
 

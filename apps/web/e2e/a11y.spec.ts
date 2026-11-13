@@ -13,7 +13,7 @@ async function blockingViolations(page: Page): Promise<string[]> {
 
 test('Inicio no tiene violaciones critical ni serious', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: es.appName })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   expect(await blockingViolations(page), 'violaciones critical/serious en Inicio').toEqual([]);
 });
 

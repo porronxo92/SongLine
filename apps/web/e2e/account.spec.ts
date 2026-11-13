@@ -10,7 +10,7 @@ test('account registration, Free limits and login', async ({ page }) => {
   );
   const email = `smoke.${String(Date.now())}@example.com`;
   await page.goto('/');
-  await page.getByRole('heading', { name: 'SongLine' }).waitFor();
+  await page.getByRole('heading', { level: 1 }).waitFor();
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
 
   await page.getByRole('button', { name: 'Crear sala', exact: true }).click();
