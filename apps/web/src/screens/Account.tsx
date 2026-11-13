@@ -1,3 +1,4 @@
+import { appPath, accountReturnPath } from '../lib/routes';
 import { useEffect, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
@@ -28,7 +29,7 @@ export function AccountRequired({ children }: { children: ReactNode }) {
   }, [load]);
   if (loadError)
     return (
-      <Screen title={es.account.title} back="/">
+      <Screen title={es.account.title} back={appPath()}>
         <p role="alert">{es.account.unavailable}</p>
         <Button
           onClick={() => {
@@ -43,7 +44,14 @@ export function AccountRequired({ children }: { children: ReactNode }) {
       </Screen>
     );
   if (!ready || !checked) return <Spinner />;
-  if (!user && !fake) return <Navigate to="/login" state={{ returnTo: location.pathname }} replace />;
+  if (!user && !fake)
+    return (
+      <Navigate
+        to={appPath('login')}
+        state={{ returnTo: location.pathname + location.search + location.hash }}
+        replace
+      />
+    );
   return <>{children}</>;
 }
 
@@ -66,22 +74,7 @@ export function AccountLogin({ register = false }: { register?: boolean }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const state = location.state as { returnTo?: unknown } | null;
-  const returnTo =
-    typeof state?.returnTo === 'string' &&
-    [
-      '/crear',
-      '/crear/generos',
-      '/anfitrion/login',
-      '/anfitrion/audio',
-      '/anfitrion/equipo',
-      '/cuenta',
-      '/',
-      '/jugar',
-    ].includes(state.returnTo)
-      ? state.returnTo === '/jugar'
-        ? '/'
-        : state.returnTo
-      : '/';
+  const returnTo = accountReturnPath(state?.returnTo);
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     setBusy(true);
@@ -96,7 +89,7 @@ export function AccountLogin({ register = false }: { register?: boolean }) {
     }
   };
   return (
-    <Screen title={register ? es.account.register : es.account.login} back="/">
+    <Screen title={register ? es.account.register : es.account.login} back={appPath()}>
       <p className="help">{register ? es.account.registerHelp : es.account.loginHelp}</p>
       <Card>
         <form
@@ -164,12 +157,12 @@ export function AccountLogin({ register = false }: { register?: boolean }) {
           </Button>
         </form>
       </Card>
-      <Link className="btn btn-secondary" to={register ? '/login' : '/registro'} state={{ returnTo }}>
+      <Link className="btn btn-secondary" to={appPath(register ? 'login' : 'registro')} state={{ returnTo }}>
         {register ? es.account.hasAccount : es.account.noAccount}
       </Link>
       <p className="help">{es.account.spotifyHelp}</p>
       {!register ? (
-        <Link className="btn btn-ghost" to="/recuperar">
+        <Link className="btn btn-ghost" to={appPath('recuperar')}>
           {es.account.forgot}
         </Link>
       ) : null}
@@ -182,15 +175,15 @@ export function Account() {
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to={appPath('login')} replace />;
   return (
-    <Screen title={es.account.title} back="/">
+    <Screen title={es.account.title} back={appPath()}>
       <Card className="flex flex-col gap-3">
         <h2>{user.display_name || user.email}</h2>
         <p className="help break-words">{user.email}</p>
         <h3>{user.plan === 'premium' ? es.account.premium : es.account.free}</h3>
         <p>{user.plan === 'premium' ? es.account.premiumDetails : es.account.freeDetails}</p>
-        <Link className="btn btn-secondary" to="/planes">
+        <Link className="btn btn-secondary" to={appPath('planes')}>
           {es.account.plans}
         </Link>
       </Card>
@@ -206,7 +199,7 @@ export function Account() {
           setError('');
           void logout()
             .then(() => {
-              navigate('/', { replace: true });
+              navigate(appPath(), { replace: true });
             })
             .catch((err: unknown) => {
               setError(errorMessage(err));

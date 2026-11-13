@@ -1,3 +1,4 @@
+import { appPath } from '../lib/routes';
 import { Delete } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -24,7 +25,7 @@ export default function Join() {
           setBusy(false);
           return;
         }
-        navigate(`/sala/${value}`);
+        navigate(appPath(`sala/${value}`));
       },
       (e: unknown) => {
         setBusy(false);
@@ -39,7 +40,7 @@ export default function Join() {
     );
   };
 
-  // Enlace compartido (/unirse/1234): entra solo, sin teclear. El ref evita la doble llamada de StrictMode.
+  // Enlace compartido (/app/unirse/1234): entra solo, sin teclear. El ref evita la doble llamada de StrictMode.
   const autoTried = useRef(false);
   useEffect(() => {
     if (autoTried.current || code.length !== 4) return;
@@ -57,7 +58,7 @@ export default function Join() {
   };
 
   return (
-    <Screen title={es.join.title} back="/">
+    <Screen title={es.join.title} back={appPath()}>
       <p className="text-muted-foreground">{es.join.hint}</p>
       <div
         className="flex justify-center gap-3"

@@ -1,3 +1,4 @@
+import { appPath } from '../lib/routes';
 import { Speaker } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -59,7 +60,7 @@ export default function Create() {
   const navigate = useNavigate();
   const [settings, update] = useCreateSettings();
   return (
-    <Screen title={es.create.title} back="/">
+    <Screen title={es.create.title} back={appPath()}>
       <StepIndicator current={1} total={2} />
       <Card className="flex flex-col gap-2">
         <GameSettingsFields values={settings} onChange={update} collapseExtras />
@@ -71,7 +72,7 @@ export default function Create() {
       <Button
         xl
         onClick={() => {
-          navigate('/crear/generos');
+          navigate(appPath('crear/generos'));
         }}
       >
         {es.create.next}

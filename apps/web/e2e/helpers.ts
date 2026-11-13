@@ -37,7 +37,7 @@ export interface RoomOptions {
  * El servidor limita las creaciones a 5 por minuto y por IP: si llega el aviso de límite, espera y reintenta.
  */
 export async function createRoom(host: Page, o: RoomOptions): Promise<string> {
-  await host.goto('/');
+  await host.goto('/app');
   await host.getByRole('button', { name: es.home.create }).click();
   for (let i = 2; i < o.teams; i++) {
     await host.getByRole('button', { name: `${es.create.more}: ${es.create.teams}` }).click();
@@ -87,7 +87,7 @@ export async function createRoom(host: Page, o: RoomOptions): Promise<string> {
 
 /** Un equipo entra con el código: Únete, teclea los cuatro dígitos, nombre y «Listo». */
 export async function joinRoom(page: Page, code: string, name: string): Promise<void> {
-  await page.goto('/');
+  await page.goto('/app');
   await page.getByRole('button', { name: es.home.join }).click();
   for (const d of code) {
     await page.getByRole('button', { name: es.join.digit(d) }).click();

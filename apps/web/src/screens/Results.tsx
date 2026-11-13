@@ -1,3 +1,4 @@
+import { appPath } from '../lib/routes';
 import { Flag, Trophy } from 'lucide-react';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -31,7 +32,12 @@ function Confetti() {
         <span
           key={i}
           className={p.dot ? 'conf dot' : 'conf'}
-          style={{ left: p.left, background: p.color, animationDelay: p.delay, animationDuration: p.duration }}
+          style={{
+            left: p.left,
+            background: p.color,
+            animationDelay: p.delay,
+            animationDuration: p.duration,
+          }}
         />
       ))}
     </div>
@@ -61,7 +67,10 @@ function Podium({ view, groups }: { view: RoomView; groups: Standing[][] }) {
     <div
       className="podium"
       data-testid="podium"
-      style={{ gridTemplateColumns: cols, ...(ordered.length === 1 ? { maxWidth: '16rem', marginInline: 'auto' } : null) }}
+      style={{
+        gridTemplateColumns: cols,
+        ...(ordered.length === 1 ? { maxWidth: '16rem', marginInline: 'auto' } : null),
+      }}
     >
       {ordered.map(({ g, cls }) => (
         <div key={cls} className={`pod ${cls}`}>
@@ -95,7 +104,9 @@ export function Results({ view }: { view: RoomView }) {
   const ranked = useMemo(() => rankedStandings(raw ?? []), [raw]);
   const groups = useMemo(() => groupByRank(ranked), [ranked]);
   const serverWinners = view.winners ?? over?.winners ?? [];
-  const winners = serverWinners.length ? serverWinners : ranked.filter((s) => s.rank === 1).map((s) => s.slot);
+  const winners = serverWinners.length
+    ? serverWinners
+    : ranked.filter((s) => s.rank === 1).map((s) => s.slot);
   const reason = view.gameOverReason ?? over?.reason ?? 'target';
   const names = joinNames(winners.map((w) => teamName(view.teams[w], w)));
   const hostEnded = reason === 'host_ended';
@@ -116,7 +127,7 @@ export function Results({ view }: { view: RoomView }) {
           variant="secondary"
           onClick={() => {
             leaveRoom(true);
-            navigate('/');
+            navigate(appPath());
           }}
         >
           {es.results.leave}
@@ -129,7 +140,9 @@ export function Results({ view }: { view: RoomView }) {
           <h2>{es.results.endedTitle}</h2>
           <p className="text-muted-foreground">{es.results.reasonHost}</p>
           <p className="mt-2 font-semibold" data-testid="winner">
-            {totalTie ? es.results.leadingTie(leadCards) : es.results.leading(names, leadCards, winners.length > 1)}
+            {totalTie
+              ? es.results.leadingTie(leadCards)
+              : es.results.leading(names, leadCards, winners.length > 1)}
           </p>
         </Card>
       ) : (
@@ -171,7 +184,12 @@ export function Results({ view }: { view: RoomView }) {
                 <span className="min-w-0 flex-1">
                   <b className="block truncate">{s.name ?? es.common.team(s.slot)}</b>
                   <span className="rank-bar" aria-hidden>
-                    <i style={{ width: `${String(Math.round((s.cards / maxBar) * 100))}%`, background: c?.hex }} />
+                    <i
+                      style={{
+                        width: `${String(Math.round((s.cards / maxBar) * 100))}%`,
+                        background: c?.hex,
+                      }}
+                    />
                   </span>
                 </span>
                 <span className="rank-score">

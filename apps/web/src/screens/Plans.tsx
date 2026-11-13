@@ -1,3 +1,4 @@
+import { appPath } from '../lib/routes';
 import { Card, Screen } from '../components/ui';
 import { es } from '../i18n/es';
 
@@ -9,7 +10,7 @@ export default function Plans() {
     [es.plans.playlists, es.plans.prices[3], es.plans.playlistsCopy],
   ];
   return (
-    <Screen title={es.plans.plansTitle} back="/">
+    <Screen title={es.plans.plansTitle} back={appPath()}>
       <p className="help">{es.plans.soon}</p>
       {products.map(([name, price, description], index) => (
         <Card key={name} className="flex flex-col gap-3">

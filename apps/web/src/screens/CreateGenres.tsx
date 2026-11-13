@@ -1,3 +1,4 @@
+import { appPath } from '../lib/routes';
 import { Music } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +15,7 @@ export default function CreateGenres() {
   return (
     <Screen
       title={es.create.genresTitle}
-      back="/crear"
+      back={appPath('crear')}
       footer={
         <div className="sticky-footer">
           <p role="status" className="flex items-center gap-2 text-lg font-bold" data-testid="pack-total">
@@ -24,7 +25,7 @@ export default function CreateGenres() {
           <Button
             xl
             onClick={() => {
-              navigate('/anfitrion/login');
+              navigate(appPath('anfitrion/login'));
             }}
           >
             {es.common.continue}

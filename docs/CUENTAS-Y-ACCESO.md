@@ -20,12 +20,22 @@ cuenta. Spotify Premium y SongLine Premium son independientes.
 
 ## Navegación
 
-La página `/` es el escaparate de SongLine: una demo de colocación sin audio,
-explicaciones visuales del juego y un único grupo para crear sala o unirse.
-Cuenta, ayuda y planes tienen accesos secundarios. `/jugar` redirige a `/` para
-conservar los enlaces anteriores. Si hay una sala guardada, el inicio ofrece
-volver a ella sin forzar una redirección automática. La demo es independiente de
-las partidas reales y no desbloquea productos ni reproduce música.
+`/` es la landing de marca: demo sin audio, explicaciones del juego y un único
+botón «Jugar» que lleva a `/app`. El inicio de la aplicación conserva crear sala,
+unirse, cuenta y continuar una sala guardada, sin redirección automática.
+
+Las pantallas funcionales viven bajo `/app`: `/app/crear`, `/app/unirse`,
+`/app/sala/:code`, `/app/login`, `/app/cuenta`, etc. Los enlaces anteriores
+(`/jugar`, `/crear`, `/unirse/:code`, `/reset-password`, etc.) redirigen a sus rutas
+nuevas conservando parámetros, fragmentos y el destino de acceso. Las API REST
+siguen en `/api` y los WebSockets en `/ws`; no se prefijan con `/app`.
+
+Los enlaces de compartir apuntan a `/app/unirse/:code`. Las invitaciones no pasan
+por la landing ni requieren registro. La PWA abre `/app` y mantiene su identidad
+anterior. Los permisos y las sesiones no cambian por la nueva ruta.
+
+La demo de la landing es independiente de las partidas reales: no desbloquea
+productos, no crea salas ni reproduce música.
 
 ## Identidades
 

@@ -1,3 +1,4 @@
+import { appPath } from '../lib/routes';
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -40,7 +41,7 @@ export default function Recovery({ reset = false }: { reset?: boolean }) {
     }
   }
   return (
-    <Screen title={reset ? es.account.reset : es.account.forgot} back="/login">
+    <Screen title={reset ? es.account.reset : es.account.forgot} back={appPath('login')}>
       <Card>
         {done ? (
           <p role="status">{reset ? es.account.resetDone : es.account.resetSent}</p>
@@ -76,11 +77,11 @@ export default function Recovery({ reset = false }: { reset?: boolean }) {
           </form>
         )}
       </Card>
-      <Link className="btn btn-secondary" to="/login">
+      <Link className="btn btn-secondary" to={appPath('login')}>
         {es.account.login}
       </Link>
       {reset ? (
-        <Link className="btn btn-ghost" to="/recuperar">
+        <Link className="btn btn-ghost" to={appPath('recuperar')}>
           {es.account.requestReset}
         </Link>
       ) : null}

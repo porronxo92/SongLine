@@ -8,7 +8,7 @@ test('tres móviles juegan una partida en modo voz hasta el final', async ({ bro
 
   try {
     // ---- Anfitrión: crear sala (3 equipos, voz, 3 cartas) ----
-    await host.goto('/');
+    await host.goto('/app');
     await host.getByRole('button', { name: 'Crear sala' }).click();
     await host.getByRole('button', { name: 'Más: Equipos' }).click();
     for (let i = 0; i < 7; i++) {
@@ -34,7 +34,7 @@ test('tres móviles juegan una partida en modo voz hasta el final', async ({ bro
       [p2, 'Azules'],
       [p3, 'Verdes'],
     ] as const) {
-      await page.goto('/');
+      await page.goto('/app');
       await page.getByRole('button', { name: 'Únete a una sala' }).click();
       for (const d of code) {
         await page.getByRole('button', { name: `Número ${d}` }).click();

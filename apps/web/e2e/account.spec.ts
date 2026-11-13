@@ -9,7 +9,7 @@ test('account registration, Free limits and login', async ({ page }) => {
     route.fulfill({ json: { auth_mode: 'spotify', logged_in: false, premium_verified: false } }),
   );
   const email = `smoke.${String(Date.now())}@example.com`;
-  await page.goto('/');
+  await page.goto('/app');
   await page.getByRole('heading', { level: 1 }).waitFor();
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
 

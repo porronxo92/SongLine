@@ -1,3 +1,4 @@
+import { appPath } from '../lib/routes';
 import { AlertTriangle, Music2, Speaker, UserCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -31,7 +32,7 @@ export function HostLogin() {
     void api.authStatus().then((st) => {
       if (!alive) return;
       if (st.auth_mode === 'fake' || draft.settings.audio_source === 'preview' || st.logged_in) {
-        navigate('/anfitrion/audio', { replace: true });
+        navigate(appPath('anfitrion/audio'), { replace: true });
       } else {
         setNeedLogin(true);
       }
@@ -42,7 +43,7 @@ export function HostLogin() {
   }, [draft.settings.audio_source, navigate]);
 
   return (
-    <Screen title={es.hostLogin.title} back="/crear">
+    <Screen title={es.hostLogin.title} back={appPath('crear')}>
       {needLogin ? (
         <Card className="flex flex-col gap-4">
           <div className="notice" role="note">
@@ -66,7 +67,7 @@ export function HostLogin() {
             busy={busy}
             onClick={() => {
               setBusy(true);
-              void api.startSpotifyLogin('/anfitrion/audio').then((url) => {
+              void api.startSpotifyLogin(appPath('anfitrion/audio')).then((url) => {
                 window.location.assign(url);
               });
             }}
@@ -92,19 +93,19 @@ export function HostAudio() {
   }, [draft.settings.audio_source]);
 
   return (
-    <Screen back="/crear">
+    <Screen back={appPath('crear')}>
       {kind ? (
         <AudioGate
           kind={kind}
           onDone={() => {
-            navigate('/anfitrion/equipo', { replace: true });
+            navigate(appPath('anfitrion/equipo'), { replace: true });
           }}
           onFallback={() => {
             saveDraft({ settings: { ...draft.settings, audio_source: 'preview' } } satisfies CreateDraft);
             setKind('preview');
           }}
           onRelogin={() => {
-            void api.startSpotifyLogin('/anfitrion/audio').then((url) => {
+            void api.startSpotifyLogin(appPath('anfitrion/audio')).then((url) => {
               window.location.assign(url);
             });
           }}
@@ -135,7 +136,7 @@ export function HostIdentity() {
       })
       .then(async ({ code }) => {
         await joinRoom(code);
-        navigate(`/sala/${code}`, { replace: true });
+        navigate(appPath(`sala/${code}`), { replace: true });
       })
       .catch((e: unknown) => {
         setBusy(false);
@@ -144,11 +145,15 @@ export function HostIdentity() {
   };
 
   return (
-    <Screen title={es.identity.title} back="/crear">
+    <Screen title={es.identity.title} back={appPath('crear')}>
       <Card>
         <IdentityForm busy={busy} onSubmit={submit} />
       </Card>
-      {error ? <p role="alert" className="text-center font-bold text-destructive">{error}</p> : null}
+      {error ? (
+        <p role="alert" className="text-center font-bold text-destructive">
+          {error}
+        </p>
+      ) : null}
     </Screen>
   );
 }

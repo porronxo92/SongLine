@@ -1,10 +1,10 @@
-import { ArrowRight, Check, CircleHelp, Plus, RotateCcw, Users } from 'lucide-react';
+import { ArrowRight, Check, CircleHelp, RotateCcw } from 'lucide-react';
 import { useCallback, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HowToPlay } from '../components/HowToPlay';
 import { Button } from '../components/ui';
 import { es } from '../i18n/es';
-import { getStoredRoom, setStoredRoom } from '../lib/session';
+import { appPath } from '../lib/routes';
 import '../styles/landing.css';
 
 const copy = es.showcase;
@@ -217,9 +217,8 @@ function PackArt() {
   );
 }
 
-export default function Home() {
+export default function Landing() {
   const navigate = useNavigate();
-  const [stored, setStored] = useState(getStoredRoom);
   const [rules, setRules] = useState(false);
   const closeRules = useCallback(() => {
     setRules(false);
@@ -244,7 +243,7 @@ export default function Home() {
           <a href="#el-juego">{copy.navGame}</a>
           <a href="#experiencia">{copy.navExperience}</a>
         </nav>
-        <Link className="sl-nav-account" to="/cuenta">
+        <Link className="sl-nav-account" to={appPath('cuenta')}>
           {es.account.title}
           <ArrowRight size={17} aria-hidden="true" />
         </Link>
@@ -260,49 +259,17 @@ export default function Home() {
             <br />
             <span>{copy.titleAccent}</span>
           </h1>
-          <div className="sl-actions" data-testid="home-actions">
-            {stored ? (
-              <Button
-                variant="accent"
-                onClick={() => {
-                  navigate(`/sala/${stored}`);
-                }}
-              >
-                {es.home.resume(stored)}
-                <ArrowRight size={20} aria-hidden="true" />
-              </Button>
-            ) : null}
+          <div className="sl-actions">
             <Button
-              variant={stored ? 'secondary' : 'primary'}
+              variant="primary"
               onClick={() => {
-                navigate('/crear');
+                navigate(appPath());
               }}
             >
-              <Plus size={20} aria-hidden="true" />
-              {es.home.create}
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => {
-                navigate('/unirse');
-              }}
-            >
-              <Users size={20} aria-hidden="true" />
-              {es.home.join}
+              {es.home.play}
+              <ArrowRight size={20} aria-hidden="true" />
             </Button>
           </div>
-          {stored ? (
-            <button
-              className="sl-text-button sl-forget"
-              type="button"
-              onClick={() => {
-                setStoredRoom(null);
-                setStored(null);
-              }}
-            >
-              {es.home.forget}
-            </button>
-          ) : null}
           <p className="sl-action-hint">{copy.actionHint}</p>
           <TimelineDemo />
         </section>
@@ -376,7 +343,7 @@ export default function Home() {
             <h2 id="free-heading">{copy.freeTitle}</h2>
             <p>{copy.freeCopy}</p>
           </div>
-          <Link to="/planes" className="sl-free-plans">
+          <Link to={appPath('planes')} className="sl-free-plans">
             {copy.freePlans}
             <ArrowRight size={20} aria-hidden="true" />
           </Link>

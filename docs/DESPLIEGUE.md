@@ -65,3 +65,21 @@ equipos, cinco cartas incluyendo la inicial y el pack «Mix variado».
 Registro y login no requieren nuevas claves. La recuperación necesita SMTP y
 `PUBLIC_ORIGIN` correcto. Ver [configuración y límites de esta entrega](CUENTAS-Y-ACCESO.md).
 No hay compras activas ni Stripe en esta entrega.
+
+## Landing y aplicación
+
+En este despliegue, `/` sirve la landing y `/app` el inicio de juego. Las rutas de
+la aplicación cuelgan de `/app/*`; las direcciones antiguas redirigen para
+conservar invitaciones, retornos de Spotify y enlaces de recuperación ya enviados.
+Vercel continúa sirviendo la misma SPA con su rewrite general. La PWA abre `/app`
+y conserva `id: '/'` para mantener su identidad de instalación anterior.
+
+El futuro reparto `songline.com` / `app.songline.com` todavía no está configurado.
+Al hacerlo habrá que decidir los dos despliegues, trasladar la raíz del módulo de
+aplicación, configurar DNS/TLS, proxy de API, `PUBLIC_ORIGIN`, retornos de Spotify,
+enlaces de correo y el manifiesto de la PWA. Las rutas se centralizan en
+`apps/web/src/lib/routes.ts` para facilitar ese traslado.
+
+Las cuentas y sus permisos permanecen en Neon. El almacenamiento del navegador
+pertenece al origen: al cambiar a otro dominio habrá que volver a iniciar sesión;
+no se debe asumir que las sesiones locales se comparten entre subdominios.

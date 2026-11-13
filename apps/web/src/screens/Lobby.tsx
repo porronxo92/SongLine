@@ -1,3 +1,4 @@
+import { appPath } from '../lib/routes';
 import { Check, Crown, VolumeX, Wifi, WifiOff } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +19,9 @@ export function ChooseSlot({ view }: { view: RoomView }) {
   const free = view.teams.filter((t) => !t.claimed);
   const [slot, setSlot] = useState<number | null>(free[0]?.slot ?? null);
   const [busy, setBusy] = useState(false);
-  const takenColors = view.teams.flatMap((t) => (t.claimed ? [safeColor(t.color)] : [])).filter((c): c is string => c !== null);
+  const takenColors = view.teams
+    .flatMap((t) => (t.claimed ? [safeColor(t.color)] : []))
+    .filter((c): c is string => c !== null);
   const navigate = useNavigate();
 
   return (
@@ -26,7 +29,7 @@ export function ChooseSlot({ view }: { view: RoomView }) {
       title={es.identity.spectatorTitle}
       back={() => {
         leaveRoom(true);
-        navigate('/');
+        navigate(appPath());
       }}
     >
       {free.length === 0 ? (
@@ -89,7 +92,7 @@ export function Lobby({ view }: { view: RoomView }) {
           variant="secondary"
           onClick={() => {
             leaveRoom(true);
-            navigate('/');
+            navigate(appPath());
           }}
         >
           {es.lobby.leave}
@@ -129,7 +132,10 @@ export function Lobby({ view }: { view: RoomView }) {
                 {t.claimed ? (
                   <TeamShape shape={c.shape} color={c.hex} size={26} />
                 ) : (
-                  <span className="h-[26px] w-[26px] rounded-full border-2 border-dashed border-border-strong" aria-hidden />
+                  <span
+                    className="h-[26px] w-[26px] rounded-full border-2 border-dashed border-border-strong"
+                    aria-hidden
+                  />
                 )}
                 <span className="flex min-w-0 flex-1 font-bold">
                   <span className="truncate">

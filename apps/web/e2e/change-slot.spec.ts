@@ -64,7 +64,7 @@ test('«Cómo se juega» se cierra tocando fuera, pero no al arrastrar desde den
   const a = await openMobile(browser);
   try {
     const page = a.page;
-    await page.goto('/');
+    await page.goto('/app');
     const opener = page.getByRole('button', { name: es.home.howTo });
     await opener.click();
     const dialog = page.getByRole('dialog', { name: es.howto.title });

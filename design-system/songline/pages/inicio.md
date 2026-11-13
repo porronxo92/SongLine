@@ -2,7 +2,7 @@
 
 Esta página concreta la dirección visual del inicio y prevalece sobre los
 patrones de pantalla compacta del MASTER solo para `/`. Las pantallas del juego
-mantienen su diseño y ancho actuales. `/jugar` sigue siendo un alias del inicio.
+mantienen su diseño y ancho actuales bajo `/app`. `/jugar` es un alias de `/app`.
 
 ## Estructura
 
@@ -12,9 +12,9 @@ banda informativa y pie compacto. No se importan su identidad, tipografías,
 formularios, sobre, newsletter ni mensajes de una agencia de IA.
 
 - Cabecera: marca original, anclas a juego/experiencia y cuenta.
-- Hero: titular Unbounded seguido del único grupo de crear/unirse o recuperar
-  sala; después, la demo de una carta. No hay que completar la demo para crear
-  una partida.
+- Hero: titular Unbounded seguido del único botón «Jugar», que abre `/app`;
+  después, la demo de una carta. Crear, unirse y recuperar sala están en el
+  inicio compacto de la aplicación, con la identidad visual anterior.
 - Demo independiente sin audio: Wannabe (1996) se sitúa respecto a Africa (1982)
   y Believe (1998). Datos presentes en el catálogo. El año permanece oculto hasta
   elegir hueco. Se explica el resultado y se puede repetir con teclado o toque.

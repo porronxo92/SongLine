@@ -19,7 +19,8 @@ export default defineConfig({
         theme_color: '#0D0E15',
         background_color: '#0D0E15',
         lang: 'es',
-        start_url: '/',
+        id: '/', // Preserve the existing installed PWA identity.
+        start_url: '/app',
         scope: '/',
         icons: [
           { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },

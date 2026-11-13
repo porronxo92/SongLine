@@ -1,3 +1,4 @@
+import { appPath } from '../lib/routes';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { AudioKind } from '../audio/AudioProvider';
@@ -44,7 +45,7 @@ export default function Room() {
           <Button
             onClick={() => {
               leaveRoom(true);
-              navigate('/');
+              navigate(appPath());
             }}
           >
             {es.connection.home}
